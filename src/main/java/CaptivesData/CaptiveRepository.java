@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
+// Repository to connect to the databse
 
 public class CaptiveRepository implements CrudRepository<Integer, Captive> {
     @Override

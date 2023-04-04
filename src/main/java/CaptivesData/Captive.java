@@ -5,6 +5,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Date;
 
+// The clas needs to describe all the attributes of a captive.
 
 @Table
 
