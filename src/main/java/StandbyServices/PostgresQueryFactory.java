@@ -7,8 +7,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 public class PostgresQueryFactory {
-    public static void H2DatabaseInput(String SqlQuery, String parameterOne ){
-        EntityManagerFactory emf= Persistence.createEntityManagerFactory("BPATool");
+    public static void queryExecuter(String SqlQuery, String parameterOne) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("BPATool");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Query query = em.createNativeQuery(SqlQuery);
@@ -16,4 +16,5 @@ public class PostgresQueryFactory {
         query.executeUpdate();
         em.getTransaction().commit();
         em.close();
+    }
 }
