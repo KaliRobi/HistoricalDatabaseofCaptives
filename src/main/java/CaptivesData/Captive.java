@@ -3,12 +3,13 @@ package CaptivesData;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
 // The clas needs to describe all the attributes of a captive.
 
 @Table
-
+@Entity
 public class Captive {
     @Id
     private long database_id;
