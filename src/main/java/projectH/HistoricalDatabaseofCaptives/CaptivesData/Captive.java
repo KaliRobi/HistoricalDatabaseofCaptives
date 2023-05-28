@@ -1,4 +1,4 @@
-package CaptivesData;
+package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -8,14 +8,14 @@ import java.util.Date;
 
 // The clas needs to describe all the attributes of a captive.
 
-@Table
+@Table(name = "captives_data")
 @Entity
 public class Captive {
     @Id
-    private long database_id;
+    private long id;
     private String volume;
     private String captive_id;
-    private String captive_name;
+    private String name;
     private String sex;
     private Integer height;
     private String build;
@@ -23,34 +23,35 @@ public class Captive {
     private String special_peculiarities;
     private Date date_of_birth;
     private String place_of_birth;
-    private String address;
+    private String place_of_residence;
+
     private String religion;
     private String childhood_status;
     private String marital_status;
     private Integer number_of_children;
-    private String occupation_1;
+    private String occupation;
     private String occupation_2;
     private String occupation_3;
     private String military_service;
     private String literacy;
     private String education;
     private String criminal_history;
-    private String current_crime;
-    private Date sentence_start_date;
-    private Date sentence_end_date;
-    private Integer prison_term;
+    private String crime;
+    private Date sentence_begins;
+    private Date sentence_expires;
+    private Integer prison_term_days;
     private String ransom;
-    private String associate;
+    private String associates;
     private String degree_of_crime;
     private String degree_of_punishment;
     private String notes;
     private String arrest_site;
 
-    public Captive(long database_id, String volume, String captive_id, String captive_name, String sex, Integer height, String build, String dentition, String special_peculiarities, Date date_of_birth, String place_of_birth, String address, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation_1, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String current_crime, Date sentence_start_date, Date sentence_end_date, Integer prison_term, String ransom, String associate, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
-        this.database_id = database_id;
+    public Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Date date_of_birth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Date sentence_begins, Date sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
+        this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
-        this.captive_name = captive_name;
+        this.name = name;
         this.sex = sex;
         this.height = height;
         this.build = build;
@@ -58,36 +59,36 @@ public class Captive {
         this.special_peculiarities = special_peculiarities;
         this.date_of_birth = date_of_birth;
         this.place_of_birth = place_of_birth;
-        this.address = address;
+        this.place_of_residence = place_of_residence;
         this.religion = religion;
         this.childhood_status = childhood_status;
         this.marital_status = marital_status;
         this.number_of_children = number_of_children;
-        this.occupation_1 = occupation_1;
+        this.occupation = occupation;
         this.occupation_2 = occupation_2;
         this.occupation_3 = occupation_3;
         this.military_service = military_service;
         this.literacy = literacy;
         this.education = education;
         this.criminal_history = criminal_history;
-        this.current_crime = current_crime;
-        this.sentence_start_date = sentence_start_date;
-        this.sentence_end_date = sentence_end_date;
-        this.prison_term = prison_term;
+        this.crime = crime;
+        this.sentence_begins = sentence_begins;
+        this.sentence_expires = sentence_expires;
+        this.prison_term_days = prison_term_days;
         this.ransom = ransom;
-        this.associate = associate;
+        this.associates = associates;
         this.degree_of_crime = degree_of_crime;
         this.degree_of_punishment = degree_of_punishment;
         this.notes = notes;
         this.arrest_site = arrest_site;
     }
 
-    public long getDatabase_id() {
-        return database_id;
+    public long getId() {
+        return id;
     }
 
-    public void setDatabase_id(long database_id) {
-        this.database_id = database_id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getVolume() {
@@ -106,12 +107,12 @@ public class Captive {
         this.captive_id = captive_id;
     }
 
-    public String getCaptive_name() {
-        return captive_name;
+    public String getName() {
+        return name;
     }
 
-    public void setCaptive_name(String captive_name) {
-        this.captive_name = captive_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSex() {
@@ -170,12 +171,12 @@ public class Captive {
         this.place_of_birth = place_of_birth;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPlace_of_residence() {
+        return place_of_residence;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPlace_of_residence(String place_of_residence) {
+        this.place_of_residence = place_of_residence;
     }
 
     public String getReligion() {
@@ -210,12 +211,12 @@ public class Captive {
         this.number_of_children = number_of_children;
     }
 
-    public String getOccupation_1() {
-        return occupation_1;
+    public String getOccupation() {
+        return occupation;
     }
 
-    public void setOccupation_1(String occupation_1) {
-        this.occupation_1 = occupation_1;
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
 
     public String getOccupation_2() {
@@ -266,36 +267,36 @@ public class Captive {
         this.criminal_history = criminal_history;
     }
 
-    public String getCurrent_crime() {
-        return current_crime;
+    public String getCrime() {
+        return crime;
     }
 
-    public void setCurrent_crime(String current_crime) {
-        this.current_crime = current_crime;
+    public void setCrime(String crime) {
+        this.crime = crime;
     }
 
-    public Date getSentence_start_date() {
-        return sentence_start_date;
+    public Date getSentence_begins() {
+        return sentence_begins;
     }
 
-    public void setSentence_start_date(Date sentence_start_date) {
-        this.sentence_start_date = sentence_start_date;
+    public void setSentence_begins(Date sentence_begins) {
+        this.sentence_begins = sentence_begins;
     }
 
-    public Date getSentence_end_date() {
-        return sentence_end_date;
+    public Date getSentence_expires() {
+        return sentence_expires;
     }
 
-    public void setSentence_end_date(Date sentence_end_date) {
-        this.sentence_end_date = sentence_end_date;
+    public void setSentence_expires(Date sentence_expires) {
+        this.sentence_expires = sentence_expires;
     }
 
-    public Integer getPrison_term() {
-        return prison_term;
+    public Integer getPrison_term_days() {
+        return prison_term_days;
     }
 
-    public void setPrison_term(Integer prison_term) {
-        this.prison_term = prison_term;
+    public void setPrison_term_days(Integer prison_term_days) {
+        this.prison_term_days = prison_term_days;
     }
 
     public String getRansom() {
@@ -306,12 +307,12 @@ public class Captive {
         this.ransom = ransom;
     }
 
-    public String getAssociate() {
-        return associate;
+    public String getAssociates() {
+        return associates;
     }
 
-    public void setAssociate(String associate) {
-        this.associate = associate;
+    public void setAssociates(String associates) {
+        this.associates = associates;
     }
 
     public String getDegree_of_crime() {
@@ -349,10 +350,10 @@ public class Captive {
     @Override
     public String toString() {
         return "Captive{" +
-                "database_id=" + database_id +
+                "id=" + id +
                 ", volume='" + volume + '\'' +
                 ", captive_id='" + captive_id + '\'' +
-                ", captive_name='" + captive_name + '\'' +
+                ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", height=" + height +
                 ", build='" + build + '\'' +
@@ -360,24 +361,24 @@ public class Captive {
                 ", special_peculiarities='" + special_peculiarities + '\'' +
                 ", date_of_birth=" + date_of_birth +
                 ", place_of_birth='" + place_of_birth + '\'' +
-                ", address='" + address + '\'' +
+                ", place_of_residence='" + place_of_residence + '\'' +
                 ", religion='" + religion + '\'' +
                 ", childhood_status='" + childhood_status + '\'' +
                 ", marital_status='" + marital_status + '\'' +
                 ", number_of_children=" + number_of_children +
-                ", occupation_1='" + occupation_1 + '\'' +
+                ", occupation='" + occupation + '\'' +
                 ", occupation_2='" + occupation_2 + '\'' +
                 ", occupation_3='" + occupation_3 + '\'' +
                 ", military_service='" + military_service + '\'' +
                 ", literacy='" + literacy + '\'' +
                 ", education='" + education + '\'' +
                 ", criminal_history='" + criminal_history + '\'' +
-                ", current_crime='" + current_crime + '\'' +
-                ", sentence_start_date=" + sentence_start_date +
-                ", sentence_end_date=" + sentence_end_date +
-                ", prison_term=" + prison_term +
-                ", ransome='" + ransom + '\'' +
-                ", associate='" + associate + '\'' +
+                ", current='" + crime + '\'' +
+                ", sentence_begins=" + sentence_begins +
+                ", sentence_expires=" + sentence_expires +
+                ", prison_term=" + prison_term_days +
+                ", ransom='" + ransom + '\'' +
+                ", associates='" + associates + '\'' +
                 ", degree_of_crime='" + degree_of_crime + '\'' +
                 ", degree_of_punishment='" + degree_of_punishment + '\'' +
                 ", notes='" + notes + '\'' +

@@ -1,8 +1,6 @@
-package CaptivesData;
+package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.Optional;
 
 // Repository to connect to the databse
 

@@ -1,4 +1,4 @@
-package CaptivesData;
+package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 // The class must describe all the captive relating functionalities.
 // 1. Database  crud operations
@@ -8,10 +8,10 @@ package CaptivesData;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Optional;
-
+@Component
 public class CaptiveServices {
 
     private final CaptiveRepository captiveRepository;

@@ -1,4 +1,4 @@
-package StandbyServices;
+package projectH.HistoricalDatabaseofCaptives.StandbyServices;
 
 
 import javax.persistence.EntityManager;

@@ -1,20 +1,19 @@
 package projectH.HistoricalDatabaseofCaptives;
 
 
-import CaptivesData.Captive;
-import CaptivesData.CaptiveServices;
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-
 @RestController
-public class RestApiController {
+public class FrontEndApiController {
 
+    @Autowired
     private final CaptiveServices captiveServices;
     @Autowired
-    public RestApiController(CaptiveServices captiveServices) {
+    public FrontEndApiController(CaptiveServices captiveServices) {
         this.captiveServices = captiveServices;
     }
 
