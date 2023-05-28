@@ -24,6 +24,11 @@ public Iterable<Captive> GettingCaptives(){
 
 
 }
+    @GetMapping(path="/v1/CitiesOfLocation")
+ public Iterable<String> getCitiesOfResidence(){
+
+        return captiveServices.getCitiesOfResidence();
+ }
 
 
 

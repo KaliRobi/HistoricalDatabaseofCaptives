@@ -10,7 +10,11 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.TreeSet;
+
 @Component
 public class CaptiveServices {
 
@@ -20,9 +24,11 @@ public class CaptiveServices {
         this.captiveRepository = captiveRepository;
     }
 
+    // This will serve the record single page
     public Optional<Captive> GetCaptiveById(Long num){
      return captiveRepository.findById(num);
     }
+
 
     public Iterable<Captive> getAllTheCaptives(){
         return captiveRepository.findAll();
@@ -31,6 +37,10 @@ public class CaptiveServices {
     // needs to be decided if I want to pull the
 
 
-
+    public TreeSet<String> getCitiesOfResidence() {
+        TreeSet<String> citiesOfResidence = new TreeSet<>();
+        getAllTheCaptives().forEach(capt -> citiesOfResidence.add(capt.getPlace_of_residence()));
+        return citiesOfResidence;
+    }
 
 }
