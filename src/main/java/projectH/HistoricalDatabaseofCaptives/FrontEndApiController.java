@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 @RestController
 public class FrontEndApiController {
 
@@ -19,15 +23,17 @@ public class FrontEndApiController {
 
 
     @GetMapping(path = "/v1/allTheCaptives")
-public Iterable<Captive> GettingCaptives(){
+public List<Captive> exposeCaptives(){
     return captiveServices.getAllTheCaptives();
-
-
 }
     @GetMapping(path="/v1/CitiesOfLocation")
- public Iterable<String> getCitiesOfResidence(){
+ public Iterable<String> exposeCitiesOfResidence(){
 
         return captiveServices.getCitiesOfResidence();
+ }
+ @GetMapping(path="/v1/SexDistributionPerCities")
+ public Map<String, List<Long>> exposeSexDistribution(){
+        return captiveServices.getSexDistribution();
  }
 
 

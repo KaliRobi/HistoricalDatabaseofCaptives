@@ -8,30 +8,35 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class CaptiveServices {
 
-    private final CaptiveRepository captiveRepository;
+    private final CaptiveRecordRepository captiveRecordRepository;
     @Autowired
-    public CaptiveServices(CaptiveRepository captiveRepository) {
-        this.captiveRepository = captiveRepository;
+    public CaptiveServices(CaptiveRecordRepository captiveRecordRepository) {
+        this.captiveRecordRepository = captiveRecordRepository;
     }
 
     // This will serve the record single page
     public Optional<Captive> GetCaptiveById(Long num){
-     return captiveRepository.findById(num);
+     return captiveRecordRepository.findById(num);
     }
 
 
-    public Iterable<Captive> getAllTheCaptives(){
-        return captiveRepository.findAll();
+    public List<Captive> getAllTheCaptives(){
+        // jparepo interface throws error
+        List<Captive> captiveList = new ArrayList<>();
+        captiveRecordRepository.findAll().forEach(captiveList::add);
+        return captiveList;
+
     }
 
     // needs to be decided if I want to pull the
@@ -43,4 +48,51 @@ public class CaptiveServices {
         return citiesOfResidence;
     }
 
+    public Map<String, List<Long>> getSexDistribution(){
+//      initiate a map with the nested map where the outer keys are the settlements in the database, the inner keys male / female
+        Map<String, List<Long>> sexDistribution = new ConcurrentHashMap<>();
+        Set<String> settlements = new TreeSet<>( getCitiesOfResidence() );
+        List<Long> nestedList = new ArrayList<>();
+        settlements.forEach(town -> sexDistribution.put(town, nestedList ));
+        // count the numbers. Steps: 1 Get the all entries of the town,
+//        2 separate the entries based on the  sex column and count them together
+//        3 assign the values to the keys
+// or a list of maps
+//        sexDistribution.forEach( (town,v) -> v.put( "female", getAllTheCaptives().stream()
+//                .filter(rec -> rec.getSex().equals("n") && rec.getPlace_of_residence().equals(town)).toList().size()   ));
+
+        for( String town : settlements){
+
+//            sexDistribution.get(town).add( getAllTheCaptives().stream()
+//                            .filter(rec ->  rec.getPlace_of_residence().equals(town)).count());
+            System.out.println(getAllTheCaptives().stream()
+                    .filter(rec ->  rec.getPlace_of_residence().equals(town)).toList());
+        }
+//        rec.getSex().equals("n") &&
+
+
+
+
+//        sexDistribution.forEach( (town,v) -> v.put("male", getAllTheCaptives().stream()
+//                .filter(rec -> rec.getSex().equals("f") && rec.getPlace_of_residence().equals(town)).count()   ));
+//        System.out.println(getAllTheCaptives().stream()
+//                .filter(rec -> rec.getSex().equals("f") && rec.getPlace_of_residence().equals("Debrecen")).count());
+
+
+
+//        System.out.println(
+//        getAllTheCaptives().stream()
+//                .filter(rec -> rec.getSex().equals("n") && rec.getPlace_of_residence().equals("Debrecen")).toList().size()  );
+
+        ;
+//        rec.getSex().equals("m") &&
+//        getAllTheCaptives().stream().filter(rec -> rec.getSex().equals("m") && rec.getPlace_of_residence().equals("Debrecen"));
+
+        // the nested map will contain mail:  and female: keys and this we also need to have from the db
+
+
+    return sexDistribution;
+
+
+    }
 }
