@@ -38,10 +38,6 @@ public class CaptiveServices {
         return captiveList;
 
     }
-
-    // needs to be decided if I want to pull the
-
-
     public TreeSet<String> getCitiesOfResidence() {
         TreeSet<String> citiesOfResidence = new TreeSet<>();
         getAllTheCaptives().forEach(capt -> citiesOfResidence.add(capt.getPlace_of_residence()));
@@ -52,14 +48,14 @@ public class CaptiveServices {
 //      initiate a map with the nested map where the outer keys are the settlements in the database, the inner keys male / female
         Map<String, HashMap<String, Long>> sexDistribution = new HashMap<>();
         Set<String> settlements = new TreeSet<>( getCitiesOfResidence() );
-
+        List<Captive> captiveList =   getAllTheCaptives();
         settlements.forEach(
                 town -> {
                     HashMap<String, Long> nestedList = new HashMap<>();
-                    nestedList.put("female", getAllTheCaptives().stream()
+                    nestedList.put("female", captiveList.stream()
                             .filter(rec -> rec.getSex().equals("n") && rec.getPlace_of_residence().equals(town))
                             .count());
-                    nestedList.put("male", getAllTheCaptives().stream()
+                    nestedList.put("male", captiveList.stream()
                             .filter(rec -> rec.getSex().equals("f") && rec.getPlace_of_residence().equals(town))
                             .count());
                     System.out.println(town + ": " + nestedList);
