@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -82,13 +83,30 @@ public class CaptiveServices {
         return null;
     }
 
-    public ArrayList<ArrayList<String>> getTheRelocated(){
+    public List<List<String>> getTheRelocated(){
+           List<List<String>> list;
+        // get records where the location of birth and residence is not the same
+        /// base for checking the relocation directions. This might be better as map? Org, dest, weight?
+        list  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
+                        .equals(captive.getPlace_of_birth())).toList()
+                        .stream().map(captive ->  Arrays.asList(captive.getPlace_of_birth(), captive.getPlace_of_residence()))
+                        .toList();
 
-        /// base for checking the relocation directions.
-        //grouped/aggregated value at the 3 index will indicate the weight [birthplace, residence, how many of them moved ]
 
-
-        return null;
+        HashSet<List<String>> uniqueRelocations  = new HashSet<>(list);
+        List<List<String>> relocationsWithWeight = new ArrayList<>();
+        for (List<String> uniqueRelocation : uniqueRelocations) {
+            long groupedValue = list.stream().filter(element -> element.equals(uniqueRelocation)).count();
+//            printing is easy, no need to filter with if later, this is for testing
+            if (groupedValue > 10L) {
+                System.out.println(uniqueRelocation + " : " + list.stream().filter(element -> element.equals(uniqueRelocation)).count());
+                relocationsWithWeight.add(Arrays.asList(uniqueRelocation
+                        .get(0), uniqueRelocation.get(1), String.valueOf(list.stream()
+                        .filter(element -> element.equals(uniqueRelocation))
+                        .count())));
+            }
+        }
+        return relocationsWithWeight;
     }
 
 
