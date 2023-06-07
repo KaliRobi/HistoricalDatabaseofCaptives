@@ -106,6 +106,7 @@ public class CaptiveServices {
                         .count())));
             }
         }
+
         return relocationsWithWeight;
     }
 
