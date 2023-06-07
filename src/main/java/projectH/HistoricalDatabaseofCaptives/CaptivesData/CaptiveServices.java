@@ -64,4 +64,34 @@ public class CaptiveServices {
         );
             return sexDistribution;
     }
+    /// one of the main thing would be to get the birth cohorts of the captives per town per sex
+    // This could be a base for a lot of other function
+    // the function needs to return the list of ids
+    // {town : [[femaile], [male]]
+
+    public Map<String, ArrayList<ArrayList<String>>> getBirthCohorts(){
+
+        // get towns
+
+        // get records by town
+
+        // get the cohorts using the birth year
+
+//         define cohorts getting the fisr or the first two digits of the difference between the youngest and oldest
+        // check if any of that is extreme and if yes find the correct base numbers by checking the normal distribution
+        return null;
+    }
+
+    public ArrayList<ArrayList<String>> getTheRelocated(){
+
+        /// base for checking the relocation directions.
+        //grouped/aggregated value at the 3 index will indicate the weight [birthplace, residence, how many of them moved ]
+
+
+        return null;
+    }
+
+
+
+
 }
