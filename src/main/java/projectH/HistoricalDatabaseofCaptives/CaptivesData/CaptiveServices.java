@@ -45,6 +45,12 @@ public class CaptiveServices {
         return citiesOfResidence;
     }
 
+    public TreeSet<String> getCitiesOfBirth() {
+        TreeSet<String> citiesOfBirth = new TreeSet<>();
+        getAllTheCaptives().forEach(capt -> citiesOfBirth.add(capt.getPlace_of_birth()));
+        return citiesOfBirth;
+    }
+
     public Map<String, HashMap<String, Long>> getSexDistribution(){
 //      initiate a map with the nested map where the outer keys are the settlements in the database, the inner keys male / female
         Map<String, HashMap<String, Long>> sexDistribution = new HashMap<>();
@@ -85,6 +91,8 @@ public class CaptiveServices {
 
     public List<List<String>> getTheRelocated(){
            List<List<String>> list;
+            //TODO
+            // Change the output to a map with original, current, weight keys
         // get records where the location of birth and residence is not the same
         /// base for checking the relocation directions. This might be better as map? Org, dest, weight?
         list  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
@@ -97,7 +105,7 @@ public class CaptiveServices {
         List<List<String>> relocationsWithWeight = new ArrayList<>();
         for (List<String> uniqueRelocation : uniqueRelocations) {
             long groupedValue = list.stream().filter(element -> element.equals(uniqueRelocation)).count();
-//            printing is easy, no need to filter with if later, this is for testing
+
             if (groupedValue > 10L) {
                 System.out.println(uniqueRelocation + " : " + list.stream().filter(element -> element.equals(uniqueRelocation)).count());
                 relocationsWithWeight.add(Arrays.asList(uniqueRelocation
