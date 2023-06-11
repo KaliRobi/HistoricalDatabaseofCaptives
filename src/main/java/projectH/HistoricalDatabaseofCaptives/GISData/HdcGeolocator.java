@@ -29,7 +29,8 @@ public class HdcGeolocator {
 //        keyset should be =  getAllMentionedSettlement();
 
         HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
-        placesWiththeirLatLon.keySet().addAll(getAllMentionedSettlement());
+//        Set<String> placesKeyset = getAllMentionedSettlement();
+
         // will need to generate a list of new uri s then do clear out tha  data like below
 
 //        the final goal is to get a hasmap where the city name is the key and the lat / lon data is the value in its own map, or a list
@@ -66,6 +67,7 @@ public class HdcGeolocator {
     private Set<String> getAllMentionedSettlement(){
         Set<String> allThePlaces =  captiveServices.getCitiesOfBirth();
         allThePlaces.addAll(captiveServices.getCitiesOfResidence());
+        System.out.println(allThePlaces);
 // latter an overcharged version could check if geological_locations has them so it will generate only the list of the new places
         return allThePlaces;
 
