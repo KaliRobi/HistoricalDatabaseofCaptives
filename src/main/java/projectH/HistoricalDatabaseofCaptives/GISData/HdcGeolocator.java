@@ -4,6 +4,7 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriUtils;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 public class HdcGeolocator {
     @Autowired
@@ -29,12 +32,25 @@ public class HdcGeolocator {
 //        keyset should be =  getAllMentionedSettlement();
 
         HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
-//        Set<String> placesKeyset = getAllMentionedSettlement();
+        Set<String> placesKeyset = getAllMentionedSettlement();
 
         // will need to generate a list of new uri s then do clear out tha  data like below
 
-//        the final goal is to get a hasmap where the city name is the key and the lat / lon data is the value in its own map, or a list
+        //generate target set
+        // town names with space need to be filtered out for now
+        Set<String> targetTownSet = getAllMentionedSettlement().stream().filter(e -> !e.contains(" ")).collect(Collectors.toSet());
 
+        List<URI> targetUris = targetTownSet.stream().map(target ->
+        {
+            try {
+                return  new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + target);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+
+//        the final goal is to get a hasmap where the city name is the key and the lat / lon data is the value in its own map, or a list
+        System.out.println(targetUris);
         // deal with the api request`
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=Balmazujvaros"))
@@ -56,7 +72,7 @@ public class HdcGeolocator {
         List<String> validKeys = List.of("\"display_name\"", "\"lat\"", "\"lon\"" );
         lanLonMap.keySet().retainAll(validKeys);
         placesWiththeirLatLon.put(lanLonMap.get("\"display_name\""), lanLonMap );
-        System.out.println(placesWiththeirLatLon);
+
 
 
 
