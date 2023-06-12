@@ -10,9 +10,11 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -25,25 +27,19 @@ public class HdcGeolocator {
     @Autowired
     private CaptiveServices captiveServices;
     public HashMap<String, HashMap<String, String>> getCityData  () throws URISyntaxException, InterruptedException, ExecutionException {
-
-
-
-        // get a hasmap where the keyset is the set of the towns in the db
-//        keyset should be =  getAllMentionedSettlement();
+ //maybe changing to google az openstreet view does not tolerate bulk requests very much
+        // also the databse needs to be set up to store the already queried information so this will be the next getAllMentionedSettlement()
 
         HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
         Set<String> placesKeyset = getAllMentionedSettlement();
 
-        // will need to generate a list of new uri s then do clear out tha  data like below
+        Set<String> targetTownSet = new HashSet<>(getAllMentionedSettlement());
 
-        //generate target set
-        // town names with space need to be filtered out for now
-        Set<String> targetTownSet = getAllMentionedSettlement().stream().filter(e -> !e.contains(" ")).collect(Collectors.toSet());
-
+        //creating uri list while dealing with the special Hungarian characters
         List<URI> targetUris = targetTownSet.stream().map(target ->
         {
             try {
-                return  new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + target);
+                return  new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8) );
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -60,21 +56,26 @@ public class HdcGeolocator {
                 .build()
                 .sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
+        HttpClient client = HttpClient.newHttpClient();
+        List<CompletableFuture<String>> listOfLatLon = targetUris.stream().map(targetURi -> client
+                .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+        ).toList();
+
+        System.out.println(listOfLatLon.get(0).isDone());
+
         // normalising the incoming string into a map
         // get the first object of the return string
         String latLonString = Arrays.stream(response.get().body().split("}")).toList().get(1);
         // this object van be converted to a map by creating smaller arrays splitting the string two times,
-        HashMap<String, String> lanLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
-                .map(part -> part.split(":"))
+        HashMap<String, String> latLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
+                .map(part -> part.replaceAll("\"", "").split(":"))
                 // since there are undesirable arrays in this stream due to the "," splitting we need to get rid off them
                 .filter(p -> p.length > 1 )
                 .collect(Collectors.toMap(e->e[0], e->e[1]));
-        List<String> validKeys = List.of("\"display_name\"", "\"lat\"", "\"lon\"" );
-        lanLonMap.keySet().retainAll(validKeys);
-        placesWiththeirLatLon.put(lanLonMap.get("\"display_name\""), lanLonMap );
-
-
-
+        System.out.println(latLonMap);
+        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
+        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );
 
         return  placesWiththeirLatLon;
 
@@ -83,7 +84,6 @@ public class HdcGeolocator {
     private Set<String> getAllMentionedSettlement(){
         Set<String> allThePlaces =  captiveServices.getCitiesOfBirth();
         allThePlaces.addAll(captiveServices.getCitiesOfResidence());
-        System.out.println(allThePlaces);
 // latter an overcharged version could check if geological_locations has them so it will generate only the list of the new places
         return allThePlaces;
 
