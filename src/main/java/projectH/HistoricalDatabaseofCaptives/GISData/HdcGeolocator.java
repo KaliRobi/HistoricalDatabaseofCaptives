@@ -106,4 +106,6 @@ public class HdcGeolocator {
         return placesWithLocationData;
     }
 
+    //validate the distance from Budapest to check if the returned lat/lon data is ok
+
 }
