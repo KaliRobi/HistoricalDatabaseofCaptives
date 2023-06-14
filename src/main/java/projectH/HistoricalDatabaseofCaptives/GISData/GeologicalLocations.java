@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Table(name="geological_locations")
 @Entity
-public class geological_locations {
+public class GeologicalLocations {
 
     @Id
     private long Id;
@@ -17,7 +17,7 @@ public class geological_locations {
 
     private double Longitude;
 
-    public geological_locations(long id, String name, double latitude, double longitude) {
+    public GeologicalLocations(long id, String name, double latitude, double longitude) {
         Id = id;
         Name = name;
         Latitude = latitude;
