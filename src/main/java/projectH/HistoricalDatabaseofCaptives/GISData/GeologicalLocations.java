@@ -24,6 +24,10 @@ public class GeologicalLocations {
         Longitude = longitude;
     }
 
+    public GeologicalLocations() {
+
+    }
+
     public long getId() {
         return Id;
     }

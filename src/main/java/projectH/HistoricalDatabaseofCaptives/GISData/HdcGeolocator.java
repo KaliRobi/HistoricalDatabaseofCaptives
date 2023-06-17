@@ -23,6 +23,8 @@ public class HdcGeolocator {
     private CaptiveServices captiveServices;
 
 
+    private GeoServices geoServices;
+
     private GeologicalRepository geologicalRepository;
     public HashMap<String, HashMap<String, String>> getCityData  () throws URISyntaxException, InterruptedException, ExecutionException {
  //maybe changing to google az openstreet view does not tolerate bulk requests very much
@@ -107,5 +109,20 @@ public class HdcGeolocator {
     }
 
     //validate the distance from Budapest to check if the returned lat/lon data is ok
+
+//    Haversine formula
+
+//    D= 3440.1 * arccos[(sin (latA) * sin(lat B)) + cos(lat A ) * cos(lat B) * cos(lat A - long B)] everything is expressed in radians
+    // radiance = xπ / 180
+
+    //tasks
+
+    // first is to enter the thing to the database
+
+
+
+
+
+
 
 }
