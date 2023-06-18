@@ -48,34 +48,53 @@ public class HdcGeolocator {
 //        the final goal is to get a hasmap where the city name is the key and the lat / lon data is the value in its own map, or a list
         System.out.println(targetUris);
         // deal with the api request`
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=Balmazujvaros"))
-                .version(HttpClient.Version.HTTP_2).GET().build();
-
-        CompletableFuture<HttpResponse<String>> response = HttpClient.newBuilder()
-                .build()
-                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=Balmazujvaros"))
+//                .version(HttpClient.Version.HTTP_2).GET().build();
+//
+//        CompletableFuture<HttpResponse<String>> response = HttpClient.newBuilder()
+//                .build()
+//                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
         HttpClient client = HttpClient.newHttpClient();
         List<CompletableFuture<String>> listOfLatLon = targetUris.stream().map(targetURi -> client
                 .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
         ).toList();
-        // return value as expected
-        System.out.println(listOfLatLon.get(1).get());
+        Map<String, Map<String, String>> temList = new HashMap<>();
 
+
+        // return value as expected
+        listOfLatLon.stream().toList().forEach(e -> {
+            try {
+                Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(1).split(","))
+                        .map(part -> part.replaceAll("\"", "").split(":"))
+                        .filter(p -> p.length > 1)
+                        .collect(Collectors.toMap(s -> s[0], s -> s[1])
+
+                        );
+                collect.keySet().retainAll(List.of("display_name", "lat", "lon" ));
+                System.out.println(temList.get(collect.get("display_name")));
+                temList.put(collect.get("display_name"), collect );
+                geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lon")), Double.parseDouble(collect.get("lat")));
+            } catch (InterruptedException | ExecutionException ex) {
+                throw new RuntimeException(ex);
+            }
+                });
+
+            System.out.println(temList);
         // normalising the incoming string into a map
         // get the first object of the return string
-        String latLonString = Arrays.stream(response.get().body().split("}")).toList().get(1);
+//        String latLonString = Arrays.stream(response.get().body().split("}")).toList().get(1);
         // this object van be converted to a map by creating smaller arrays splitting the string two times,
-        HashMap<String, String> latLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
-                .map(part -> part.replaceAll("\"", "").split(":"))
-                // since there are undesirable arrays in this stream due to the "," splitting we need to get rid off them
-                .filter(p -> p.length > 1 )
-                .collect(Collectors.toMap(e->e[0], e->e[1]));
-        System.out.println(latLonMap);
-        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
-        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );
+//        HashMap<String, String> latLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
+//                .map(part -> part.replaceAll("\"", "").split(":"))
+//                // since there are undesirable arrays in this stream due to the "," splitting we need to get rid off them
+//                .filter(p -> p.length > 1 )
+//                .collect(Collectors.toMap(e->e[0], e->e[1]));
+//        System.out.println(latLonMap);
+//        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
+//        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );
 
         return  placesWiththeirLatLon;
 
@@ -88,7 +107,7 @@ public class HdcGeolocator {
 
         // to test and to not to ge baned from openstreetwiev there will be 5 towns selected
         Set<String> tempSet = new HashSet<>();
-        tempSet.add("Balmazújváros"); tempSet.add("Szolnok"); tempSet.add("Sáránd"); tempSet.add("Karcag"); tempSet.add("Hajdúnánás");
+        tempSet.add("Tiszakecske"); tempSet.add("Konya"); tempSet.add("Tiszacsege"); tempSet.add("Tallinn"); tempSet.add("Győr");
             return tempSet;
 //        return allThePlaces;
 
@@ -120,29 +139,16 @@ public class HdcGeolocator {
         double radiusOfEarth = 6371000;
         double difLat = latB - latA;
         double difLon = lonB - lonA;
-//        math.sin(delta_phi / 2.0) ** 2 + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda / 2.0) ** 2
-        double sinatan2Base = Math.sin(difLat / 2) * 2 + Math.cos(latA) * Math.cos(latB) * Math.sin(difLon);
+//      Haversine formula
+        // based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
+        // https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
+        double atan2Base = Math.sin(difLat / 2) * 2 + Math.cos(latA) * Math.cos(latB) * Math.sin(difLon / 2 ) * 2;
+
+        double distanceInKm = (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base ))) * radiusOfEarth / 1000.0;
+
         return 0;
     }
-//    Haversine formula
-//    phi_1 = math.radians(lat1)
-//    phi_2 = math.radians(lat2)//
-//    delta_phi = math.radians(lat2 - lat1)
-//    delta_lambda = math.radians(lon2 - lon1)
-//
-//    a = math.sin(delta_phi / 2.0) ** 2 + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda / 2.0) ** 2
-//
-//    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-//
-//    meters = R * c  # output distance in meters
-//    km = meters / 1000.0  # output distance in kilometers
-//
-//    meters = round(meters, 3)
-//    km = round(km, 3)
 
-
-//    D= 3440.1 * arccos[(sin (latA) * sin(lat B)) + cos(lat A ) * cos(lat B) * cos(lat A - long B)] everything is expressed in radians
-    // radian = xπ / 180
 
     //tasks
 

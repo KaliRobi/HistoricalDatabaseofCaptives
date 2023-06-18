@@ -12,7 +12,7 @@ public class GeoServices {
 
 
 
-    public void addGeographicalLocation(long lon, long lat, String locationName){
+    public void addGeographicalLocation(String locationName, double lon, double lat){
         geologicalLocations.setLongitude(lon);
         geologicalLocations.setLatitude(lat);
         geologicalLocations.setName(locationName);
