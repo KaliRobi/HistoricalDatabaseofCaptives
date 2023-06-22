@@ -151,7 +151,7 @@ public class HdcGeolocator {
 
 
     //tasks
-
+//
     // first is to enter the thing to the database
 
 
