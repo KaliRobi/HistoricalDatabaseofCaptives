@@ -1,4 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ public class GeologicalLocations {
 
     private double Longitude;
 
+
     public GeologicalLocations(long id, String name, double latitude, double longitude) {
         Id = id;
         Name = name;
@@ -24,9 +27,6 @@ public class GeologicalLocations {
         Longitude = longitude;
     }
 
-    public GeologicalLocations() {
-
-    }
 
     public long getId() {
         return Id;
@@ -56,7 +56,7 @@ public class GeologicalLocations {
         return Longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public  void setLongitude(double longitude) {
         Longitude = longitude;
     }
 

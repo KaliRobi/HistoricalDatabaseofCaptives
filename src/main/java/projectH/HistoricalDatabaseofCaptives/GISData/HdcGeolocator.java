@@ -22,8 +22,8 @@ public class HdcGeolocator {
     @Autowired
     private CaptiveServices captiveServices;
 
-
-    private GeoServices geoServices;
+    @Autowired
+    private  GeoServices geoServices;
 
     private GeologicalRepository geologicalRepository;
     public HashMap<String, HashMap<String, String>> getCityData  () throws URISyntaxException, InterruptedException, ExecutionException {
@@ -148,6 +148,16 @@ public class HdcGeolocator {
 
         return 0;
     }
+//    public void addGeographicalLocation(String locationName, double lon, double lat){
+//        GeologicalLocations geologicalLocations = new GeologicalLocations();
+//
+//        geologicalLocations.setName(locationName);
+//        geologicalLocations.setLongitude(lon);
+//        geologicalLocations.setLatitude(lat);
+//
+//
+//        geologicalRepository.save(geologicalLocations);
+//    }
 
 
     //tasks
