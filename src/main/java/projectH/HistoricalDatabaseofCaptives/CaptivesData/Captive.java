@@ -1,15 +1,16 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-import javax.persistence.Entity;
+
 import java.util.Date;
 
 // The clas needs to describe all the attributes of a captive.
 
 @Table(name = "captives_data")
-@Entity
+@Entity(name="captive")
 public class Captive {
     @Id
     private long id;
@@ -81,6 +82,10 @@ public class Captive {
         this.degree_of_punishment = degree_of_punishment;
         this.notes = notes;
         this.arrest_site = arrest_site;
+    }
+
+    public Captive() {
+
     }
 
     public long getId() {

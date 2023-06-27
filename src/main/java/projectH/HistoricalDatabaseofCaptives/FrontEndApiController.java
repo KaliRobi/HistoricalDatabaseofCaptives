@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectH.HistoricalDatabaseofCaptives.GISData.HdcGeolocator;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -17,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class FrontEndApiController {
 
-    @Autowired
+
     private final CaptiveServices captiveServices;
 
     private final HdcGeolocator hdcGeolocator;

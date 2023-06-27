@@ -22,8 +22,10 @@ public class HdcGeolocator {
     @Autowired
     private CaptiveServices captiveServices;
 
+
+
     @Autowired
-    private  GeoServices geoServices;
+    private GeoServices geoServices;
 
     private GeologicalRepository geologicalRepository;
     public HashMap<String, HashMap<String, String>> getCityData  () throws URISyntaxException, InterruptedException, ExecutionException {

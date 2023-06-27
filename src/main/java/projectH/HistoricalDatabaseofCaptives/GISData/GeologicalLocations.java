@@ -1,16 +1,14 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.*;
+
 
 @Table(name="geological_locations")
-@Entity
+@Entity(name="geological_location")
 public class GeologicalLocations {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
 
     private String Name;
@@ -27,6 +25,8 @@ public class GeologicalLocations {
         Longitude = longitude;
     }
 
+    public GeologicalLocations() {
+            }
 
     public long getId() {
         return Id;

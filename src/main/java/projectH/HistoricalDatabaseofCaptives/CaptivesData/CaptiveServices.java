@@ -15,7 +15,7 @@ import java.util.*;
 
 @Component
 public class CaptiveServices {
-
+    @Autowired
     private final CaptiveRecordRepository captiveRecordRepository;
     @Autowired
     public CaptiveServices(CaptiveRecordRepository captiveRecordRepository) {
@@ -30,9 +30,8 @@ public class CaptiveServices {
 
     public List<Captive> getAllTheCaptives(){
         // jparepo interface throws error
-        List<Captive> captiveList = new ArrayList<>();
-        captiveRecordRepository.findAll().forEach(captiveList::add);
-        return captiveList;
+
+        return captiveRecordRepository.findAll();
 
     }
     public TreeSet<String> getCitiesOfResidence() {
