@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 
 @SpringBootApplication
-@EntityScan({"projectH.HistoricalDatabaseofCaptives.GISData.GeologicalLocations", "projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive"})
+//@EntityScan({ "projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive"})
 public class HistoricalDatabaseOfCaptivesApplication {
 
 	public static void main(String[] args) {

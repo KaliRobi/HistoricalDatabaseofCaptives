@@ -1,10 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-
+import jakarta.persistence.Entity;
 import java.util.Date;
 
 // The clas needs to describe all the attributes of a captive.

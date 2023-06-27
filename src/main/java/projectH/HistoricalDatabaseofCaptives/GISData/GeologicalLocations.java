@@ -9,64 +9,63 @@ public class GeologicalLocations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
+    private long id;
 
-    private String Name;
+    private String name;
 
-    private double Latitude;
+    private double latitude;
 
-    private double Longitude;
-
+    private double longitude;
 
     public GeologicalLocations(long id, String name, double latitude, double longitude) {
-        Id = id;
-        Name = name;
-        Latitude = latitude;
-        Longitude = longitude;
+        this.id = id;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public GeologicalLocations() {
-            }
+    }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public double getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(double latitude) {
-        Latitude = latitude;
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
-    public  void setLongitude(double longitude) {
-        Longitude = longitude;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override
     public String toString() {
-        return "geological_locations{" +
-                "Id=" + Id +
-                ", Name='" + Name + '\'' +
-                ", Latitude=" + Latitude +
-                ", Longitude=" + Longitude +
+        return "GeologicalLocations{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 '}';
     }
 }

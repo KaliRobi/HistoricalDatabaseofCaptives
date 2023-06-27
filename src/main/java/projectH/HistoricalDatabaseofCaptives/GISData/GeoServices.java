@@ -7,19 +7,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class GeoServices {
 
-    @Autowired
-    private GeologicalRepository geologicalRepository;
-    @Autowired
-    private final GeologicalLocations geologicalLocations;
 
+    private GeologicalRepository geologicalRepository;
+
+    private final GeologicalLocations geologicalLocations;
+    @Autowired
     public GeoServices(GeologicalRepository geologicalRepository, GeologicalLocations geologicalLocations) {
         this.geologicalRepository = geologicalRepository;
+
         this.geologicalLocations = geologicalLocations;
     }
 
 
     public void addGeographicalLocation(String locationName, double lon, double lat){
-
+//        GeologicalLocations geologicalLocations = new GeologicalLocations();
 
         geologicalLocations.setName(locationName);
         geologicalLocations.setLongitude(lon);
@@ -27,7 +28,7 @@ public class GeoServices {
 
 
         System.out.println(geologicalLocations);
-//        geologicalRepository.save(geologicalLocations);
+        geologicalRepository.save(geologicalLocations);
 
 
     }
