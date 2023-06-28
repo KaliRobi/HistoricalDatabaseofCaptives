@@ -5,27 +5,28 @@ import jakarta.persistence.*;
 
 @Table(name="geological_locations")
 @Entity(name="geological_location")
-public class GeologicalLocations {
-
+public class GeoLocations {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;
+    private String Name;
 
-    private double latitude;
+    private double Latitude;
 
-    private double longitude;
+    private double Longitude;
 
-    public GeologicalLocations(long id, String name, double latitude, double longitude) {
+    public GeoLocations( String name, double latitude, double longitude) {
         this.id = id;
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.Name = name;
+        this.Latitude = latitude;
+        this.Longitude = longitude;
     }
 
-    public GeologicalLocations() {
+    public GeoLocations() {
     }
+
+
 
     public long getId() {
         return id;
@@ -36,36 +37,36 @@ public class GeologicalLocations {
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public double getLatitude() {
-        return latitude;
+        return Latitude;
     }
 
     public void setLatitude(double latitude) {
-        this.latitude = latitude;
+        this.Latitude = latitude;
     }
 
     public double getLongitude() {
-        return longitude;
+        return Longitude;
     }
 
     public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        this.Longitude = longitude;
     }
 
     @Override
     public String toString() {
-        return "GeologicalLocations{" +
+        return "GeoLocations{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
+                ", name='" + Name + '\'' +
+                ", latitude=" + Latitude +
+                ", longitude=" + Longitude +
                 '}';
     }
 }

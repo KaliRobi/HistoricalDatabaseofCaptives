@@ -1,34 +1,27 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
-@Service
+
+@Component
 public class GeoServices {
 
+    private final GeologicalRepository geologicalRepository;
 
-    private GeologicalRepository geologicalRepository;
 
-    private final GeologicalLocations geologicalLocations;
     @Autowired
-    public GeoServices(GeologicalRepository geologicalRepository, GeologicalLocations geologicalLocations) {
+    public GeoServices(GeologicalRepository geologicalRepository) {
         this.geologicalRepository = geologicalRepository;
 
-        this.geologicalLocations = geologicalLocations;
     }
 
 
+
     public void addGeographicalLocation(String locationName, double lon, double lat){
-//        GeologicalLocations geologicalLocations = new GeologicalLocations();
 
-        geologicalLocations.setName(locationName);
-        geologicalLocations.setLongitude(lon);
-        geologicalLocations.setLatitude(lat);
-
-
-        System.out.println(geologicalLocations);
-        geologicalRepository.save(geologicalLocations);
+        geologicalRepository.save(new GeoLocations(locationName,lon, lat));
 
 
     }

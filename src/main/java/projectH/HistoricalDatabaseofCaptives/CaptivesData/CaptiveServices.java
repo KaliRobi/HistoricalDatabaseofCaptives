@@ -15,7 +15,7 @@ import java.util.*;
 
 @Component
 public class CaptiveServices {
-    @Autowired
+
     private final CaptiveRecordRepository captiveRecordRepository;
     @Autowired
     public CaptiveServices(CaptiveRecordRepository captiveRecordRepository) {
