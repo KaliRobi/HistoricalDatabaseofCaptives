@@ -6,6 +6,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.GISData.HdcGeolocator;
 
 import java.net.URISyntaxException;
@@ -47,5 +48,10 @@ public List<List<String>> exposeRelocations(){
 public Object settlementDetails() throws URISyntaxException,  InterruptedException, ExecutionException {
         return hdcGeolocator.getCityData();
 }
+
+    @GetMapping(path="/v1/test")
+    public Object testest()  {
+        return hdcGeolocator.getPlacesWithoutLocationData();
+    }
 
 }

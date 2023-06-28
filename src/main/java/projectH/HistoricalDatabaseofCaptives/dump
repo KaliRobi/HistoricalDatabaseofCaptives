@@ -1,0 +1,12 @@
+        // normalising the incoming string into a map
+        // get the first object of the return string
+//        String latLonString = Arrays.stream(response.get().body().split("}")).toList().get(1);
+        // this object van be converted to a map by creating smaller arrays splitting the string two times,
+//        HashMap<String, String> latLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
+//                .map(part -> part.replaceAll("\"", "").split(":"))
+//                // since there are undesirable arrays in this stream due to the "," splitting we need to get rid off them
+//                .filter(p -> p.length > 1 )
+//                .collect(Collectors.toMap(e->e[0], e->e[1]));
+//        System.out.println(latLonMap);
+//        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
+//        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );

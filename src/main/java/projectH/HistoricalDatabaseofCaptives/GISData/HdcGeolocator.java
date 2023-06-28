@@ -38,7 +38,8 @@ public class HdcGeolocator {
         HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
 
         Set<String> targetTownSet = new HashSet<>(getAllSettlement());
-
+//        Remove all when they are present in the geological_locations
+        targetTownSet.removeAll(getPlacesWithoutLocationData());
 
         //creating uri list while dealing with the special Hungarian characters
         List<URI> targetUris = targetTownSet.stream().map(target ->
@@ -51,15 +52,7 @@ public class HdcGeolocator {
         }).toList();
 
 //        the final goal is to get a hasmap where the city name is the key and the lat / lon data is the value in its own map, or a list
-        System.out.println(targetUris);
         // deal with the api request`
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=Balmazujvaros"))
-//                .version(HttpClient.Version.HTTP_2).GET().build();
-//
-//        CompletableFuture<HttpResponse<String>> response = HttpClient.newBuilder()
-//                .build()
-//                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
         HttpClient client = HttpClient.newHttpClient();
         List<CompletableFuture<String>> listOfLatLon = targetUris.stream().map(targetURi -> client
@@ -69,14 +62,13 @@ public class HdcGeolocator {
         Map<String, Map<String, String>> temList = new HashMap<>();
 
 
-        // return value as expected
+        // return value from open street view
         listOfLatLon.stream().toList().forEach(e -> {
             try {
                 Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(1).split(","))
                         .map(part -> part.replaceAll("\"", "").split(":"))
                         .filter(p -> p.length > 1)
                         .collect(Collectors.toMap(s -> s[0], s -> s[1])
-
                         );
                 collect.keySet().retainAll(List.of("display_name", "lat", "lon"));
                 System.out.println(temList.get(collect.get("display_name")));
@@ -87,20 +79,6 @@ public class HdcGeolocator {
             }
         });
 
-        System.out.println(temList);
-        // normalising the incoming string into a map
-        // get the first object of the return string
-//        String latLonString = Arrays.stream(response.get().body().split("}")).toList().get(1);
-        // this object van be converted to a map by creating smaller arrays splitting the string two times,
-//        HashMap<String, String> latLonMap = (HashMap<String, String>) Arrays.stream(latLonString.split(","))
-//                .map(part -> part.replaceAll("\"", "").split(":"))
-//                // since there are undesirable arrays in this stream due to the "," splitting we need to get rid off them
-//                .filter(p -> p.length > 1 )
-//                .collect(Collectors.toMap(e->e[0], e->e[1]));
-//        System.out.println(latLonMap);
-//        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
-//        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );
-
         return placesWiththeirLatLon;
 
     }
@@ -108,33 +86,20 @@ public class HdcGeolocator {
     private Set<String> getAllSettlement() {
         Set<String> allThePlaces = captiveServices.getCitiesOfBirth();
         allThePlaces.addAll(captiveServices.getCitiesOfResidence());
-// latter an overcharged version could check if geological_locations has them so it will generate only the list of the new places
-
-        // to test and to not to ge baned from openstreetwiev there will be 5 towns selected
-        Set<String> tempSet = new HashSet<>();
-        tempSet.add("Tiszakecske");
-        tempSet.add("Balmazujvaros");
-        tempSet.add("Tiszacsege");
-        tempSet.add("Debrecen");
-        tempSet.add("Hajdúböszörmény");
-
-        return tempSet;
-//        return allThePlaces;
-
-
+        return allThePlaces;
     }
-
-    private Set<String> getPlacesWithoutLocationData() {
-        Set<String> placesWithLocationData = new HashSet<>();
+    // get the locations without lat / lon data
+    public Set<String> getPlacesWithoutLocationData() {
+        Set<String> placesWithoutLocationData = new HashSet<>();
         geologicalRepository.findAll().forEach(loca -> {
-                    // get the locations without lat / lon data
-                    // this or getlatitude > 0
-                    if (String.valueOf(loca.getLatitude()).equals("")) {
-                        placesWithLocationData.add(loca.getName());
+                    if (loca.getLatitude() != 0 || loca.getLongitude() != 0) {
+//                        both value need to be in the db to not het prepared for a new fetch
+                        placesWithoutLocationData.add(loca.getName());
                     }
                 }
         );
-        return placesWithLocationData;
+
+        return placesWithoutLocationData;
     }
 
     //validate the distance from Budapest to check if the returned lat/lon data is ok
