@@ -38,8 +38,9 @@ public class HdcGeolocator {
         HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
 
         Set<String> targetTownSet = new HashSet<>(getAllSettlement());
+
 //        Remove all when they are present in the geological_locations
-        targetTownSet.removeAll(getPlacesWithoutLocationData());
+        targetTownSet.removeAll(getPlacesWithLocationData());
 
         //creating uri list while dealing with the special Hungarian characters
         List<URI> targetUris = targetTownSet.stream().map(target ->
@@ -70,10 +71,10 @@ public class HdcGeolocator {
                         .filter(p -> p.length > 1)
                         .collect(Collectors.toMap(s -> s[0], s -> s[1])
                         );
-                collect.keySet().retainAll(List.of("display_name", "lat", "lon"));
+                collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
                 System.out.println(temList.get(collect.get("display_name")));
                 temList.put(collect.get("display_name"), collect);
-                geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lon")), Double.parseDouble(collect.get("lat")));
+                geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
@@ -83,6 +84,7 @@ public class HdcGeolocator {
 
     }
 
+    // move to services
     private Set<String> getAllSettlement() {
         Set<String> allThePlaces = captiveServices.getCitiesOfBirth();
         allThePlaces.addAll(captiveServices.getCitiesOfResidence());
@@ -93,7 +95,7 @@ public class HdcGeolocator {
         Set<String> placesWithoutLocationData = new HashSet<>();
 
         geologicalRepository.findAll().forEach(loca -> {
-                    if (loca.getLatitude() != null || loca.getLongitude() != null) {
+                    if (loca.getLatitude() == null || loca.getLongitude() == null) {
 //                        both value need to be in the db to not get prepared for a new fetch
                         placesWithoutLocationData.add(loca.getName());
                     }
@@ -101,6 +103,20 @@ public class HdcGeolocator {
         );
 
         return placesWithoutLocationData;
+    }
+
+    private Set<String> getPlacesWithLocationData() {
+        Set<String> placesWithLocationData = new HashSet<>();
+
+        geologicalRepository.findAll().forEach(loca -> {
+                    if (loca.getLatitude() != null  && loca.getLongitude() != null  ) {
+//                        both value need to be in the db to not get prepared for a new fetch
+                        placesWithLocationData.add(loca.getName());
+                    }
+                }
+        );
+
+        return placesWithLocationData;
     }
     //TODO
     //Check for UNLOCATION codes for each settlement
@@ -112,14 +128,14 @@ public class HdcGeolocator {
 
     //validate the distance from Budapest to check if the returned lat/lon data is ok
 
-    public double getDistanceBetween() {
+    public double getDistanceBetween(GeoLocation locationA, GeoLocation locationB) {
 //        function calculates the distance between two point defined by coordinates (i.e. Cities) from the DB
 //        GeoLocation locationA, GeoLocation locationB
 //        convert to Radian is = degree * 3.1415926535 / 180;
 
-        GeoLocation locationA = getALocationByName("Balmazújváros");
-
-        GeoLocation locationB = getALocationByName("Hajdúböszörmény");
+//        GeoLocation locationA = getALocationByName("Balmazújváros");
+//
+//        GeoLocation locationB = getALocationByName("Hajdúböszörmény");
 
         double latA = Math.toRadians(locationB.getLatitude());
         double latB = Math.toRadians(locationB.getLatitude());
@@ -135,11 +151,20 @@ public class HdcGeolocator {
         double atan2Base = Math.pow(Math.sin(difLat / 2),  2) + Math.cos(latA) * Math.cos(latB) * Math.pow(Math.sin(difLon / 2) ,2);
 //
         double distanceInKm =  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
-
+        System.out.println(distanceInKm);
         return   distanceInKm;
     }
 
 
+    public Set<String> returnDistancesFromBudapest() {
+        //base
+        GeoLocation x = getALocationByName("Budapest");
+        Set<String> resultedDistanceString = new HashSet<>();
+// get the places and compare ach to the base
+         getPlacesWithLocationData().forEach( e-> resultedDistanceString.add("The distance between " + e + " and Budapest is about " +  getDistanceBetween( x, getALocationByName(e) ) + " km"));
+        System.out.println(resultedDistanceString);
+        return resultedDistanceString;
+    }
 
     //tasks
 //

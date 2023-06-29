@@ -51,7 +51,7 @@ public Object settlementDetails() throws URISyntaxException,  InterruptedExcepti
 
     @GetMapping(path="/v1/test")
     public Object testest()  {
-        return hdcGeolocator.getDistanceBetween();
+        return hdcGeolocator.returnDistancesFromBudapest();
     }
 
 }
