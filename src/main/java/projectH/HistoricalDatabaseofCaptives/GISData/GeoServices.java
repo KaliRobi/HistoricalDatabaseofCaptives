@@ -21,7 +21,7 @@ public class GeoServices {
 
     public void addGeographicalLocation(String locationName, double lon, double lat){
 
-        geologicalRepository.save(new GeoLocations(locationName,lon, lat));
+        geologicalRepository.save(new GeoLocation(locationName,lon, lat));
 
 
     }

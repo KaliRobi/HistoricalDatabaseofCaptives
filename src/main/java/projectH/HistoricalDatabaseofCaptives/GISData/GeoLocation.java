@@ -5,25 +5,25 @@ import jakarta.persistence.*;
 
 @Table(name="geological_locations")
 @Entity(name="geological_location")
-public class GeoLocations {
+public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String Name;
 
-    private double Latitude;
+    private Double Latitude;
 
-    private double Longitude;
+    private Double Longitude;
 
-    public GeoLocations( String name, double latitude, double longitude) {
+    public GeoLocation(String name, Double latitude, Double longitude) {
         this.id = id;
         this.Name = name;
         this.Latitude = latitude;
         this.Longitude = longitude;
     }
 
-    public GeoLocations() {
+    public GeoLocation() {
     }
 
 
@@ -44,19 +44,19 @@ public class GeoLocations {
         this.Name = name;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.Latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.Longitude = longitude;
     }
 

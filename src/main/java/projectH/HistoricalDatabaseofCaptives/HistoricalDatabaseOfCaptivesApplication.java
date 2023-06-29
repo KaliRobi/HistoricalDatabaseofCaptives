@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-
+//https://docs.spring.io/spring-data/jpa/docs/current/reference/html
 @SpringBootApplication
 //@EntityScan({ "projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive"})
 public class HistoricalDatabaseOfCaptivesApplication {

@@ -89,11 +89,12 @@ public class HdcGeolocator {
         return allThePlaces;
     }
     // get the locations without lat / lon data
-    public Set<String> getPlacesWithoutLocationData() {
+    private Set<String> getPlacesWithoutLocationData() {
         Set<String> placesWithoutLocationData = new HashSet<>();
+
         geologicalRepository.findAll().forEach(loca -> {
-                    if (loca.getLatitude() != 0 || loca.getLongitude() != 0) {
-//                        both value need to be in the db to not het prepared for a new fetch
+                    if (loca.getLatitude() != null || loca.getLongitude() != null) {
+//                        both value need to be in the db to not get prepared for a new fetch
                         placesWithoutLocationData.add(loca.getName());
                     }
                 }
@@ -101,27 +102,41 @@ public class HdcGeolocator {
 
         return placesWithoutLocationData;
     }
+    //TODO
+    //Check for UNLOCATION codes for each settlement
+    private GeoLocation getALocationByName(String name){
+       return geologicalRepository.findByName(name);
+
+    }
+
 
     //validate the distance from Budapest to check if the returned lat/lon data is ok
 
-    private double getDistanceBetween(GeoLocations locationA, GeoLocations locationB) {
-//        convert to Radian calc = degree * 3.1415926535 / 180;
-        double latA = Math.toRadians(locationA.getLatitude());
-        double lonA = Math.toRadians(locationA.getLongitude());
-        double latB = Math.toRadians(locationB.getLatitude());
-        double lonB = Math.toRadians(locationB.getLongitude());
+    public double getDistanceBetween() {
+//        function calculates the distance between two point defined by coordinates (i.e. Cities) from the DB
+//        GeoLocation locationA, GeoLocation locationB
+//        convert to Radian is = degree * 3.1415926535 / 180;
 
-        double radiusOfEarth = 6371000;
-        double difLat = latB - latA;
-        double difLon = lonB - lonA;
+        GeoLocation locationA = getALocationByName("Balmazújváros");
+
+        GeoLocation locationB = getALocationByName("Hajdúböszörmény");
+
+        double latA = Math.toRadians(locationB.getLatitude());
+        double latB = Math.toRadians(locationB.getLatitude());
+
+        double difLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
+        double difLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude()) ;
+
+
 //      Haversine formula
         // based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
         // https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
-        double atan2Base = Math.sin(difLat / 2) * 2 + Math.cos(latA) * Math.cos(latB) * Math.sin(difLon / 2) * 2;
+//
+        double atan2Base = Math.pow(Math.sin(difLat / 2),  2) + Math.cos(latA) * Math.cos(latB) * Math.pow(Math.sin(difLon / 2) ,2);
+//
+        double distanceInKm =  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
 
-        double distanceInKm = (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * radiusOfEarth / 1000.0;
-
-        return 0;
+        return   distanceInKm;
     }
 
 
