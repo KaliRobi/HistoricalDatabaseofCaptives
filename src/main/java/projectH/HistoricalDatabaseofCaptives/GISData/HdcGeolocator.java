@@ -1,6 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
@@ -173,7 +174,41 @@ public class HdcGeolocator {
 
 
 
+    /// temporrary feeder for mass coordinattes retrival so openstreet view wont close the conenction.
 
+
+    public void bulkTownFeeder(Set<String> towns){
+        // since it is time / request limited I need to spread the requested thing
+        List<String> localTowns = towns.stream().toList();
+
+        Set<String> feeder =  new HashSet<>();
+        Integer interateOver  = towns.size() /6 +1;
+
+
+        for(int counter = localTowns.size() -1 ; counter -- > 0;){
+            List<String> localList = new ArrayList<>();
+//             we need the last fragment of the arra
+//            so we need to get the index get the index
+//            and if this index is between the last 5 then add it to the current list
+
+            if(localTowns.indexOf(counter) >= localList.size() - 5){
+
+            }
+
+
+
+        }
+
+//        lets go 6
+//             when the length / 6 +1  =  new number we need to iterate over
+
+
+
+
+
+
+
+    }
 
 
 
