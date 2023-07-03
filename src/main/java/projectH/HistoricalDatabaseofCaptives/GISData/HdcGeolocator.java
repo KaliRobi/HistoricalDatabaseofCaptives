@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class HdcGeolocator {
@@ -119,8 +120,7 @@ public class HdcGeolocator {
 
         return placesWithLocationData;
     }
-    //TODO
-    //Check for UNLOCATION codes for each settlement
+
     private GeoLocation getALocationByName(String name){
        return geologicalRepository.findByName(name);
 
@@ -134,9 +134,6 @@ public class HdcGeolocator {
 //        GeoLocation locationA, GeoLocation locationB
 //        convert to Radian is = degree * 3.1415926535 / 180;
 
-//        GeoLocation locationA = getALocationByName("Balmazújváros");
-//
-//        GeoLocation locationB = getALocationByName("Hajdúböszörmény");
 
         double latA = Math.toRadians(locationB.getLatitude());
         double latB = Math.toRadians(locationB.getLatitude());
@@ -177,38 +174,38 @@ public class HdcGeolocator {
     /// temporrary feeder for mass coordinattes retrival so openstreet view wont close the conenction.
 
 
-    public void bulkTownFeeder(Set<String> towns){
-        // since it is time / request limited I need to spread the requested thing
-        List<String> localTowns = towns.stream().toList();
-
-        Set<String> feeder =  new HashSet<>();
-        Integer interateOver  = towns.size() /6 +1;
+    private void bulkTownFeeder(List<String> listToProcess, int maxPartitionSize){
 
 
-        for(int counter = localTowns.size() -1 ; counter -- > 0;){
-            List<String> localList = new ArrayList<>();
-//             we need the last fragment of the arra
-//            so we need to get the index get the index
-//            and if this index is between the last 5 then add it to the current list
+            int listSize = listToProcess.size();
+            System.out.println(listSize);
+            Integer partitionSize2 = IntStream.range(1, maxPartitionSize).filter(e-> listSize % e == 0).reduce(Integer::max).orElseThrow();
+//       use the partition size to slice the array.
+            List<List<String>> collectorList = new ArrayList<>();
+            // increase the min and max index with partition size until it is larger than the size - 1 of the array.
+            int subLinkAmount = listSize / partitionSize2;
+            List<Integer> itList = IntStream.range(1, subLinkAmount + 1).map(e -> e * partitionSize2).boxed().toList();
+            itList.forEach(e ->
+                    collectorList.add(listToProcess.subList(e - partitionSize2, e))
+            );
 
-            if(localTowns.indexOf(counter) >= localList.size() - 5){
+            System.out.println(collectorList);
+        }
+        public String justExecute(){
 
-            }
+        Set<String> locations =  getAllSettlement();
+//                locations.removeAll(getPlacesWithLocationData());
+                ;
 
+            bulkTownFeeder( locations.stream().toList(), 6);
+
+            return null;
 
 
         }
 
-//        lets go 6
-//             when the length / 6 +1  =  new number we need to iterate over
 
 
-
-
-
-
-
-    }
 
 
 
