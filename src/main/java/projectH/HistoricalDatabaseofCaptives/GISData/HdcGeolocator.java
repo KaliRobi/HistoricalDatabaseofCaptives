@@ -1,7 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 
-import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
@@ -35,14 +34,14 @@ public class HdcGeolocator {
 
     public HashMap<String, HashMap<String, String>> getCityData() throws URISyntaxException, InterruptedException, ExecutionException {
         //maybe changing to google az openstreet view does not tolerate bulk requests very much
-        // also the databse needs to be set up to store the already queried information so this will be the next getAllMentionedSettlement()
+        // also the databse needs to be set up to store the already queried information so this will be the next getAllMentionedlocation()
 
-        HashMap<String, HashMap<String, String>> placesWiththeirLatLon = new HashMap<>();
+        HashMap<String, HashMap<String, String>> locationsWiththeirLatLon = new HashMap<>();
 
-        Set<String> targetTownSet = new HashSet<>(getAllSettlement());
+        Set<String> targetTownSet = new HashSet<>(getAllLocation());
 
 //        Remove all when they are present in the geological_locations
-        targetTownSet.removeAll(getPlacesWithLocationData());
+        targetTownSet.removeAll(getlocationsWithLocationData());
 
         //creating uri list while dealing with the special Hungarian characters
         List<URI> targetUris = targetTownSet.stream().map(target ->
@@ -82,43 +81,95 @@ public class HdcGeolocator {
             }
         });
 
-        return placesWiththeirLatLon;
+        return locationsWiththeirLatLon;
+
+    }
+    // This version is for the larger mass of data retrieval
+    // apparently the locations name is retruned by its current non-latin names
+//    select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
+    // needs an extra column in  geological_locations "source_name"  and the name renamed to "osv_name"
+    public void getCityDataInMass() throws URISyntaxException, InterruptedException, ExecutionException {
+        Set<String> locations =  getAllLocation();
+        locations.removeAll(getlocationsWithLocationData());
+        //creating uri list while dealing with the special Hungarian characters
+        List<List<String>> targetLocations = bulkTownFeeder( locations.stream().toList(), 6);
+        List<List<URI>> targetUris =  targetLocations.stream().map( targetList -> targetList.stream().map(target ->  {
+            try {
+                return new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList() ).toList();
+
+        for(List<URI> UriList : targetUris) {
+        HttpClient client = HttpClient.newHttpClient();
+        List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
+                .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+        ).toList();
+        Map<String, Map<String, String>> temList = new HashMap<>();
+            System.out.println(UriList);
+        // return value from open street view
+        listOfLatLon.stream().toList().forEach(e -> {
+            try { if(Arrays.asList(e.get().split("}")).size() >= 1 && Arrays.asList(e.get().split("}")).get(0).length() != 0 ){
+                Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(0).split(","))
+                        .map(part -> part.replaceAll("\"", "").split(":"))
+                        .filter(p -> p.length > 1)
+                        .collect(Collectors.toMap(s -> s[0], s -> s[1])
+                        );
+                collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
+                System.out.println(temList.get(collect.get("display_name")));
+                temList.put(collect.get("display_name"), collect);
+                if(null != collect.get("lat") &&
+                        null !=  collect.get("lon")) {
+                    geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+                }
+                    }
+
+            } catch (InterruptedException | ExecutionException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        //lets wait this much for now
+        Thread.sleep(6000);
+}
+
 
     }
 
     // move to services
-    private Set<String> getAllSettlement() {
-        Set<String> allThePlaces = captiveServices.getCitiesOfBirth();
-        allThePlaces.addAll(captiveServices.getCitiesOfResidence());
-        return allThePlaces;
+    private Set<String> getAllLocation() {
+        Set<String> allThelocations = captiveServices.getCitiesOfBirth();
+        allThelocations.addAll(captiveServices.getCitiesOfResidence());
+        return allThelocations;
     }
     // get the locations without lat / lon data
-    private Set<String> getPlacesWithoutLocationData() {
-        Set<String> placesWithoutLocationData = new HashSet<>();
+    private Set<String> getlocationsWithoutLocationData() {
+        Set<String> locationsWithoutLocationData = new HashSet<>();
 
         geologicalRepository.findAll().forEach(loca -> {
                     if (loca.getLatitude() == null || loca.getLongitude() == null) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        placesWithoutLocationData.add(loca.getName());
+                        locationsWithoutLocationData.add(loca.getName());
                     }
                 }
         );
 
-        return placesWithoutLocationData;
+        return locationsWithoutLocationData;
     }
 
-    private Set<String> getPlacesWithLocationData() {
-        Set<String> placesWithLocationData = new HashSet<>();
+    private Set<String> getlocationsWithLocationData() {
+        Set<String> locationsWithLocationData = new HashSet<>();
 
         geologicalRepository.findAll().forEach(loca -> {
                     if (loca.getLatitude() != null  && loca.getLongitude() != null  ) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        placesWithLocationData.add(loca.getName());
+                        locationsWithLocationData.add(loca.getName());
                     }
                 }
         );
 
-        return placesWithLocationData;
+        return locationsWithLocationData;
     }
 
     private GeoLocation getALocationByName(String name){
@@ -129,52 +180,41 @@ public class HdcGeolocator {
 
     //validate the distance from Budapest to check if the returned lat/lon data is ok
 
-    public double getDistanceBetween(GeoLocation locationA, GeoLocation locationB) {
+    public double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
 //        function calculates the distance between two point defined by coordinates (i.e. Cities) from the DB
 //        GeoLocation locationA, GeoLocation locationB
 //        convert to Radian is = degree * 3.1415926535 / 180;
-
-
         double latA = Math.toRadians(locationB.getLatitude());
         double latB = Math.toRadians(locationB.getLatitude());
-
         double difLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
         double difLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude()) ;
-
-
 //      Haversine formula
-        // based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
-        // https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
-//
+//         based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
+//         https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
+
         double atan2Base = Math.pow(Math.sin(difLat / 2),  2) + Math.cos(latA) * Math.cos(latB) * Math.pow(Math.sin(difLon / 2) ,2);
-//
+
         double distanceInKm =  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
         System.out.println(distanceInKm);
         return   distanceInKm;
     }
-
-
     public Set<String> returnDistancesFromBudapest() {
-        //base
+//        base
         GeoLocation x = getALocationByName("Budapest");
         Set<String> resultedDistanceString = new HashSet<>();
-// get the places and compare ach to the base
-         getPlacesWithLocationData().forEach( e-> resultedDistanceString.add("The distance between " + e + " and Budapest is about " +  getDistanceBetween( x, getALocationByName(e) ) + " km"));
+// get the locations and compare ach to the base
+         getlocationsWithLocationData().forEach( e-> resultedDistanceString.add("The distance between " + e + " and Budapest is about " +  calculateLocationToLocationDistance( x, getALocationByName(e) ) + " km"));
         System.out.println(resultedDistanceString);
         return resultedDistanceString;
     }
 
-    //tasks
-//
+
     //TODO
     //    build an in memory cache so it will see what the we need to get from open street view
 
 
-
-    /// temporrary feeder for mass coordinattes retrival so openstreet view wont close the conenction.
-
-
-    private void bulkTownFeeder(List<String> listToProcess, int maxPartitionSize){
+    // will be a separate class, maybe it will be useful later
+    private List<List<String>> bulkTownFeeder(List<String> listToProcess, int maxPartitionSize){
 
 
             int listSize = listToProcess.size();
@@ -190,14 +230,11 @@ public class HdcGeolocator {
             );
 
             System.out.println(collectorList);
+            return collectorList;
         }
-        public String justExecute(){
+        public String justExecute() throws URISyntaxException, ExecutionException, InterruptedException {
 
-        Set<String> locations =  getAllSettlement();
-//                locations.removeAll(getPlacesWithLocationData());
-                ;
-
-            bulkTownFeeder( locations.stream().toList(), 6);
+            getCityDataInMass();
 
             return null;
 

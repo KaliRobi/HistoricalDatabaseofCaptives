@@ -50,7 +50,7 @@ public Object settlementDetails() throws URISyntaxException,  InterruptedExcepti
 }
 
     @GetMapping(path="/v1/test")
-    public Object testest()  {
+    public Object testest() throws URISyntaxException, ExecutionException, InterruptedException {
         return hdcGeolocator.justExecute();
     }
 
