@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface GeologicalRepository extends JpaRepository<GeoLocation, Long> {
-    @Query("select loc from geological_location loc WHERE loc.Name = ?1")
+    @Query("select loc from geological_location loc WHERE loc.source_name = ?1")
     GeoLocation findByName(String Name);
 
 }

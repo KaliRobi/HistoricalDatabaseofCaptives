@@ -3,6 +3,7 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.util.UriEncoder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.net.URI;
@@ -60,6 +61,7 @@ public class HdcGeolocator {
         List<CompletableFuture<String>> listOfLatLon = targetUris.stream().map(targetURi -> client
                 .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
+
         ).toList();
         Map<String, Map<String, String>> temList = new HashMap<>();
 
@@ -75,7 +77,7 @@ public class HdcGeolocator {
                 collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
                 System.out.println(temList.get(collect.get("display_name")));
                 temList.put(collect.get("display_name"), collect);
-                geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+//                geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
             } catch (InterruptedException | ExecutionException ex) {
                 throw new RuntimeException(ex);
             }
@@ -93,6 +95,7 @@ public class HdcGeolocator {
         locations.removeAll(getlocationsWithLocationData());
         //creating uri list while dealing with the special Hungarian characters
         List<List<String>> targetLocations = bulkTownFeeder( locations.stream().toList(), 6);
+
         List<List<URI>> targetUris =  targetLocations.stream().map( targetList -> targetList.stream().map(target ->  {
             try {
                 return new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8));
@@ -106,23 +109,33 @@ public class HdcGeolocator {
         List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
                 .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
+                .thenApply( e -> e.concat(UriEncoder.decode(targetURi.toString()).substring(targetURi.toString().lastIndexOf("="))   ))
         ).toList();
         Map<String, Map<String, String>> temList = new HashMap<>();
-            System.out.println(UriList);
+
         // return value from open street view
         listOfLatLon.stream().toList().forEach(e -> {
-            try { if(Arrays.asList(e.get().split("}")).size() >= 1 && Arrays.asList(e.get().split("}")).get(0).length() != 0 ){
-                Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(0).split(","))
-                        .map(part -> part.replaceAll("\"", "").split(":"))
-                        .filter(p -> p.length > 1)
-                        .collect(Collectors.toMap(s -> s[0], s -> s[1])
-                        );
+
+
+
+            try {
+                List<String> responseList =   Arrays.asList(e.get().split("}"));
+
+                if(responseList.size() >= 1 && responseList.get(0).length() != 0 ){
+                    Map<String, String> collect = Arrays.stream(responseList.get(0).split(","))
+                            .map(part -> part.replaceAll("\"", "").split(":"))
+                            .filter(p -> p.length > 1)
+                            .collect(Collectors.toMap(s -> s[0], s -> s[1])
+                            );
+                String sourceName = responseList.get(responseList.size() -1).replaceAll("\\W", "" );
+                System.out.println(sourceName);
+
                 collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
-                System.out.println(temList.get(collect.get("display_name")));
+
                 temList.put(collect.get("display_name"), collect);
                 if(null != collect.get("lat") &&
                         null !=  collect.get("lon")) {
-                    geoServices.addGeographicalLocation(collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+                    geoServices.addGeographicalLocation(sourceName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
                 }
                     }
 
@@ -131,7 +144,7 @@ public class HdcGeolocator {
             }
         });
         //lets wait this much for now
-        Thread.sleep(6000);
+        Thread.sleep(60000);
 }
 
 
@@ -150,7 +163,7 @@ public class HdcGeolocator {
         geologicalRepository.findAll().forEach(loca -> {
                     if (loca.getLatitude() == null || loca.getLongitude() == null) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithoutLocationData.add(loca.getName());
+                        locationsWithoutLocationData.add(loca.getSource_name());
                     }
                 }
         );
@@ -164,7 +177,7 @@ public class HdcGeolocator {
         geologicalRepository.findAll().forEach(loca -> {
                     if (loca.getLatitude() != null  && loca.getLongitude() != null  ) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithLocationData.add(loca.getName());
+                        locationsWithLocationData.add(loca.getSource_name());
                     }
                 }
         );

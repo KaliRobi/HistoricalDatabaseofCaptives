@@ -19,9 +19,9 @@ public class GeoServices {
 
 
 
-    public void addGeographicalLocation(String locationName, double lon, double lat){
+    public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat){
 
-        geologicalRepository.save(new GeoLocation(locationName,lon, lat));
+        geologicalRepository.save(new GeoLocation(sourceName, OsvName,lon, lat));
 
 
     }

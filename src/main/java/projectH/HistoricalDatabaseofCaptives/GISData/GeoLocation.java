@@ -10,23 +10,24 @@ public class GeoLocation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String Name;
-
+    @Column(name = "osv_name")
+    private String osv_name;
+    @Column( name = "source_name")
+    private String source_name;
     private Double Latitude;
 
     private Double Longitude;
 
-    public GeoLocation(String name, Double latitude, Double longitude) {
+    public GeoLocation(String sourceName, String osvName, Double latitude, Double longitude) {
         this.id = id;
-        this.Name = name;
+        this.source_name = sourceName;
+        this.osv_name = osvName;
         this.Latitude = latitude;
         this.Longitude = longitude;
     }
 
     public GeoLocation() {
     }
-
-
 
     public long getId() {
         return id;
@@ -36,12 +37,20 @@ public class GeoLocation {
         this.id = id;
     }
 
-    public String getName() {
-        return Name;
+    public String getOsv_name() {
+        return osv_name;
     }
 
-    public void setName(String name) {
-        this.Name = name;
+    public void setOsv_name(String osv_name) {
+        this.osv_name = osv_name;
+    }
+
+    public String getSource_name() {
+        return source_name;
+    }
+
+    public void setSource_name(String source_name) {
+        this.source_name = source_name;
     }
 
     public Double getLatitude() {
@@ -49,7 +58,7 @@ public class GeoLocation {
     }
 
     public void setLatitude(Double latitude) {
-        this.Latitude = latitude;
+        Latitude = latitude;
     }
 
     public Double getLongitude() {
@@ -57,16 +66,6 @@ public class GeoLocation {
     }
 
     public void setLongitude(Double longitude) {
-        this.Longitude = longitude;
-    }
-
-    @Override
-    public String toString() {
-        return "GeoLocations{" +
-                "id=" + id +
-                ", name='" + Name + '\'' +
-                ", latitude=" + Latitude +
-                ", longitude=" + Longitude +
-                '}';
+        Longitude = longitude;
     }
 }
