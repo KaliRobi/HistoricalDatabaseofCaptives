@@ -3,11 +3,11 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.yaml.snakeyaml.util.UriEncoder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -69,7 +69,7 @@ public class HdcGeolocator {
         // return value from open street view
         listOfLatLon.stream().toList().forEach(e -> {
             try {
-                Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(1).split(","))
+                Map<String, String> collect = Arrays.stream(Arrays.asList(e.get().split("}")).get(0).split(","))
                         .map(part -> part.replaceAll("\"", "").split(":"))
                         .filter(p -> p.length > 1)
                         .collect(Collectors.toMap(s -> s[0], s -> s[1])
@@ -109,7 +109,8 @@ public class HdcGeolocator {
         List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
                 .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply( e -> e.concat(UriEncoder.decode(targetURi.toString()).substring(targetURi.toString().lastIndexOf("="))   ))
+                // hun characters ale lost :(
+                .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
         ).toList();
         Map<String, Map<String, String>> temList = new HashMap<>();
 
@@ -144,7 +145,7 @@ public class HdcGeolocator {
             }
         });
         //lets wait this much for now
-        Thread.sleep(60000);
+        Thread.sleep(6000);
 }
 
 
@@ -211,6 +212,7 @@ public class HdcGeolocator {
         System.out.println(distanceInKm);
         return   distanceInKm;
     }
+
     public Set<String> returnDistancesFromBudapest() {
 //        base
         GeoLocation x = getALocationByName("Budapest");

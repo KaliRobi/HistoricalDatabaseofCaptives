@@ -22,6 +22,7 @@ public class HistoricalDatabaseOfCaptivesApplication {
 // Visually interesting parts ae getting prioritised. (Appears to be more interesting )
 // This the GIS part is the most important at the moment . Things to learn => https://docs.qgis.org/3.28/en/docs/training_manual/index.html
 // 2023.06.11 main goal is to figure out the main concept of the GIS part.
+// 2023.07.04 Most of the Geolocation part is done. cache left to do so db call is necessary to see what see what sources do we have
 // .
 // another idea is to create data cleaning utility
 //    will go through the db and checks for data not meeting the requirements or possibly wrongly entered, extremes from statistical point of view.
