@@ -22,7 +22,7 @@ public class CaptiveServices {
         this.captiveRecordRepository = captiveRecordRepository;
     }
 
-    // This will serve the record single page
+
     public Optional<Captive> GetCaptiveById(Long num){
      return captiveRecordRepository.findById(num);
     }

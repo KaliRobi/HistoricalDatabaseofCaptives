@@ -1,12 +1,12 @@
 package projectH.HistoricalDatabaseofCaptives;
 
 
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.Antropometrics;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.GISData.HdcGeolocator;
 
 import java.net.URISyntaxException;
@@ -17,12 +17,14 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class FrontEndApiController {
 
-
+    private final Antropometrics antropometrics;
     private final CaptiveServices captiveServices;
 
     private final HdcGeolocator hdcGeolocator;
     @Autowired
-    public FrontEndApiController(CaptiveServices captiveServices, HdcGeolocator hdcGeolocator) {
+    public FrontEndApiController(Antropometrics antropometrics, CaptiveServices captiveServices, HdcGeolocator hdcGeolocator) {
+        this.antropometrics = antropometrics;
+
         this.captiveServices = captiveServices;
         this.hdcGeolocator = hdcGeolocator;
     }
@@ -50,8 +52,8 @@ public Object settlementDetails() throws URISyntaxException,  InterruptedExcepti
 }
 
     @GetMapping(path="/v1/test")
-    public Object testest() throws URISyntaxException, ExecutionException, InterruptedException {
-        return hdcGeolocator.justExecute();
+    public void testest() throws URISyntaxException, ExecutionException, InterruptedException {
+         antropometrics.getCohorList(10);
     }
 
 }

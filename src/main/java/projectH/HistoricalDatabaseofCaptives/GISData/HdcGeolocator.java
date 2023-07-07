@@ -238,8 +238,9 @@ public class HdcGeolocator {
 //       use the partition size to slice the array.
             List<List<String>> collectorList = new ArrayList<>();
             // increase the min and max index with partition size until it is larger than the size - 1 of the array.
-            int subLinkAmount = listSize / partitionSize2;
-            List<Integer> itList = IntStream.range(1, subLinkAmount + 1).map(e -> e * partitionSize2).boxed().toList();
+            int subListAmount = listSize / partitionSize2;
+
+            List<Integer> itList = IntStream.range(1, subListAmount + 1).map(e -> e * partitionSize2).boxed().toList();
             itList.forEach(e ->
                     collectorList.add(listToProcess.subList(e - partitionSize2, e))
             );

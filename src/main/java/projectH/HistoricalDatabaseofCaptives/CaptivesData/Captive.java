@@ -46,7 +46,7 @@ public class Captive {
     private String notes;
     private String arrest_site;
 
-    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Date date_of_birth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Date sentence_begins, Date sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
+    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Date dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Date sentence_begins, Date sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
         this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
@@ -56,7 +56,7 @@ public class Captive {
         this.build = build;
         this.dentition = dentition;
         this.special_peculiarities = special_peculiarities;
-        this.date_of_birth = date_of_birth;
+        this.date_of_birth = dateOfBirth;
         this.place_of_birth = place_of_birth;
         this.place_of_residence = place_of_residence;
         this.religion = religion;
