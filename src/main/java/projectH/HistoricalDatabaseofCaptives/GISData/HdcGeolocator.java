@@ -115,10 +115,8 @@ public class HdcGeolocator {
         Map<String, Map<String, String>> temList = new HashMap<>();
 
         // return value from open street view
+//            since the foreach should be used only to rreport thre result not operate it needs to be refactored to loop
         listOfLatLon.stream().toList().forEach(e -> {
-
-
-
             try {
                 List<String> responseList =   Arrays.asList(e.get().split("}"));
 
