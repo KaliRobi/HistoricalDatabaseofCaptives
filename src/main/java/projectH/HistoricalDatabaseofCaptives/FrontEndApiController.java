@@ -7,7 +7,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import projectH.HistoricalDatabaseofCaptives.GISData.HdcGeolocator;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
 
 import java.net.URISyntaxException;
 import java.util.*;
@@ -20,13 +20,13 @@ public class FrontEndApiController {
     private final Antropometrics antropometrics;
     private final CaptiveServices captiveServices;
 
-    private final HdcGeolocator hdcGeolocator;
+    private final GeologicalOperations geologicalOperations;
     @Autowired
-    public FrontEndApiController(Antropometrics antropometrics, CaptiveServices captiveServices, HdcGeolocator hdcGeolocator) {
+    public FrontEndApiController(Antropometrics antropometrics, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
         this.antropometrics = antropometrics;
 
         this.captiveServices = captiveServices;
-        this.hdcGeolocator = hdcGeolocator;
+        this.geologicalOperations = geologicalOperations;
     }
 
 
@@ -46,14 +46,14 @@ public Map<String, HashMap<String, Long>> exposeSexDistribution(){
 public List<List<String>> exposeRelocations(){
     return captiveServices.getTheRelocated();
 }
-@GetMapping(path="/v1/locations")
-public Object settlementDetails() throws URISyntaxException,  InterruptedException, ExecutionException {
-        return hdcGeolocator.getCityData();
-}
+//@GetMapping(path="/v1/locations")
+//public Object settlementDetails() throws URISyntaxException,  InterruptedException, ExecutionException {
+//        return geologicalOperations.getCityData();
+//}
 
     @GetMapping(path="/v1/test")
     public void testest() throws URISyntaxException, ExecutionException, InterruptedException {
-         antropometrics.getCohorList(10);
+         geologicalOperations.justExecute();
     }
 
 }
