@@ -3,9 +3,9 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
+
 import java.util.*;
-import java.util.stream.Collectors;
+
 import java.util.stream.IntStream;
 
 @Component
@@ -21,13 +21,19 @@ public class Antropometrics {
         this.captiveServices = captiveServices;
     }
 
+    /// one of the main thing would be to get the birth cohorts of the captives per town per sex
+    // This could be a base for a lot of other function
+    // the function needs to return the list of ids
+    // {town : [[female], [male]]
+
+
     //  get a method what creates the list of cohorts
-    // adding a range in year, two variant getCohorList /  getCohorListBySex
+    // adding a range in year, two variant getCohortList /  getCohortListBySex
 
 
 
 
-    public void getCohorList(int subRangeSize){
+    public void getCohortList(int subRangeSize){
 
         // height , birth year
         List<List<Integer>> heightBirthdayList = captiveServices.getAllTheCaptives().stream()
@@ -42,10 +48,10 @@ public class Antropometrics {
                 .boxed().toList();
 
 
-        List<List<Integer>>    zsamo = iteratorList.stream().map(e -> yearRange.subList(e - subRangeSize, e)).toList();
+        List<List<Integer>>    tempList = iteratorList.stream().map(e -> yearRange.subList(e - subRangeSize, e)).toList();
 
 
-        System.out.println(zsamo);
+        System.out.println(tempList );
 
     }
 

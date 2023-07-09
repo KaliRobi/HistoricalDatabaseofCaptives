@@ -3,7 +3,6 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,18 +19,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class GeologicalOperations implements IGeolocator{
-    private CaptiveServices captiveServices;
+
     private final GeoServices geoServices;
 
-    private  final GeologicalOperationsBulk geologicalOperationsBulk;
-    private GeologicalRepository geologicalRepository;
-
     @Autowired
-    public GeologicalOperations(CaptiveServices captiveServices, GeoServices geoServices, GeologicalOperationsBulk geologicalOperationsBulk, GeologicalRepository geologicalRepository) {
-        this.captiveServices = captiveServices;
+    public GeologicalOperations(GeoServices geoServices) {
         this.geoServices = geoServices;
-        this.geologicalOperationsBulk = geologicalOperationsBulk;
-        this.geologicalRepository = geologicalRepository;
     }
 
 //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
@@ -61,18 +54,9 @@ public class GeologicalOperations implements IGeolocator{
                 .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
 
         ).toList();
-        Map<String, Map<String, String>> locationsWithCoordinates = new HashMap<>();
-        listOfLatLon.forEach(e -> {
-            try {
-                System.out.println(e.get());  ;
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            } catch (ExecutionException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+//        Map<String, Map<String, String>> locationsWithCoordinates = new HashMap<>();
 
-        Map<String, String> collect = null;
+        Map<String, String> collect;
         // return value from open street view
          for( CompletableFuture<String> lonLat : listOfLatLon ) {
              String locationName;
@@ -84,7 +68,7 @@ public class GeologicalOperations implements IGeolocator{
                          .collect(Collectors.toMap(s -> s[0], s -> s[1])
                          );
                  collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
-                 locationsWithCoordinates.put(collect.get("display_name"), collect);
+//                 locationsWithCoordinates.put(collect.get("display_name"), collect);
 
              } catch (InterruptedException | ExecutionException ex) {
                  throw new RuntimeException(ex);
@@ -103,11 +87,9 @@ public class GeologicalOperations implements IGeolocator{
 
 
 
-        public String justExecute() throws URISyntaxException, ExecutionException, InterruptedException {
+        public void justExecute() {
 
             getCityData();
-
-            return null;
 
 
         }

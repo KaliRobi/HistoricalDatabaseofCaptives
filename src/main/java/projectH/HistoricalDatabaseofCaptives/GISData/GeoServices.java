@@ -28,18 +28,18 @@ public class GeoServices {
 
     }
     public Set<String> getAllLocation() {
-        Set<String> allThelocations = captiveServices.getCitiesOfBirth();
-        allThelocations.addAll(captiveServices.getCitiesOfResidence());
-        return allThelocations;
+        Set<String> allLocations = captiveServices.getCitiesOfBirth();
+        allLocations.addAll(captiveServices.getCitiesOfResidence());
+        return allLocations;
     }
     // get the locations without lat / lon data
     public  Set<String> getLocationsWithoutCoordinates() {
         Set<String> locationsWithoutLocationData = new HashSet<>();
 
-        geologicalRepository.findAll().forEach(loca -> {
-                    if (loca.getLatitude() == null || loca.getLongitude() == null) {
+        geologicalRepository.findAll().forEach(location -> {
+                    if (location.getLatitude() == null || location.getLongitude() == null) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithoutLocationData.add(loca.getSource_name());
+                        locationsWithoutLocationData.add(location.getSource_name());
                     }
                 }
         );

@@ -1,14 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-// The class must describe all the captive relating functionalities.
-// 1. Database  crud operations
-// 2. calculations and data preparations what later will eb pushed to the RestApi Controller class thus to the front end,
-// the application will be server heavy meaning that each of the objects on the front end will be served with the appropriate data
-// ReactJs will deal mostly with the data presentation
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -29,8 +21,6 @@ public class CaptiveServices {
 
 
     public List<Captive> getAllTheCaptives(){
-        // jparepo interface throws error
-
         return captiveRecordRepository.findAll();
 
     }
@@ -66,23 +56,7 @@ public class CaptiveServices {
         );
             return sexDistribution;
     }
-    /// one of the main thing would be to get the birth cohorts of the captives per town per sex
-    // This could be a base for a lot of other function
-    // the function needs to return the list of ids
-    // {town : [[femaile], [male]]
 
-    public Map<String, ArrayList<ArrayList<String>>> getBirthCohorts(){
-
-        // get towns
-
-        // get records by town
-
-        // get the cohorts using the birth year
-
-//         define cohorts getting the fisr or the first two digits of the difference between the youngest and oldest
-        // check if any of that is extreme and if yes find the correct base numbers by checking the normal distribution
-        return null;
-    }
 
     public List<List<String>> getTheRelocated(){
            List<List<String>> list;
