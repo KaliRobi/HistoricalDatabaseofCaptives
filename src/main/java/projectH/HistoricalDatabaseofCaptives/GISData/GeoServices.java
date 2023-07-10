@@ -13,12 +13,13 @@ public class GeoServices {
 
     private final GeologicalRepository geologicalRepository;
 
-    private CaptiveServices captiveServices;
+    private final CaptiveServices captiveServices;
 
     @Autowired
-    public GeoServices(GeologicalRepository geologicalRepository) {
+    public GeoServices(GeologicalRepository geologicalRepository, CaptiveServices captiveServices) {
         this.geologicalRepository = geologicalRepository;
 
+        this.captiveServices = captiveServices;
     }
 
     public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat){

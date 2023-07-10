@@ -22,9 +22,12 @@ public class GeologicalOperations implements IGeolocator{
 
     private final GeoServices geoServices;
 
+    private  final  GeologicalOperationsBulk geologicalOperationsBulk;
+
     @Autowired
-    public GeologicalOperations(GeoServices geoServices) {
+    public GeologicalOperations(GeoServices geoServices, GeologicalOperationsBulk geologicalOperationsBulk) {
         this.geoServices = geoServices;
+        this.geologicalOperationsBulk = geologicalOperationsBulk;
     }
 
 //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
@@ -81,15 +84,9 @@ public class GeologicalOperations implements IGeolocator{
 
 
     }
+        public void justExecute() throws InterruptedException {
 
-
-
-
-
-
-        public void justExecute() {
-
-            getCityData();
+            geologicalOperationsBulk.getCityData();
 
 
         }

@@ -1,7 +1,16 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -13,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
@@ -30,8 +38,6 @@ public class GeologicalOperationsBulk implements IGeolocator {
     // select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
 
-    //TODO
-    //would be nice to clean this up as much as the GeologicalOperations
     public void getCityData() throws InterruptedException {
         Set<String> locations =  geoServices.getAllLocation();
         locations.removeAll(geoServices.getLocationsWithCoordinates());
@@ -57,33 +63,33 @@ public class GeologicalOperationsBulk implements IGeolocator {
             Map<String, Map<String, String>> temList = new HashMap<>();
 
             // return value from open street view
-//            since the foreach should be used only to report thre result not operate it needs to be refactored to loop
-            listOfLatLon.stream().toList().forEach(e -> {
+
+//            String  t = "[{\"bookingid\":4},{\"bookingid\":9},{\"bookingid\":3},{\"bookingid\":2},{\"bookingid\":1},{\"bookingid\":6},{\"bookingid\":5},{\"bookingid\":10},{\"bookingid\":8},{\"bookingid\":7}]";
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+//            JavaType type = mapper.getTypeFactory().constructParametrizedType(List.class, List.class, BookingID.class);
+//            List<BookingID> t2 = mapper.readValue(t,type);
+// just for printing
+
+
+
+
+            for( CompletableFuture<String> lonLat : listOfLatLon)
+            {
                 try {
-                    List<String> responseList =   Arrays.asList(e.get().split("}"));
+                    if(lonLat.get().charAt(1) != ']') {
+//                        https://www.baeldung.com/jackson-collection-array
+//                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<OSVJson> listCar = mapper.readValue(lonLat.get(), new TypeReference<>(){});
 
-                    if(responseList.size() >= 1 && responseList.get(0).length() != 0 ){
-                        Map<String, String> collect = Arrays.stream(responseList.get(0).split(","))
-                                .map(part -> part.replaceAll("\"", "").split(":"))
-                                .filter(p -> p.length > 1)
-                                .collect(Collectors.toMap(s -> s[0], s -> s[1])
-                                );
-                        String sourceName = responseList.get(responseList.size() -1).replaceAll("\\W", "" );
-                        System.out.println(sourceName);
-
-                        collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
-
-                        temList.put(collect.get("display_name"), collect);
-                        if(null != collect.get("lat") &&
-                                null !=  collect.get("lon")) {
-                            geoServices.addGeographicalLocation(sourceName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
-                        }
+                        System.out.println(listCar);
                     }
 
-                } catch (InterruptedException | ExecutionException ex) {
+                } catch (ExecutionException | JsonProcessingException ex) {
                     throw new RuntimeException(ex);
                 }
-            });
+            }
 
             Thread.sleep(6000);
         }

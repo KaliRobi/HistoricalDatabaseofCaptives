@@ -10,3 +10,23 @@
 //        System.out.println(latLonMap);
 //        latLonMap.keySet().retainAll(List.of("display_name", "lat", "lon" ));
 //        placesWiththeirLatLon.put(latLonMap.get("display_name"), latLonMap );
+
+
+               List<String> responseList =   Arrays.asList(lonLat.get().split("}"));
+                    if(responseList.size() >= 1 && responseList.get(0).length() != 0 ){
+                        Map<String, String> collect = Arrays.stream(responseList.get(0).split(","))
+                                .map(part -> part.replaceAll("\"", "").split(":"))
+                                .filter(p -> p.length > 1)
+                                .collect(Collectors.toMap(s -> s[0], s -> s[1])
+                                );
+                        String sourceName = responseList.get(responseList.size() -1).replaceAll("\\W", "" );
+                        System.out.println(sourceName);
+
+                        collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
+
+                        temList.put(collect.get("display_name"), collect);
+                        if(null != collect.get("lat") &&
+                                null !=  collect.get("lon")) {
+                            geoServices.addGeographicalLocation(sourceName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+                        }
+                    }
