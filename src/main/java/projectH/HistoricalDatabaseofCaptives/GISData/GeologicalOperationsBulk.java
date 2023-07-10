@@ -57,8 +57,8 @@ public class GeologicalOperationsBulk implements IGeolocator {
             List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
                     .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
-                    // hun characters ale lost :(
-                    .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
+
+//                    .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
             ).toList();
             Map<String, Map<String, String>> temList = new HashMap<>();
 
@@ -80,13 +80,21 @@ public class GeologicalOperationsBulk implements IGeolocator {
                     if(lonLat.get().charAt(1) != ']') {
 //                        https://www.baeldung.com/jackson-collection-array
 //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
-                        ObjectMapper mapper = new ObjectMapper();
-                        List<OSVJson> listCar = mapper.readValue(lonLat.get(), new TypeReference<>(){});
+//                        learn jackson this thing took almost 4 hours
 
-                        System.out.println(listCar);
+                        ObjectMapper mapper = new ObjectMapper();
+                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                        List<OSVJson> array = mapper.readValue(lonLat.get(), List.class);
+
+                        System.out.println(array.get(0));
+
+
+
+
+//                        System.out.println(listCar);
                     }
 
-                } catch (ExecutionException | JsonProcessingException ex) {
+                } catch (ExecutionException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
