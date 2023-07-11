@@ -22,7 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Component
 public class GeologicalOperationsBulk implements IGeolocator {
@@ -52,32 +55,39 @@ public class GeologicalOperationsBulk implements IGeolocator {
             }
         }).toList() ).toList();
 
+
+        List<List<Map<String, URI>>> targetUris2 =  targetLocations.stream().map(targetList -> targetList.stream().map(target ->  {
+            try {
+                Map<String, URI> tempMap = new HashMap<>();
+                tempMap.put(target, new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)));
+                return tempMap ;
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList() ).toList();
+
+        System.out.println(targetUris2);
+
         for(List<URI> UriList : targetUris) {
             HttpClient client = HttpClient.newHttpClient();
             List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
                     .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
-
-//                    .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
+// i need a more elegant solution than this
+                    .thenApply( e ->
+                    e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8)
+                            .substring(targetURi.toString()
+                                    .lastIndexOf("="))
+                            .replace("=", "")   ))
             ).toList();
-            Map<String, Map<String, String>> temList = new HashMap<>();
-
-            // return value from open street view
-
-//            String  t = "[{\"bookingid\":4},{\"bookingid\":9},{\"bookingid\":3},{\"bookingid\":2},{\"bookingid\":1},{\"bookingid\":6},{\"bookingid\":5},{\"bookingid\":10},{\"bookingid\":8},{\"bookingid\":7}]";
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-//            JavaType type = mapper.getTypeFactory().constructParametrizedType(List.class, List.class, BookingID.class);
-//            List<BookingID> t2 = mapper.readValue(t,type);
-// just for printing
-
-
 
 
             for( CompletableFuture<String> lonLat : listOfLatLon)
+
             {
                 try {
-                    if(lonLat.get().charAt(1) != ']') {
+
+                    if(lonLat.get().contains(":")) {
 //                        https://www.baeldung.com/jackson-collection-array
 //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
 //                        learn jackson this thing took almost 4 hours
@@ -86,12 +96,22 @@ public class GeologicalOperationsBulk implements IGeolocator {
                         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                         List<OSVJson> array = mapper.readValue(lonLat.get(), List.class);
 
-                        System.out.println(array.get(0));
+                        if (array.size() > 1) {
+
+                            System.out.println(array.get(0));
+                            System.out.println(array.get(array.size()-1));
+// this is a linkedhashmap not a OSVJsON object This mapping is still not working
+                            System.out.println(array.get(0));
+//                            geoServices.addGeographicalLocation(name,
+//                                    osvData.getDisplay_name(),
+//                                    Double.parseDouble(osvData.getLon()),
+//                                    Double.parseDouble(osvData.getLat()) );
+                        }
 
 
 
 
-//                        System.out.println(listCar);
+//
                     }
 
                 } catch (ExecutionException | IOException ex) {

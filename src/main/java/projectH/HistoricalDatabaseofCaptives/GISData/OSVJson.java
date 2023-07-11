@@ -28,6 +28,8 @@ public class OSVJson implements Serializable {
  private String importance;
  private String icon;
 
+
+
 @JsonIgnore
  public OSVJson( @JsonProperty("display_name") String display_name,
                  @JsonProperty("lon")String lon,
@@ -38,7 +40,8 @@ public class OSVJson implements Serializable {
                  @JsonProperty("boundingbox") String boundingbox,
                  @JsonProperty("type") String type,
                  @JsonProperty("importance") String importance,
-                 @JsonProperty("icon") String icon) {
+                 @JsonProperty("icon") String icon
+                 ) {
   this.display_name = display_name;
   this.lon = lon;
   this.lat = lat;
@@ -49,6 +52,7 @@ public class OSVJson implements Serializable {
   this.type = type;
   this.importance = importance;
   this.icon = icon;
+
  }
 
  public OSVJson() { }
