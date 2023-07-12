@@ -30,3 +30,73 @@
                             geoServices.addGeographicalLocation(sourceName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
                         }
                     }
+     List<List<URI>> targetUris =  targetLocations.stream().map(targetList -> targetList.stream().map(target ->  {
+            try {
+                Map<String, URI> tempMap = new HashMap<>();
+                tempMap.put(target, new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)));
+                return tempMap ;
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList() ).toList();
+
+
+        //    private List<List<TargetLink>>  produceTargetLinkList(List<List<String>>  targetLocations ){
+        //        return targetLocations.stream().map(targetList -> targetList.stream().map(target ->  {
+        //            try {
+        //                return new TargetLink(
+        //                        new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)),
+        //                        target
+        //                );
+        //            } catch (URISyntaxException e) {
+        //                throw new RuntimeException(e);
+        //            }
+        //        }).toList() ).toList();
+        //    }
+
+
+        //
+        //     private List<Map<String, CompletableFuture<String>>> getCompleteables(List<List<TargetLink>> targetUrls) throws InterruptedException {
+        //        HttpClient client = HttpClient.newHttpClient();
+        //        List<Map<String, CompletableFuture<String>>> mapOfLatLon = new ArrayList<>();
+        //        for(List<TargetLink> UriList : targetUrls) {
+        //            mapOfLatLon = UriList.stream().map(targetLink -> {
+        //                Map<String, CompletableFuture<String>> locMap = new HashMap<>();
+        //                locMap.put(targetLink.getTarget(),
+        //                        client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
+        //                                .thenApply(HttpResponse::body));
+        //                System.out.println(locMap);
+        //                return locMap;
+        //            }).toList();
+        //            Thread.sleep(6000);
+        //        }
+        //
+        //
+        //        return mapOfLatLon;
+        //    }
+
+                    System.out.println(listOfLatLon);
+                    for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
+                        for(String key : latLonsMap.keySet()) {
+                            try {
+                                if(!latLonsMap.get(key).get().isEmpty()){
+         //                        https://www.baeldung.com/jackson-collection-array
+        //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
+        //                        learn jackson this thing took almost 4 hours
+                                    ObjectMapper mapper = new ObjectMapper();
+                                    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                                    OSVJson osvJson= mapper.readValue(latLonsMap.get(key).get(), OSVJson.class);
+                                    System.out.println(osvJson.toString());
+                                    geoServices.addGeographicalLocation(key,
+                                            osvJson.getDisplay_name(),
+                                            Double.parseDouble(osvJson.getLon()),
+                                            Double.parseDouble(osvJson.getLat()));
+
+                                }
+                            } catch (ExecutionException | JsonProcessingException ex) {
+                                throw new RuntimeException(ex);
+                            }
+
+                        }
+
+                    }

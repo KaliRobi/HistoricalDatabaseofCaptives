@@ -1,19 +1,14 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -22,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -46,82 +40,74 @@ public class GeologicalOperationsBulk implements IGeolocator {
         locations.removeAll(geoServices.getLocationsWithCoordinates());
         //creating uri list while dealing with the special Hungarian characters
         List<List<String>> targetLocations = bulkTownFeeder( locations.stream().toList(), 6);
-
-        List<List<URI>> targetUris =  targetLocations.stream().map(targetList -> targetList.stream().map(target ->  {
-            try {
-                return new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList() ).toList();
+        produceCompleteables(targetLocations);
 
 
-        List<List<Map<String, URI>>> targetUris2 =  targetLocations.stream().map(targetList -> targetList.stream().map(target ->  {
-            try {
-                Map<String, URI> tempMap = new HashMap<>();
-                tempMap.put(target, new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)));
-                return tempMap ;
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList() ).toList();
+    }
 
-        System.out.println(targetUris2);
+    private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException {
+        List<Map<String, CompletableFuture<String>>> listOfCompletables = new ArrayList<>();
 
-        for(List<URI> UriList : targetUris) {
-            HttpClient client = HttpClient.newHttpClient();
-            List<CompletableFuture<String>> listOfLatLon = UriList.stream().map(targetURi -> client
-                    .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-// i need a more elegant solution than this
-                    .thenApply( e ->
-                    e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8)
-                            .substring(targetURi.toString()
-                                    .lastIndexOf("="))
-                            .replace("=", "")   ))
-            ).toList();
-
-
-            for( CompletableFuture<String> lonLat : listOfLatLon)
-
-            {
-                try {
-
-                    if(lonLat.get().contains(":")) {
-//                        https://www.baeldung.com/jackson-collection-array
-//                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
-//                        learn jackson this thing took almost 4 hours
-
-                        ObjectMapper mapper = new ObjectMapper();
-                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                        List<OSVJson> array = mapper.readValue(lonLat.get(), List.class);
-
-                        if (array.size() > 1) {
-
-                            System.out.println(array.get(0));
-                            System.out.println(array.get(array.size()-1));
-// this is a linkedhashmap not a OSVJsON object This mapping is still not working
-                            System.out.println(array.get(0));
-//                            geoServices.addGeographicalLocation(name,
-//                                    osvData.getDisplay_name(),
-//                                    Double.parseDouble(osvData.getLon()),
-//                                    Double.parseDouble(osvData.getLat()) );
-                        }
-
-
-
-
-//
-                    }
-
-                } catch (ExecutionException | IOException ex) {
-                    throw new RuntimeException(ex);
+        for(List<String> list : targetLocations) {
+            List<TargetLink> tempList = new ArrayList<>();
+            for(String target : list) {
+                try {tempList.add(
+                     new TargetLink(
+                            new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)),
+                            target
+                    ));
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
                 }
             }
-
+            Map<String, CompletableFuture<String>> copmMap = getCompleteables(tempList);
+            listOfCompletables.add(copmMap);
+            completeCompletablesInToDatabase(listOfCompletables);
             Thread.sleep(6000);
         }
 
+    }
+
+    private Map<String, CompletableFuture<String>> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        Map<String, CompletableFuture<String>> mapOfLatLon = new HashMap<>();
+        for(TargetLink targetLink : targetUrls) {
+            mapOfLatLon.put(targetLink.getTarget(),
+                        client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
+                                .thenApply(HttpResponse::body));
+        }
+        System.out.println("from the getcompletables");
+        System.out.println(mapOfLatLon);
+
+        return mapOfLatLon;
+    }
+
+
+    private void completeCompletablesInToDatabase(List<Map<String, CompletableFuture<String>>> listOfLatLon ){
+        for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
+            for(String key : latLonsMap.keySet()) {
+                try {
+                    if(!latLonsMap.get(key).get().isEmpty()){
+                        //                        https://www.baeldung.com/jackson-collection-array
+//                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
+//                        learn jackson this thing took almost 4 hours
+                        ObjectMapper mapper = new ObjectMapper();
+                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                        OSVJson osvJson= mapper.readValue(latLonsMap.get(key).get(), OSVJson.class);
+                        System.out.println(osvJson.toString());
+                        geoServices.addGeographicalLocation(key,
+                                osvJson.getDisplay_name(),
+                                Double.parseDouble(osvJson.getLon()),
+                                Double.parseDouble(osvJson.getLat()));
+
+                    }
+                } catch (ExecutionException | JsonProcessingException | InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+
+        }
 
     }
 
