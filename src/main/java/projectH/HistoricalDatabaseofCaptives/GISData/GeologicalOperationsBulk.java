@@ -88,6 +88,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
         for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
             for(String key : latLonsMap.keySet()) {
                 try {
@@ -99,10 +100,13 @@ public class GeologicalOperationsBulk implements IGeolocator {
 //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
 //                        learn jackson this thing took almost 4 hours
 
-                        String lista  = mapper.writeValueAsString(latLonsMap.get(key).get());
-                        assert false;
-                        List<OSVJson> osvJson= mapper.readValue( lista, List.class);
-                        System.out.println(osvJson.get(0).getDisplay_name());
+                        String str =    mapper.writeValueAsString(latLonsMap.get(key).get());
+
+                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
+
+
+//                        OSVJson[] osvJson= mapper.readValue( str, OSVJson[].class);
+//                        System.out.println(Arrays.toString(osvJson));
 //                        geoServices.addGeographicalLocation(key,
 //                                osvJson.get(0).getDisplay_name(),
 //                                Double.parseDouble(osvJson.get(0).getLon()),

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.lang.*;
+import java.util.Objects;
+
 @Component
 public class OSVJson implements Serializable {
 
@@ -56,6 +58,8 @@ public class OSVJson implements Serializable {
  }
 
  public OSVJson() { }
+
+ public OSVJson(String stringCostruct ) {}
 
  public String getDisplay_name() {
   return display_name;
@@ -151,6 +155,19 @@ public class OSVJson implements Serializable {
 
  public void setIcon(String icon) {
   this.icon = icon;
+ }
+
+ @Override
+ public boolean equals(Object o) {
+  if (this == o) return true;
+  if (o == null || getClass() != o.getClass()) return false;
+  OSVJson osvJson = (OSVJson) o;
+  return Objects.equals(display_name, osvJson.display_name) && Objects.equals(lon, osvJson.lon) && Objects.equals(lat, osvJson.lat) && Objects.equals(place_id, osvJson.place_id) && Objects.equals(licence, osvJson.licence) && Objects.equals(osm_type, osvJson.osm_type) && Objects.equals(osm_id, osvJson.osm_id) && Objects.equals(boundingbox, osvJson.boundingbox) && Objects.equals(type, osvJson.type) && Objects.equals(osm_class, osvJson.osm_class) && Objects.equals(importance, osvJson.importance) && Objects.equals(icon, osvJson.icon);
+ }
+
+ @Override
+ public int hashCode() {
+  return Objects.hash(display_name, lon, lat, place_id, licence, osm_type, osm_id, boundingbox, type, osm_class, importance, icon);
  }
 
  @Override
