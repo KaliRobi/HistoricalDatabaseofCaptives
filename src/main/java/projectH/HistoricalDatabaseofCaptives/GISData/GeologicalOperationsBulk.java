@@ -1,5 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -85,23 +86,30 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
     private void completeCompletablesInToDatabase(List<Map<String, CompletableFuture<String>>> listOfLatLon ){
         for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
             for(String key : latLonsMap.keySet()) {
                 try {
-                    if(!latLonsMap.get(key).get().isEmpty()){
+                    // this part indicates that the ComplableFuture should actually contain a hasmap
+                    // not sure if this is even possible.
+                    if(latLonsMap.get(key).get().length() > 2){
+
                         //                        https://www.baeldung.com/jackson-collection-array
 //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
 //                        learn jackson this thing took almost 4 hours
-                        ObjectMapper mapper = new ObjectMapper();
-                        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                        OSVJson osvJson= mapper.readValue(latLonsMap.get(key).get(), OSVJson.class);
-                        System.out.println(osvJson.toString());
-                        geoServices.addGeographicalLocation(key,
-                                osvJson.getDisplay_name(),
-                                Double.parseDouble(osvJson.getLon()),
-                                Double.parseDouble(osvJson.getLat()));
+
+                        String lista  = mapper.writeValueAsString(latLonsMap.get(key).get());
+                        assert false;
+                        List<OSVJson> osvJson= mapper.readValue( lista, List.class);
+                        System.out.println(osvJson.get(0).getDisplay_name());
+//                        geoServices.addGeographicalLocation(key,
+//                                osvJson.get(0).getDisplay_name(),
+//                                Double.parseDouble(osvJson.get(0).getLon()),
+//                                Double.parseDouble(osvJson.get(0).getLat()));
 
                     }
-                } catch (ExecutionException | JsonProcessingException | InterruptedException ex) {
+                } catch (ExecutionException | InterruptedException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
 

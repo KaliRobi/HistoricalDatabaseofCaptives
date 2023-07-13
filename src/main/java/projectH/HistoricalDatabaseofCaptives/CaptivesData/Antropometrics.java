@@ -37,7 +37,7 @@ public class Antropometrics {
 
         // height , birth year
         List<List<Integer>> heightBirthdayList = captiveServices.getAllTheCaptives().stream()
-                        .filter(a -> a.getDate_of_birth() != null  &&  a.getHeight() != null)
+                        .filter(a -> a.getDate_of_birth() != null  &&  a.getHeight() != 0)
                         .map(e -> List.of (Integer.valueOf(String.valueOf(e.getDate_of_birth()).substring(0,4)), e.getHeight())  )
                         .toList();
 
