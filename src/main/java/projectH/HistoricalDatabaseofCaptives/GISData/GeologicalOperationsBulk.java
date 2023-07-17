@@ -2,6 +2,7 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,8 +78,8 @@ public class GeologicalOperationsBulk implements IGeolocator {
                         client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
                                 .thenApply(HttpResponse::body));
         }
-        System.out.println("from the getcompletables");
-        System.out.println(mapOfLatLon);
+//        System.out.println("from the getcompletables");
+//        System.out.println(mapOfLatLon);
 
         return mapOfLatLon;
     }
@@ -94,19 +95,22 @@ public class GeologicalOperationsBulk implements IGeolocator {
                 try {
                     // this part indicates that the ComplableFuture should actually contain a hasmap
                     // not sure if this is even possible.
-                    if(latLonsMap.get(key).get().length() > 2){
+                    String rawStringValue = latLonsMap.get(key).get();
+                    if(rawStringValue.length() > 2){
 
                         //                        https://www.baeldung.com/jackson-collection-array
 //                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
 //                        learn jackson this thing took almost 4 hours
+                        List<Object> firstList  = mapper.readValue(rawStringValue, List.class);
+//                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
+                        String osvJsonString =    mapper.writeValueAsString(firstList.get(0));
+                        String osvJsonString2 =    mapper.writeValueAsString(osvJsonString);
+                        System.out.println(osvJsonString2);
 
-                        String str =    mapper.writeValueAsString(latLonsMap.get(key).get());
+                        OSVJson osvJson= mapper.readValue( osvJsonString2, OSVJson.class);
+                        System.out.println(osvJson);
 
-                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
-
-
-//                        OSVJson[] osvJson= mapper.readValue( str, OSVJson[].class);
-//                        System.out.println(Arrays.toString(osvJson));
+//                        System.out.println(osvJson);
 //                        geoServices.addGeographicalLocation(key,
 //                                osvJson.get(0).getDisplay_name(),
 //                                Double.parseDouble(osvJson.get(0).getLon()),

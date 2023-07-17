@@ -10,39 +10,47 @@ import java.util.Objects;
 
 @Component
 public class OSVJson implements Serializable {
-
-  private  String display_name;
-
+ @JsonProperty("\"display_name\"")
+ private  String display_name;
+ @JsonProperty("lon")
   private   String lon;
-
+ @JsonProperty("lat")
   private   String lat;
-
+ @JsonProperty("place_id")
   private String place_id;
 
-
+ @JsonProperty("licence")
  private String  licence;
-
+ @JsonProperty("osm_type")
  private String osm_type;
+ @JsonProperty("osm_id")
  private String osm_id;
+ @JsonProperty("boundingbox")
  private String boundingbox;
+ @JsonProperty("type")
  private String type;
+ @JsonProperty("class")
  private String osm_class;
+ @JsonProperty("importance")
  private String importance;
+ @JsonProperty("icon")
  private String icon;
 
 
 
 @JsonIgnore
- public OSVJson( @JsonProperty("display_name") String display_name,
-                 @JsonProperty("lon")String lon,
-                 @JsonProperty("lat") String lat,
-                 @JsonProperty("osm_type") String osm_type,
-                 @JsonProperty("osm_id") String osm_id,
-                 @JsonProperty("class") String osm_class,
-                 @JsonProperty("boundingbox") String boundingbox,
-                 @JsonProperty("type") String type,
-                 @JsonProperty("importance") String importance,
-                 @JsonProperty("icon") String icon
+ public OSVJson( String display_name,
+                 String lon,
+                 String lat,
+                 String osm_type,
+                 String osm_id,
+                 String osm_class,
+                 String boundingbox,
+                 String type,
+                 String importance,
+                 String icon,
+                 String place_id,
+                 String  licence
                  ) {
   this.display_name = display_name;
   this.lon = lon;
@@ -54,6 +62,8 @@ public class OSVJson implements Serializable {
   this.type = type;
   this.importance = importance;
   this.icon = icon;
+  this.place_id = place_id;
+  this.licence = licence;
 
  }
 
