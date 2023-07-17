@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Component
 public class OSVJson implements Serializable {
- @JsonProperty("\"display_name\"")
+ @JsonProperty("display_name")
  private  String display_name;
  @JsonProperty("lon")
   private   String lon;

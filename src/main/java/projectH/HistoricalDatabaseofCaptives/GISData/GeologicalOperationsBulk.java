@@ -89,7 +89,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
         for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+//            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
             for(String key : latLonsMap.keySet()) {
                 try {
@@ -107,8 +107,8 @@ public class GeologicalOperationsBulk implements IGeolocator {
                         String osvJsonString2 =    mapper.writeValueAsString(osvJsonString);
                         System.out.println(osvJsonString2);
 
-                        OSVJson osvJson= mapper.readValue( osvJsonString2, OSVJson.class);
-                        System.out.println(osvJson);
+                        OSVJson osvJson2= mapper.readValue( osvJsonString2, OSVJson.class);
+                        System.out.println(osvJson2);
 
 //                        System.out.println(osvJson);
 //                        geoServices.addGeographicalLocation(key,
