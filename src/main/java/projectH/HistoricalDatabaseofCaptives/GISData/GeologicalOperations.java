@@ -1,6 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +85,7 @@ public class GeologicalOperations implements IGeolocator{
 
 
     }
-        public void justExecute() throws InterruptedException {
+        public void justExecute() throws InterruptedException, ExecutionException, JsonProcessingException {
 
             geologicalOperationsBulk.getCityData();
 

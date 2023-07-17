@@ -1,6 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Antropometrics;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
@@ -52,7 +53,7 @@ public List<List<String>> exposeRelocations(){
 //}
 
     @GetMapping(path="/v1/test")
-    public void testest() throws URISyntaxException, ExecutionException, InterruptedException {
+    public void testest() throws URISyntaxException, ExecutionException, InterruptedException, JsonProcessingException {
          geologicalOperations.justExecute();
     }
 

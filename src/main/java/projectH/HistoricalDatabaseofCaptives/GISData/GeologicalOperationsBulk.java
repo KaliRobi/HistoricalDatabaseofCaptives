@@ -39,7 +39,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
     // select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
 
-    public void getCityData() throws InterruptedException {
+    public void getCityData() throws InterruptedException, ExecutionException, JsonProcessingException {
         Set<String> locations =  geoServices.getAllLocation();
         locations.removeAll(geoServices.getLocationsWithCoordinates());
         //creating uri list while dealing with the special Hungarian characters
@@ -49,8 +49,8 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
     }
 
-    private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException {
-        List<Map<String, CompletableFuture<String>>> listOfCompletables = new ArrayList<>();
+    private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException, ExecutionException, JsonProcessingException {
+        List<Map<String, OSVJson>> listOfCompletables = new ArrayList<>();
 
         for(List<String> list : targetLocations) {
             List<TargetLink> tempList = new ArrayList<>();
@@ -64,9 +64,9 @@ public class GeologicalOperationsBulk implements IGeolocator {
                     throw new RuntimeException(e);
                 }
             }
-            Map<String, CompletableFuture<String>> copmMap = getCompleteables(tempList);
+            Map<String, OSVJson> copmMap = getCompleteables(tempList);
             listOfCompletables.add(copmMap);
-            completeCompletablesInToDatabase(listOfCompletables);
+//            completeCompletablesInToDatabase(listOfCompletables);
             Thread.sleep(6000);
         }
 
@@ -74,7 +74,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
 
     // this is the first plcae where the mapping may happen
-    private Map<String, CompletableFuture<String>> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException {
+    private Map<String, CompletableFuture<String>> getCompleteablesb(List<TargetLink> targetUrls) throws InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         Map<String, CompletableFuture<String>> mapOfLatLon = new HashMap<>();
         for(TargetLink targetLink : targetUrls) {
@@ -86,6 +86,41 @@ public class GeologicalOperationsBulk implements IGeolocator {
 //        System.out.println(mapOfLatLon);
 
         return mapOfLatLon;
+    }
+    private Map<String, OSVJson> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException, ExecutionException, JsonProcessingException {
+        HttpClient client = HttpClient.newHttpClient();
+        Map<String, OSVJson> mapOfLatLon = new HashMap<>();
+        for(TargetLink targetLink : targetUrls) {
+            mapOfLatLon.put(targetLink.getTarget(),
+                    processCompletables(client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
+                            .thenApply(HttpResponse::body)));
+        }
+//        System.out.println("from the getcompletables");
+//        System.out.println(mapOfLatLon);
+
+        return mapOfLatLon;
+    }
+
+
+    private OSVJson processCompletables(CompletableFuture<String> completableFuture) throws ExecutionException, InterruptedException, JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        String osvJsonList =    mapper.writeValueAsString(completableFuture.get());
+        System.out.println(osvJsonList);
+        OSVJson firstList = mapper.readValue(osvJsonList, new TypeReference<OSVJson>(){});
+        System.out.println( firstList);
+//        if(firstList.size() > 1){
+//
+//            OSVJson osvJson = mapper.readValue(firstList.get(0),  );
+//            System.out.println(osvJson);
+//        }
+
+
+        OSVJson osvJson = null;
+
+        return osvJson;
     }
 
 
@@ -107,13 +142,13 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
                         List<Object> firstList  = mapper.readValue(rawStringValue, List.class);
 
-                        List<Object> firstee  = mapper.readValue(firstList.get(0).toString(), new TypeReference<List<Object>>() {});
+//                        List<Object> firstee  = mapper.readValue(firstList.get(0).toString(),  {});
 
 
 //                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
 
 
-                        System.out.println(firstee);
+//                        System.out.println(firstee);
 //                        geoServices.addGeographicalLocation(key,
 //                                osvJson.get(0).getDisplay_name(),
 //                                Double.parseDouble(osvJson.get(0).getLon()),
