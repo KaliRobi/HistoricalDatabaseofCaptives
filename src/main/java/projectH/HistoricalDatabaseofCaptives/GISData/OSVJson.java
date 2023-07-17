@@ -74,7 +74,7 @@ public class OSVJson implements Serializable {
  public String getDisplay_name() {
   return display_name;
  }
-
+ @JsonProperty("display_name")
  public void setDisplay_name(String display_name) {
   this.display_name = display_name;
  }

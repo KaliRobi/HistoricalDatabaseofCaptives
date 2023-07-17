@@ -5,9 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
+import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -70,6 +72,8 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
     }
 
+
+    // this is the first plcae where the mapping may happen
     private Map<String, CompletableFuture<String>> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         Map<String, CompletableFuture<String>> mapOfLatLon = new HashMap<>();
@@ -89,7 +93,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
         for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 
             for(String key : latLonsMap.keySet()) {
                 try {
@@ -97,20 +101,19 @@ public class GeologicalOperationsBulk implements IGeolocator {
                     // not sure if this is even possible.
                     String rawStringValue = latLonsMap.get(key).get();
                     if(rawStringValue.length() > 2){
+                        System.out.println(key);
+                        String osvJsonList =    mapper.writeValueAsString(rawStringValue);
 
-                        //                        https://www.baeldung.com/jackson-collection-array
-//                        Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)
-//                        learn jackson this thing took almost 4 hours
+
                         List<Object> firstList  = mapper.readValue(rawStringValue, List.class);
+
+                        List<Object> firstee  = mapper.readValue(firstList.get(0).toString(), new TypeReference<List<Object>>() {});
+
+
 //                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
-                        String osvJsonString =    mapper.writeValueAsString(firstList.get(0));
-                        String osvJsonString2 =    mapper.writeValueAsString(osvJsonString);
-                        System.out.println(osvJsonString2);
 
-                        OSVJson osvJson2= mapper.readValue( osvJsonString2, OSVJson.class);
-                        System.out.println(osvJson2);
 
-//                        System.out.println(osvJson);
+                        System.out.println(firstee);
 //                        geoServices.addGeographicalLocation(key,
 //                                osvJson.get(0).getDisplay_name(),
 //                                Double.parseDouble(osvJson.get(0).getLon()),
