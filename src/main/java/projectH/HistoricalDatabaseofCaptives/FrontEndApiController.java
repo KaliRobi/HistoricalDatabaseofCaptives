@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +54,7 @@ public List<List<String>> exposeRelocations(){
 //}
 
     @GetMapping(path="/v1/test")
-    public void testest() throws URISyntaxException, ExecutionException, InterruptedException, JsonProcessingException {
+    public void testest() throws URISyntaxException, ExecutionException, InterruptedException, IOException {
          geologicalOperations.justExecute();
     }
 

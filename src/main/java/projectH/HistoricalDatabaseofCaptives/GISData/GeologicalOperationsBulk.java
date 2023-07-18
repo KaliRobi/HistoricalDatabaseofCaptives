@@ -39,7 +39,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
     // select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
 
-    public void getCityData() throws InterruptedException, ExecutionException, JsonProcessingException {
+    public void getCityData() throws InterruptedException, ExecutionException, IOException {
         Set<String> locations =  geoServices.getAllLocation();
         locations.removeAll(geoServices.getLocationsWithCoordinates());
         //creating uri list while dealing with the special Hungarian characters
@@ -49,7 +49,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
     }
 
-    private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException, ExecutionException, JsonProcessingException {
+    private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException, ExecutionException, IOException {
         List<Map<String, OSVJson>> listOfCompletables = new ArrayList<>();
 
         for(List<String> list : targetLocations) {
@@ -87,7 +87,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
         return mapOfLatLon;
     }
-    private Map<String, OSVJson> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException, ExecutionException, JsonProcessingException {
+    private Map<String, OSVJson> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException, ExecutionException, IOException {
         HttpClient client = HttpClient.newHttpClient();
         Map<String, OSVJson> mapOfLatLon = new HashMap<>();
         for(TargetLink targetLink : targetUrls) {
@@ -102,20 +102,24 @@ public class GeologicalOperationsBulk implements IGeolocator {
     }
 
 
-    private OSVJson processCompletables(CompletableFuture<String> completableFuture) throws ExecutionException, InterruptedException, JsonProcessingException {
+    private OSVJson processCompletables(CompletableFuture<String> completableFuture) throws ExecutionException, InterruptedException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         String osvJsonList =    mapper.writeValueAsString(completableFuture.get());
-        System.out.println(osvJsonList);
-        OSVJson firstList = mapper.readValue(osvJsonList, new TypeReference<OSVJson>(){});
-        System.out.println( firstList);
-//        if(firstList.size() > 1){
-//
-//            OSVJson osvJson = mapper.readValue(firstList.get(0),  );
-//            System.out.println(osvJson);
-//        }
+        if(osvJsonList.length() > 10){
+//            String osvJsonList =    mapper.writeValueAsString(completableFuture.get());
+            System.out.println(osvJsonList);
+
+//            OSVJson firstList = mapper.readValue(osvJsonList, OSVJson.class);
+List<OSVJson> osvJsons = mapper.readValue(osvJsonList, new TypeReference<List<OSVJson>>() {});
+            System.out.println( osvJsons.get(0));
+        }
+
+
+
+
 
 
         OSVJson osvJson = null;

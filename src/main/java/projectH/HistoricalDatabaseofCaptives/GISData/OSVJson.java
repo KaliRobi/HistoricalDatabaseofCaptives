@@ -10,8 +10,8 @@ import java.util.Objects;
 
 @Component
 public class OSVJson implements Serializable {
- @JsonProperty("display_name")
- private  String display_name;
+// @JsonProperty("display_name")
+ private String display_name;
  @JsonProperty("lon")
   private   String lon;
  @JsonProperty("lat")
@@ -38,8 +38,10 @@ public class OSVJson implements Serializable {
 
 
 
-@JsonIgnore
- public OSVJson( String display_name,
+
+ public OSVJson( String place_id,
+                 String  licence,
+                 String display_name,
                  String lon,
                  String lat,
                  String osm_type,
@@ -48,10 +50,12 @@ public class OSVJson implements Serializable {
                  String boundingbox,
                  String type,
                  String importance,
-                 String icon,
-                 String place_id,
-                 String  licence
+                 String icon
+
+
                  ) {
+ this.place_id = place_id;
+ this.licence = licence;
   this.display_name = display_name;
   this.lon = lon;
   this.lat = lat;
@@ -62,19 +66,21 @@ public class OSVJson implements Serializable {
   this.type = type;
   this.importance = importance;
   this.icon = icon;
-  this.place_id = place_id;
-  this.licence = licence;
+
+
 
  }
 
  public OSVJson() { }
 
- public OSVJson(String stringCostruct ) {}
+ public OSVJson(String stringCostruct) {
+
+ }
 
  public String getDisplay_name() {
   return display_name;
  }
- @JsonProperty("display_name")
+ @JsonProperty("\\\"display_name\\\"")
  public void setDisplay_name(String display_name) {
   this.display_name = display_name;
  }

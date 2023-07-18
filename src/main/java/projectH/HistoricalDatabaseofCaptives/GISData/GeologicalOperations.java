@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -85,7 +86,7 @@ public class GeologicalOperations implements IGeolocator{
 
 
     }
-        public void justExecute() throws InterruptedException, ExecutionException, JsonProcessingException {
+        public void justExecute() throws InterruptedException, ExecutionException, IOException {
 
             geologicalOperationsBulk.getCityData();
 
