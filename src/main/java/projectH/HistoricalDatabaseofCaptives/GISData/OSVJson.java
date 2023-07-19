@@ -6,56 +6,55 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.lang.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Component
 public class OSVJson implements Serializable {
-// @JsonProperty("display_name")
+ @JsonProperty("display_name")
  private String display_name;
  @JsonProperty("lon")
-  private   String lon;
+ private double lon;
  @JsonProperty("lat")
-  private   String lat;
+ private double lat;
  @JsonProperty("place_id")
-  private String place_id;
-//"[{\"place_id\":307917094,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"relation\",\"osm_id\":1078501,\"boundingbox\":[\"47.0196223\",\"47.1579913\",\"17.4942785\",\"17.6405335\"],\"lat\":\"47.1056579\",\"lon\":\"17.5587276\",\"display_name\":\"Ajka, Ajkai járás, Veszprém vármegye, Közép-Dunántúl, Dunántúl, Magyarország\",\"class\":\"boundary\",\"type\":\"administrative\",\"importance\":0.5859398558340168,\"icon\":\"https://nominatim.openstreetmap.org/ui/mapicons/poi_boundary_administrative.p.20.png\"},{\"place_id\":49347715,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"node\",\"osm_id\":4382049384,\"boundingbox\":[\"51.9236874\",\"51.9237874\",\"85.5721056\",\"85.5722056\"],\"lat\":\"51.9237374\",\"lon\":\"85.5721556\",\"display_name\":\"Айка, Айский сельсовет, Алтайский район, Алтайский край, Сибирский федеральный округ, Россия\",\"class\":\"natural\",\"type\":\"peak\",\"importance\":0.30000999999999994,\"icon\":\"https://nominatim.openstreetmap.org/ui/mapicons/poi_peak.p.20.png\"},{\"place_id\":221073228,\"licence\":\"Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright\",\"osm_type\":\"way\",\"osm_id\":524040710,\"boundingbox\":[\"52.0024165\",\"52.0246532\",\"85.7296604\",\"85.7557797\"],\"lat\":\"52.0170804\",\"lon\":\"85.7477546\",\"display_name\":\"Айка, Айский сельсовет, Алтайский район, Алтайский край, Сибирский федеральный округ, Россия\",\"class\":\"waterway\",\"type\":\"stream\",\"importance\":0.2000099999999999}]"
+ private long place_id;
  @JsonProperty("licence")
- private String  licence;
+ private String licence;
  @JsonProperty("osm_type")
  private String osm_type;
  @JsonProperty("osm_id")
- private String osm_id;
+ private long osm_id;
  @JsonProperty("boundingbox")
- private String boundingbox;
+ private ArrayList<BigDecimal> boundingbox;
  @JsonProperty("type")
  private String type;
  @JsonProperty("class")
  private String osm_class;
  @JsonProperty("importance")
- private String importance;
+ private double importance;
  @JsonProperty("icon")
  private String icon;
 
 
+ public OSVJson(long place_id,
+                String licence,
+                String display_name,
+                double lon,
+                double lat,
+                String osm_type,
+                long osm_id,
+                String osm_class,
+                ArrayList<BigDecimal> boundingbox,
+                String type,
+                double importance,
+                String icon
 
 
- public OSVJson( String place_id,
-                 String  licence,
-                 String display_name,
-                 String lon,
-                 String lat,
-                 String osm_type,
-                 String osm_id,
-                 String osm_class,
-                 String boundingbox,
-                 String type,
-                 String importance,
-                 String icon
-
-
-                 ) {
- this.place_id = place_id;
- this.licence = licence;
+ ) {
+  this.place_id = place_id;
+  this.licence = licence;
   this.display_name = display_name;
   this.lon = lon;
   this.lat = lat;
@@ -68,44 +67,45 @@ public class OSVJson implements Serializable {
   this.icon = icon;
 
 
-
  }
 
- public OSVJson() { }
+ public OSVJson() {
+ }
 
- public OSVJson(String stringCostruct) {
-
+ public OSVJson(String stringCostruct, String display_name) {
+  this.display_name = display_name;
  }
 
  public String getDisplay_name() {
   return display_name;
  }
- @JsonProperty("\\\"display_name\\\"")
+
+ @JsonProperty("display_name")
  public void setDisplay_name(String display_name) {
   this.display_name = display_name;
  }
 
- public String getLon() {
+ public double getLon() {
   return lon;
  }
 
- public void setLon(String lon) {
+ public void setLon(double lon) {
   this.lon = lon;
  }
 
- public String getLat() {
+ public double getLat() {
   return lat;
  }
 
- public void setLat(String lat) {
+ public void setLat(double lat) {
   this.lat = lat;
  }
 
- public String getPlace_id() {
+ public long getPlace_id() {
   return place_id;
  }
 
- public void setPlace_id(String place_id) {
+ public void setPlace_id(long place_id) {
   this.place_id = place_id;
  }
 
@@ -125,19 +125,19 @@ public class OSVJson implements Serializable {
   this.osm_type = osm_type;
  }
 
- public String getOsm_id() {
+ public long getOsm_id() {
   return osm_id;
  }
 
- public void setOsm_id(String osm_id) {
+ public void setOsm_id(long osm_id) {
   this.osm_id = osm_id;
  }
 
- public String getBoundingbox() {
+ public ArrayList<BigDecimal> getBoundingbox() {
   return boundingbox;
  }
 
- public void setBoundingbox(String boundingbox) {
+ public void setBoundingbox(ArrayList<BigDecimal> boundingbox) {
   this.boundingbox = boundingbox;
  }
 
@@ -157,11 +157,11 @@ public class OSVJson implements Serializable {
   this.osm_class = osm_class;
  }
 
- public String getImportance() {
+ public double getImportance() {
   return importance;
  }
 
- public void setImportance(String importance) {
+ public void setImportance(double importance) {
   this.importance = importance;
  }
 

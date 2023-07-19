@@ -66,27 +66,13 @@ public class GeologicalOperationsBulk implements IGeolocator {
             }
             Map<String, OSVJson> copmMap = getCompleteables(tempList);
             listOfCompletables.add(copmMap);
-//            completeCompletablesInToDatabase(listOfCompletables);
+            completeCompletablesInToDatabase(listOfCompletables);
             Thread.sleep(6000);
         }
 
     }
 
 
-    // this is the first plcae where the mapping may happen
-    private Map<String, CompletableFuture<String>> getCompleteablesb(List<TargetLink> targetUrls) throws InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        Map<String, CompletableFuture<String>> mapOfLatLon = new HashMap<>();
-        for(TargetLink targetLink : targetUrls) {
-            mapOfLatLon.put(targetLink.getTarget(),
-                        client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
-                                .thenApply(HttpResponse::body));
-        }
-//        System.out.println("from the getcompletables");
-//        System.out.println(mapOfLatLon);
-
-        return mapOfLatLon;
-    }
     private Map<String, OSVJson> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException, ExecutionException, IOException {
         HttpClient client = HttpClient.newHttpClient();
         Map<String, OSVJson> mapOfLatLon = new HashMap<>();
@@ -95,80 +81,39 @@ public class GeologicalOperationsBulk implements IGeolocator {
                     processCompletables(client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
                             .thenApply(HttpResponse::body)));
         }
-//        System.out.println("from the getcompletables");
-//        System.out.println(mapOfLatLon);
-
         return mapOfLatLon;
     }
 
 
     private OSVJson processCompletables(CompletableFuture<String> completableFuture) throws ExecutionException, InterruptedException, IOException {
-
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        String osvJsonList =    mapper.writeValueAsString(completableFuture.get());
-        if(osvJsonList.length() > 10){
-//            String osvJsonList =    mapper.writeValueAsString(completableFuture.get());
-            System.out.println(osvJsonList);
-
-//            OSVJson firstList = mapper.readValue(osvJsonList, OSVJson.class);
-List<OSVJson> osvJsons = mapper.readValue(osvJsonList, new TypeReference<List<OSVJson>>() {});
-            System.out.println( osvJsons.get(0));
+        List<OSVJson> osvJsons = mapper.readValue(completableFuture.get(), new TypeReference<List<OSVJson>>() {});
+        OSVJson osvJson = new OSVJson();
+        if (!osvJsons.isEmpty() ){
+            osvJson = osvJsons.get(0);
         }
-
-
-
-
-
-
-        OSVJson osvJson = null;
-
         return osvJson;
     }
 
 
-    private void completeCompletablesInToDatabase(List<Map<String, CompletableFuture<String>>> listOfLatLon ){
-        for( Map<String, CompletableFuture<String>> latLonsMap : listOfLatLon){
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+    private void completeCompletablesInToDatabase(List<Map<String, OSVJson>> listOfLatLon ) {
+        for (Map<String, OSVJson> latLonsMap : listOfLatLon) {
+            for (String key : latLonsMap.keySet()) {
+                OSVJson osvJson = latLonsMap.get(key);
+                if (null != osvJson.getDisplay_name()) {
 
-            for(String key : latLonsMap.keySet()) {
-                try {
-                    // this part indicates that the ComplableFuture should actually contain a hasmap
-                    // not sure if this is even possible.
-                    String rawStringValue = latLonsMap.get(key).get();
-                    if(rawStringValue.length() > 2){
-                        System.out.println(key);
-                        String osvJsonList =    mapper.writeValueAsString(rawStringValue);
+                    geoServices.addGeographicalLocation(key,
+                            osvJson.getDisplay_name().substring(0, osvJson.getDisplay_name().indexOf(',')),
+                            osvJson.getLon(),
+                            osvJson.getLat(),
+                            osvJson.getDisplay_name().substring(osvJson.getDisplay_name().lastIndexOf(',')+1).trim());
 
-
-                        List<Object> firstList  = mapper.readValue(rawStringValue, List.class);
-
-//                        List<Object> firstee  = mapper.readValue(firstList.get(0).toString(),  {});
-
-
-//                        https://stackoverflow.com/questions/45110371/no-string-argument-constructor-factory-method-to-deserialize-from-string-value
-
-
-//                        System.out.println(firstee);
-//                        geoServices.addGeographicalLocation(key,
-//                                osvJson.get(0).getDisplay_name(),
-//                                Double.parseDouble(osvJson.get(0).getLon()),
-//                                Double.parseDouble(osvJson.get(0).getLat()));
-
-                    }
-                } catch (ExecutionException | InterruptedException | IOException ex) {
-                    throw new RuntimeException(ex);
                 }
-
             }
-
         }
-
     }
-
 //    to make the feeded information processing as fast as possible with openstreet view this method can be used to
 //    create a list of list what defines the amount of data the GET request will fetch at once.
 //    aim is to get as much as possible at  the given time, but avoid creating tails like 21 % 4 = 1 vs 21 % 3 = 0

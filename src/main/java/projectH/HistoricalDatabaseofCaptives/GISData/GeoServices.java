@@ -22,9 +22,9 @@ public class GeoServices {
         this.captiveServices = captiveServices;
     }
 
-    public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat){
+    public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat, String country){
 
-        geologicalRepository.save(new GeoLocation(sourceName, OsvName,lon, lat));
+        geologicalRepository.save(new GeoLocation(sourceName, OsvName,lon, lat, country));
 
 
     }

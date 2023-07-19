@@ -18,12 +18,16 @@ public class GeoLocation {
 
     private Double Longitude;
 
-    public GeoLocation(String sourceName, String osvName, Double latitude, Double longitude) {
+    @Column( name = "country")
+    private String country;
+
+    public GeoLocation(String sourceName, String osvName, Double latitude, Double longitude, String country) {
         this.id = id;
         this.source_name = sourceName;
         this.osv_name = osvName;
         this.Latitude = latitude;
         this.Longitude = longitude;
+        this.country = country;
     }
 
     public GeoLocation() {
@@ -67,5 +71,25 @@ public class GeoLocation {
 
     public void setLongitude(Double longitude) {
         Longitude = longitude;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "GeoLocation{" +
+                "id=" + id +
+                ", osv_name='" + osv_name + '\'' +
+                ", source_name='" + source_name + '\'' +
+                ", Latitude=" + Latitude +
+                ", Longitude=" + Longitude +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

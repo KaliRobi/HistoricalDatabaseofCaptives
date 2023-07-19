@@ -277,3 +277,14 @@
              '}';
     }
    }
+    private Map<String, CompletableFuture<String>> getCompleteablesb(List<TargetLink> targetUrls) throws InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        Map<String, CompletableFuture<String>> mapOfLatLon = new HashMap<>();
+        for(TargetLink targetLink : targetUrls) {
+            mapOfLatLon.put(targetLink.getTarget(),
+                        client.sendAsync(HttpRequest.newBuilder(targetLink.getLink()).GET().build(), HttpResponse.BodyHandlers.ofString())
+                                .thenApply(HttpResponse::body));
+        }
+
+        return mapOfLatLon;
+    }

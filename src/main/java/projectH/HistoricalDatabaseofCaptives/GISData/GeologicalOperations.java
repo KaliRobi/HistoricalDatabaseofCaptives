@@ -78,7 +78,7 @@ public class GeologicalOperations implements IGeolocator{
              } catch (InterruptedException | ExecutionException ex) {
                  throw new RuntimeException(ex);
              }
-             geoServices.addGeographicalLocation(locationName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+//             geoServices.addGeographicalLocation(locationName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
          }
 
 
