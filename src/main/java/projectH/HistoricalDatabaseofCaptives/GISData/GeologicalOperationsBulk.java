@@ -99,9 +99,11 @@ public class GeologicalOperationsBulk implements IGeolocator {
     private void insertEntriesIntoGeologicalLocations(List<Map<String, OSVJson>> listOfLatLon ) {
 
         for (Map<String, OSVJson> latLonsMap : listOfLatLon) {
+            try{
             for (String key : latLonsMap.keySet()) {
                 OSVJson osvJson = latLonsMap.get(key);
                 if (null != osvJson.getDisplay_name()) {
+                    System.out.println(key + " #########################################################################################");
 
                     geoServices.addGeographicalLocation(key,
                             osvJson.getDisplay_name().substring(0, osvJson.getDisplay_name().indexOf(',')),
@@ -110,6 +112,10 @@ public class GeologicalOperationsBulk implements IGeolocator {
                             osvJson.getDisplay_name().substring(osvJson.getDisplay_name().lastIndexOf(',')+1).trim());
 
                 }
+            }
+        } catch (StringIndexOutOfBoundsException ignored){
+
+
             }
         }
     }
@@ -131,6 +137,9 @@ public class GeologicalOperationsBulk implements IGeolocator {
         itList.forEach(e ->
                 collectorList.add(listToProcess.subList(e - partitionSize, e))
         );
+
+        collectorList.forEach(System.out::println);
+
                 return collectorList;
     }
 

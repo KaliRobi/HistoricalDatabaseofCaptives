@@ -31,6 +31,7 @@ public class GeoServices {
     public Set<String> getAllLocation() {
         Set<String> allLocations = captiveServices.getCitiesOfBirth();
         allLocations.addAll(captiveServices.getCitiesOfResidence());
+
         return allLocations;
     }
     // get the locations without lat / lon data
