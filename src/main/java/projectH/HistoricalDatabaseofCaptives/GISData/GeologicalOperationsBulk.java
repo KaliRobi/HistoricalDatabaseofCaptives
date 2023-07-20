@@ -1,15 +1,9 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
-
-import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.groupingBy;
 
 @Component
 public class GeologicalOperationsBulk implements IGeolocator {
@@ -42,7 +35,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
     public void getCityData() throws InterruptedException, ExecutionException, IOException {
         Set<String> locations =  geoServices.getAllLocation();
         locations.removeAll(geoServices.getLocationsWithCoordinates());
-        //creating uri list while dealing with the special Hungarian characters
+             //creating uri list while dealing with the special Hungarian characters
         List<List<String>> targetLocations = bulkTownFeeder( locations.stream().toList(), 6);
         produceCompleteables(targetLocations);
 
@@ -53,20 +46,28 @@ public class GeologicalOperationsBulk implements IGeolocator {
         List<Map<String, OSVJson>> listOfCompletables = new ArrayList<>();
 
         for(List<String> list : targetLocations) {
-            List<TargetLink> tempList = new ArrayList<>();
-            for(String target : list) {
-                try {tempList.add(
-                     new TargetLink(
-                            new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)),
-                            target
-                    ));
+            Map<String, OSVJson> copmMap = null;
+            for (String target : list) {
+                List<TargetLink> tempLinkList = new ArrayList<>();
+                try {
+                    tempLinkList.add(
+                            new TargetLink(
+                                    new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8)),
+                                    target
+                            ));
+                    copmMap = getCompleteables(tempLinkList);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-            Map<String, OSVJson> copmMap = getCompleteables(tempList);
+
             listOfCompletables.add(copmMap);
-            completeCompletablesInToDatabase(listOfCompletables);
+            System.out.println("#############################################");
+            System.out.println(listOfCompletables);
+            System.out.println("#############################################");
+            insertEntriesIntoGeologicalLocations(listOfCompletables);
+            listOfCompletables.clear();
             Thread.sleep(6000);
         }
 
@@ -89,7 +90,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-        List<OSVJson> osvJsons = mapper.readValue(completableFuture.get(), new TypeReference<List<OSVJson>>() {});
+        List<OSVJson> osvJsons = mapper.readValue(completableFuture.get(), new TypeReference<>() {});
         OSVJson osvJson = new OSVJson();
         if (!osvJsons.isEmpty() ){
             osvJson = osvJsons.get(0);
@@ -98,8 +99,13 @@ public class GeologicalOperationsBulk implements IGeolocator {
     }
 
 
-    private void completeCompletablesInToDatabase(List<Map<String, OSVJson>> listOfLatLon ) {
+    private void insertEntriesIntoGeologicalLocations(List<Map<String, OSVJson>> listOfLatLon ) {
+
         for (Map<String, OSVJson> latLonsMap : listOfLatLon) {
+            System.out.println("-----------------------------------------------");
+            System.out.println(latLonsMap.keySet());
+            System.out.println("-----------------------------------------------");
+
             for (String key : latLonsMap.keySet()) {
                 OSVJson osvJson = latLonsMap.get(key);
                 if (null != osvJson.getDisplay_name()) {
@@ -121,7 +127,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
 
 
         int listSize = listToProcess.size();
-        System.out.println(listSize);
+
         Integer partitionSize = IntStream.range(1, maxPartitionSize).filter(e-> listSize % e == 0).reduce(Integer::max).orElseThrow();
 //       use the partition size to slice the array.
         List<List<String>> collectorList = new ArrayList<>();
@@ -132,9 +138,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
         itList.forEach(e ->
                 collectorList.add(listToProcess.subList(e - partitionSize, e))
         );
-
-        System.out.println(collectorList);
-        return collectorList;
+                return collectorList;
     }
 
 

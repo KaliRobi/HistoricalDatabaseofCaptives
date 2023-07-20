@@ -1,7 +1,5 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,14 +57,14 @@ public class GeologicalOperations implements IGeolocator{
                 .thenApply( e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))   ))
 
         ).toList();
-//        Map<String, Map<String, String>> locationsWithCoordinates = new HashMap<>();
-
         Map<String, String> collect;
         // return value from open street view
          for( CompletableFuture<String> lonLat : listOfLatLon ) {
-             String locationName;
+             String sourceName;
+             String osvName;
+             String country;
              try {
-                 locationName = Arrays.stream(lonLat.get().split("=")).toList().subList(1, 2).get(0);
+                 sourceName = Arrays.stream(lonLat.get().split("=")).toList().subList(1, 2).get(0);
                  collect = Arrays.stream(Arrays.asList(lonLat.get().split("}")).get(0).split(","))
                          .map(part -> part.replaceAll("\"", "").split(":"))
                          .filter(p -> p.length > 1)
@@ -74,16 +72,13 @@ public class GeologicalOperations implements IGeolocator{
                          );
                  collect.keySet().retainAll(List.of("display_name", "lon", "lat"));
 //                 locationsWithCoordinates.put(collect.get("display_name"), collect);
-
+                 osvName = collect.get("display_name").substring(0, collect.get("display_name").indexOf(','));
+                 country = collect.get("display_name").substring(collect.get("display_name").lastIndexOf(',')+1);
              } catch (InterruptedException | ExecutionException ex) {
                  throw new RuntimeException(ex);
              }
-//             geoServices.addGeographicalLocation(locationName, collect.get("display_name"), Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")));
+             geoServices.addGeographicalLocation(sourceName, osvName, Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")), country);
          }
-
-
-
-
 
     }
         public void justExecute() throws InterruptedException, ExecutionException, IOException {
