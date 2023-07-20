@@ -63,9 +63,6 @@ public class GeologicalOperationsBulk implements IGeolocator {
             }
 
             listOfCompletables.add(copmMap);
-            System.out.println("#############################################");
-            System.out.println(listOfCompletables);
-            System.out.println("#############################################");
             insertEntriesIntoGeologicalLocations(listOfCompletables);
             listOfCompletables.clear();
             Thread.sleep(6000);
@@ -102,10 +99,6 @@ public class GeologicalOperationsBulk implements IGeolocator {
     private void insertEntriesIntoGeologicalLocations(List<Map<String, OSVJson>> listOfLatLon ) {
 
         for (Map<String, OSVJson> latLonsMap : listOfLatLon) {
-            System.out.println("-----------------------------------------------");
-            System.out.println(latLonsMap.keySet());
-            System.out.println("-----------------------------------------------");
-
             for (String key : latLonsMap.keySet()) {
                 OSVJson osvJson = latLonsMap.get(key);
                 if (null != osvJson.getDisplay_name()) {
