@@ -55,7 +55,7 @@ public List<List<String>> exposeRelocations(){
 
     @GetMapping(path="/v1/test")
     public void testest()  {
-         antropometrics.getCohortList(10);
+         antropometrics.getCohortList();
     }
 
 }

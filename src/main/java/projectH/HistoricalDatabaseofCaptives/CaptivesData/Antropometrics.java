@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
+import java.time.Instant;
 import java.time.Year;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
@@ -38,45 +41,70 @@ public class Antropometrics {
 //   at this moment a List<Map<Integer, List<Integer>>  model looks like the good way to present this data
 //    The outer List is the collection. The Nested Map represents the cohorts where the key is the first year of the period.
 //    The nested list will contain all the heights mapped on femail/male keys and the actual heights
-    public void getCohortList(int subRangeSize){
+    public void getCohortList(){
+        List<Captive> captiveList = captiveServices.getAllTheCaptives();
 
-        // height , birth year
-//        List<List<Integer>> heightBirthdayList = captiveServices.getAllTheCaptives().stream()
-//                        .filter(a -> a.getDate_of_birth() != null  &&  a.getHeight() != 0)
-//                        .map(e ->
-//                            List.of (Integer.valueOf(String.valueOf(e.getDate_of_birth()).substring(0,4)),   e.getHeight())
-//                                  )
-//                        .toList();
-        // creating Map<yearofbirt, Map<sex, height>>  this is the individual level
-
-         List<Map<Integer, Map<String, Integer>>>  individualLink  = new ArrayList<>();
-         captiveServices.getAllTheCaptives().stream()
-                .filter(a -> a.getDate_of_birth() != null  &&  a.getHeight() != 0 )
+         List<Map<Integer, Map<String, Integer>>>  peopleList  = new ArrayList<>();
+        captiveList.stream()
+                .filter( a->  null != a.getHeight() && null != a.getDate_of_birth() )
                 .forEach(e->
-//                        {
-//                    Map<Integer, Map<String, Integer>> personWithYear = new HashMap<>();
-//                    Map<String, Integer> personSexAndHeight = new HashMap<>();
-//                    personSexAndHeight.put(e.getSex()  , e.getHeight());
-//                    personWithYear.put(e.getDate_of_birth().get(ChronoField.DAY_OF_WEEK), personSexAndHeight);
-//                    individualLink.add(personWithYear);
-//                        }
-                                System.out.println(e.getDate_of_birth().get(ChronoField.YEAR) + " " + e.getDate_of_birth()));
+                        {
+                    Map<Integer, Map<String, Integer>> personWithYear = new HashMap<>();
+                    Map<String, Integer> personSexAndHeight = new HashMap<>();
+                    personSexAndHeight.put(e.getSex(), e.getHeight());
+//                    Ideal would be e.getDate_of_birth().get(Chronfield.YEAR)  but no matter what format I did isSupported(Chronfield.YEAR) is always false
+                    personWithYear.put( Integer.valueOf(e.getDate_of_birth().toString().substring(0,4 )), personSexAndHeight);
+                    peopleList.add(personWithYear);
+                        });
+        List<Integer> cohortBase =   getCohortsByFirstYear(10);
+
+        Map<Integer, List<List<Integer>>> mapToCohortStartYears = new HashMap<>();
+        mapToCohortStartYears.keySet().addAll(cohortBase);
+
+        for(Map<Integer, Map<String, Integer>> person : peopleList ) {
+                for(Integer key : mapToCohortStartYears.keySet())   {
+                    person.get(person.keySet().stream().toList().get(0));
+                }
 
 
 
 
-//        List<Integer> yearRange = heightBirthdayList.stream().map(e -> e.get(0)).sorted().toList();
-        // this is where the standard distribution will be needed
-
-//        List<Integer> iteratorList = IntStream.range(1, yearRange.size() / subRangeSize + 1).map(e -> e * subRangeSize)
-//                .boxed().toList();
-//
-//
-//        List<List<Integer>>    cohortsList = iteratorList.stream().map(e -> yearRange.subList(e - subRangeSize, e)).toList();
 
 
-        System.out.println(individualLink );
+        }
 
+
+
+        System.out.println(cohortBase);
+
+
+    }
+
+    public List<List<Integer>> getCohorts(Integer cohortSize){
+
+       List<Integer>  uniqueYearList = captiveServices.getAllTheCaptives().stream().filter(a -> null != a.getDate_of_birth())
+               .map(e -> Integer.valueOf(e.getDate_of_birth().toString().substring(0, 4)))
+               .collect(Collectors.toSet()).stream().sorted().toList();
+
+        List<List<Integer>> cohortList =  new ArrayList<>();
+       List<Integer> interatorList = IntStream.range(1 , uniqueYearList.size() / cohortSize + 1).map(e -> e * cohortSize ).boxed().toList();
+        interatorList.forEach( e -> cohortList.add(uniqueYearList.subList( e - cohortSize , e      )));
+
+
+        return cohortList;
+    }
+    public List<Integer> getCohortsByFirstYear(Integer cohortSize){
+
+        List<Integer>  uniqueYearList = captiveServices.getAllTheCaptives().stream().filter(a -> null != a.getDate_of_birth())
+                .map(e -> Integer.valueOf(e.getDate_of_birth().toString().substring(0, 4)))
+                .collect(Collectors.toSet()).stream().sorted().toList();
+
+        List<Integer> cohortList =  new ArrayList<>();
+        List<Integer> interatorList = IntStream.range(1 , uniqueYearList.size() / cohortSize + 1).map(e -> e * cohortSize ).boxed().toList();
+        interatorList.forEach( e -> cohortList.add(uniqueYearList.subList( e - cohortSize , e      ).stream().limit(1).toList().get(0)));
+
+
+        return cohortList;
     }
 
 

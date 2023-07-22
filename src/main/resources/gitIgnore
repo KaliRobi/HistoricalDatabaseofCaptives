@@ -288,3 +288,12 @@
 
         return mapOfLatLon;
     }
+
+    //        List<Integer> yearRange = heightBirthdayList.stream().map(e -> e.get(0)).sorted().toList();
+            // this is where the standard distribution will be needed
+
+    //        List<Integer> iteratorList = IntStream.range(1, yearRange.size() / subRangeSize + 1).map(e -> e * subRangeSize)
+    //                .boxed().toList();
+    //
+    //
+    //        List<List<Integer>>    cohortsList = iteratorList.stream().map(e -> yearRange.subList(e - subRangeSize, e)).toList();
