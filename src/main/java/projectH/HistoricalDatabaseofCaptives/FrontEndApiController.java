@@ -54,8 +54,8 @@ public List<List<String>> exposeRelocations(){
 //}
 
     @GetMapping(path="/v1/test")
-    public void testest() throws URISyntaxException, ExecutionException, InterruptedException, IOException {
-         geologicalOperations.justExecute();
+    public void testest()  {
+         antropometrics.getCohortList(10);
     }
 
 }

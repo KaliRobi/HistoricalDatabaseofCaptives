@@ -3,7 +3,9 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
-import java.util.Date;
+
+import java.time.Instant;
+
 
 // The clas needs to describe all the attributes of a captive.
 
@@ -20,7 +22,7 @@ public class Captive {
     private String build;
     private String dentition;
     private String special_peculiarities;
-    private Date date_of_birth;
+    private Instant date_of_birth;
     private String place_of_birth;
     private String place_of_residence;
 
@@ -36,8 +38,8 @@ public class Captive {
     private String education;
     private String criminal_history;
     private String crime;
-    private Date sentence_begins;
-    private Date sentence_expires;
+    private Instant sentence_begins;
+    private Instant sentence_expires;
     private Integer prison_term_days;
     private String ransom;
     private String associates;
@@ -46,7 +48,7 @@ public class Captive {
     private String notes;
     private String arrest_site;
 
-    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Date dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Date sentence_begins, Date sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
+    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Instant dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Instant sentence_begins, Instant sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
         this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
@@ -158,11 +160,11 @@ public class Captive {
         this.special_peculiarities = special_peculiarities;
     }
 
-    public Date getDate_of_birth() {
+    public Instant getDate_of_birth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth(Instant date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
@@ -278,19 +280,19 @@ public class Captive {
         this.crime = crime;
     }
 
-    public Date getSentence_begins() {
+    public Instant getSentence_begins() {
         return sentence_begins;
     }
 
-    public void setSentence_begins(Date sentence_begins) {
+    public void setSentence_begins(Instant sentence_begins) {
         this.sentence_begins = sentence_begins;
     }
 
-    public Date getSentence_expires() {
+    public Instant getSentence_expires() {
         return sentence_expires;
     }
 
-    public void setSentence_expires(Date sentence_expires) {
+    public void setSentence_expires(Instant sentence_expires) {
         this.sentence_expires = sentence_expires;
     }
 
