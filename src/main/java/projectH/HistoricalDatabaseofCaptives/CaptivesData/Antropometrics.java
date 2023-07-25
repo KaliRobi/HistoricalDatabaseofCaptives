@@ -61,10 +61,13 @@ public class Antropometrics {
         }
         System.out.println(mapToCohortStartYears);
         for(Map<Integer, Map<String, Integer>> person : peopleList ) {
-                for(Integer key : mapToCohortStartYears.keySet())   {
+                for(int i = 0; i < cohortBase.size(); i++  )   {   // traditional foor loop because of the index?
 //                    [1921, 1891, 1861, 1911, 1800, 1881, 1901, 1871]
                     int currentBrithYear = person.keySet().stream().toList().get(0);
-                    if(currentBrithYear > key)
+//                    if the birthyear smaller than the current element of the cohortbase then
+//                    get the element of the people list where key == i-1 and add there the the value
+//                     if "n" then first list if "f" second. The size of these list can tell how many people we are talking about
+
 
 //                    System.out.println(person.get(person.keySet().stream().toList().get(0)).get("n"));
 
