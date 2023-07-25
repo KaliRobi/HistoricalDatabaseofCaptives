@@ -1,9 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 import java.lang.*;
 import java.math.BigDecimal;

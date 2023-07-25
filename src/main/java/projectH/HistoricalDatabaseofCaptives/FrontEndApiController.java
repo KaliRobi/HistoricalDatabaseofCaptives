@@ -1,7 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Antropometrics;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
@@ -9,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
+
 
 
 @RestController

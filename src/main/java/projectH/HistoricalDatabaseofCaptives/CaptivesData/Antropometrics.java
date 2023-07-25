@@ -2,15 +2,7 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
-import java.time.Instant;
-import java.time.Year;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
-
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,20 +19,21 @@ public class Antropometrics {
         this.captiveServices = captiveServices;
     }
 
-    /// one of the main thing would be to get the birth cohorts of the captives per town per sex
-    // This could be a base for a lot of other function
-    // the function needs to return the list of ids
-    // {town : [[female], [male]]
+    /* one of the main thing would be to get the birth cohorts of the captives per town per sex
+    * This could be a base for a lot of other function
+    * the function needs to return the list of ids
+    * {town : [[female], [male]]
 
 
-    //  get a method what creates the list of cohorts
-    // adding a range in year, two variant getCohortList /  getCohortListBySex
+    *  get a method what creates the list of cohorts
+    * adding a range in year, two variant getCohortList /  getCohortListBySex
 
 
 
-//   at this moment a List<Map<Integer, List<Integer>>  model looks like the good way to present this data
-//    The outer List is the collection. The Nested Map represents the cohorts where the key is the first year of the period.
-//    The nested list will contain all the heights mapped on femail/male keys and the actual heights
+    *   at this moment a List<Map<Integer, List<Integer>>  model looks like the good way to present this data
+    *    The outer List is the collection. The Nested Map represents the cohorts where the key is the first year of the period.
+    *   The nested list will contain all the heights mapped on femail/male keys and the actual heights
+*/
     public void getCohortList(){
         List<Captive> captiveList = captiveServices.getAllTheCaptives();
 
@@ -53,24 +46,32 @@ public class Antropometrics {
                     Map<String, Integer> personSexAndHeight = new HashMap<>();
                     personSexAndHeight.put(e.getSex(), e.getHeight());
 //                    Ideal would be e.getDate_of_birth().get(Chronfield.YEAR)  but no matter what format I did isSupported(Chronfield.YEAR) is always false
+//                     As it is not supported per documentation. Should go with NANO_OF_SECOND / MICRO_OF_SECON / MILLI_OF_SECOND
                     personWithYear.put( Integer.valueOf(e.getDate_of_birth().toString().substring(0,4 )), personSexAndHeight);
                     peopleList.add(personWithYear);
                         });
-        List<Integer> cohortBase =   getCohortsByFirstYear(10);
-
+        List<Integer> cohortBase = getCohortsByFirstYear(10);
+// ideal would be to have a map<String, List<Integer>> here
         Map<Integer, List<List<Integer>>> mapToCohortStartYears = new HashMap<>();
-        mapToCohortStartYears.keySet().addAll(cohortBase);
-
+        System.out.println(cohortBase);
+        List<List<Integer>> listTpAdd = new ArrayList<>();
+        for( int cohortStart : cohortBase){
+            Object List;
+            mapToCohortStartYears.put(cohortStart, listTpAdd);
+        }
+        System.out.println(mapToCohortStartYears);
         for(Map<Integer, Map<String, Integer>> person : peopleList ) {
                 for(Integer key : mapToCohortStartYears.keySet())   {
-                    person.get(person.keySet().stream().toList().get(0));
+//                    [1921, 1891, 1861, 1911, 1800, 1881, 1901, 1871]
+                    int currentBrithYear = person.keySet().stream().toList().get(0);
+                    if(currentBrithYear > key)
+
+//                    System.out.println(person.get(person.keySet().stream().toList().get(0)).get("n"));
+
+//                    System.out.println(person.keySet());
+//                    System.out.println(key)
+                    ;
                 }
-
-
-
-
-
-
         }
 
 
