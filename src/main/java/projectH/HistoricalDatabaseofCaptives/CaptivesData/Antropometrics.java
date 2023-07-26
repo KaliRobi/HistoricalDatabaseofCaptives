@@ -54,33 +54,44 @@ public class Antropometrics {
 // ideal would be to have a map<String, List<Integer>> here
         Map<Integer, List<List<Integer>>> mapToCohortStartYears = new HashMap<>();
         System.out.println(cohortBase);
-        List<List<Integer>> listTpAdd = new ArrayList<>();
+        List<List<Integer>> listToAdd = new ArrayList<>();
+        List<Integer> femaleList = new ArrayList<>();
+        List<Integer> maleList = new ArrayList<>();
+        listToAdd.add(femaleList);
+        listToAdd.add(maleList);
         for( int cohortStart : cohortBase){
             Object List;
-            mapToCohortStartYears.put(cohortStart, listTpAdd);
+            mapToCohortStartYears.put(cohortStart, listToAdd);
         }
         System.out.println(mapToCohortStartYears);
         for(Map<Integer, Map<String, Integer>> person : peopleList ) {
-                for(int i = 0; i < cohortBase.size(); i++  )   {   // traditional foor loop because of the index?
+                for(int i = cohortBase.size() -1; i >= 0; i--  )   {   // traditional for loop because of the index?
 //                    [1921, 1891, 1861, 1911, 1800, 1881, 1901, 1871]
                     int currentBrithYear = person.keySet().stream().toList().get(0);
-//                    if the birthyear smaller than the current element of the cohortbase then
-//                    get the element of the people list where key == i-1 and add there the the value
+//                    if the birthyear smaller than the current element of the cohortBase then
+//                    get the element of the people list where key ==  cohortBase.get(i-1) and add there  the value
 //                     if "n" then first list if "f" second. The size of these list can tell how many people we are talking about
-
-
-//                    System.out.println(person.get(person.keySet().stream().toList().get(0)).get("n"));
-
-//                    System.out.println(person.keySet());
-//                    System.out.println(key)
-                    ;
+//                    System.out.println(cohortBase.get(i));
+                    Map<String, Integer>  currentPerson = person.get(person.keySet().stream().toList().get(0));
+                    if(currentBrithYear > cohortBase.get(i) ){//
+                        if( null != currentPerson.get("n")) {
+                            mapToCohortStartYears.get(cohortBase.get(i)).get(0).add(currentPerson.get("n"));
+                            break;
+                        } else if ( null != currentPerson.get("f")) {
+                            mapToCohortStartYears.get(cohortBase.get(i)).get(1).add(currentPerson.get("f"));
+                            break;
+                        }
+                    }
                 }
         }
 
 
 
-        System.out.println(cohortBase);
+        System.out.println(mapToCohortStartYears.get(1911).get(0).size());
+        System.out.println(mapToCohortStartYears.get(1911).get(1).size());
 
+        System.out.println(mapToCohortStartYears.get(1861).get(0).size());
+        System.out.println(mapToCohortStartYears.get(1861).get(1).size());
 
     }
 
