@@ -50,49 +50,60 @@ public class Antropometrics {
                     personWithYear.put( Integer.valueOf(e.getDate_of_birth().toString().substring(0,4 )), personSexAndHeight);
                     peopleList.add(personWithYear);
                         });
-        List<Integer> cohortBase = getCohortsByFirstYear(10);
-// ideal would be to have a map<String, List<Integer>> here
+        List<Integer> cohortBase = getCohortsByFirstYear(5);
         Map<Integer, List<List<Integer>>> mapToCohortStartYears = new HashMap<>();
-        System.out.println(cohortBase);
-        List<List<Integer>> listToAdd = new ArrayList<>();
-        List<Integer> femaleList = new ArrayList<>();
-        List<Integer> maleList = new ArrayList<>();
-        listToAdd.add(femaleList);
-        listToAdd.add(maleList);
+
+//      This loop makes sure each key has its own list.(no confusion with object references like in the prev version)
         for( int cohortStart : cohortBase){
-            Object List;
+            List<List<Integer>> listToAdd = new ArrayList<>();
+            List<Integer> listA = new ArrayList<>();
+            List<Integer> listB = new ArrayList<>();
+            listToAdd.add(listA); listToAdd.add(listB);
             mapToCohortStartYears.put(cohortStart, listToAdd);
         }
-        System.out.println(mapToCohortStartYears);
+
+
         for(Map<Integer, Map<String, Integer>> person : peopleList ) {
-                for(int i = cohortBase.size() -1; i >= 0; i--  )   {   // traditional for loop because of the index?
-//                    [1921, 1891, 1861, 1911, 1800, 1881, 1901, 1871]
+                for(int i = cohortBase.size() -1; i >= 0; i--  )   {
                     int currentBrithYear = person.keySet().stream().toList().get(0);
-//                    if the birthyear smaller than the current element of the cohortBase then
-//                    get the element of the people list where key ==  cohortBase.get(i-1) and add there  the value
-//                     if "n" then first list if "f" second. The size of these list can tell how many people we are talking about
-//                    System.out.println(cohortBase.get(i));
                     Map<String, Integer>  currentPerson = person.get(person.keySet().stream().toList().get(0));
-                    if(currentBrithYear > cohortBase.get(i) ){//
+                    int targetBase = cohortBase.get(i);
+//                    if the birth year larger than the current element of the cohortBase then we are good
+                    if(currentBrithYear > targetBase){
                         if( null != currentPerson.get("n")) {
-                            mapToCohortStartYears.get(cohortBase.get(i)).get(0).add(currentPerson.get("n"));
+                            mapToCohortStartYears.get(targetBase).get(0).add(currentPerson.get("n"));
                             break;
                         } else if ( null != currentPerson.get("f")) {
-                            mapToCohortStartYears.get(cohortBase.get(i)).get(1).add(currentPerson.get("f"));
+                            mapToCohortStartYears.get(targetBase).get(1).add(currentPerson.get("f"));
                             break;
                         }
+                    break;
                     }
+
                 }
         }
-
-
-
-        System.out.println(mapToCohortStartYears.get(1911).get(0).size());
-        System.out.println(mapToCohortStartYears.get(1911).get(1).size());
-
-        System.out.println(mapToCohortStartYears.get(1861).get(0).size());
-        System.out.println(mapToCohortStartYears.get(1861).get(1).size());
-
+// Just for fun section
+//[1800, 1861, 1871, 1881,  1891,  1901, 1911,  1921]
+//        System.out.println("Cohorts (with standard size of 5 years) :");
+//        System.out.println(cohortBase);
+//        for (int year : cohortBase){
+//            System.out.println("average male height  : " +  mapToCohortStartYears.get(year).get(1).stream().reduce(0, Integer::sum) / mapToCohortStartYears.get(year).get(1).size() + "cm by birth year in the cohort of " + year) ;
+//            System.out.println("average female height: " +  mapToCohortStartYears.get(year).get(0).stream().reduce(0, Integer::sum) / mapToCohortStartYears.get(year).get(0).size() + "cm by birth year in the cohort of " + year);
+//        }
+//
+//
+//        System.out.println("születési korcsoportok (with standard size of 5 years) :");
+//        System.out.println(cohortBase);
+//        for (int year : cohortBase){
+//            int endYear = year + 5;
+//            int maleAvS = mapToCohortStartYears.get(year).get(1).stream().reduce(0, Integer::sum) / mapToCohortStartYears.get(year).get(1).size();
+//            int femaleAvS = mapToCohortStartYears.get(year).get(0).stream().reduce(0, Integer::sum) / mapToCohortStartYears.get(year).get(0).size();
+//            int difInCm = Math.abs(maleAvS - femaleAvS);
+//            double difInPErc = difInCm / (maleAvS / 100.00);
+//            System.out.println("átlag testmagasság féfiaknál  :" +  maleAvS + "cm, a " + year + "-" + endYear + " között születettek csoportjában"  ) ;
+//            System.out.println("átlag testmagasság nőknél     :" +  femaleAvS + "cm, a " + year + "-" + endYear + " között születettek csoportjában"  );
+//            System.out.println("különbség cm-ben: " + Math.abs(maleAvS - femaleAvS) +    "cm, különség % ban: " + difInCm + "%"   );
+//        }
     }
 
     public List<List<Integer>> getCohorts(Integer cohortSize){
