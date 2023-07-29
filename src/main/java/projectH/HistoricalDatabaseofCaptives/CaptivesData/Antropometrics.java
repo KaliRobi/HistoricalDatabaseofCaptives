@@ -19,7 +19,7 @@ public class Antropometrics {
         this.captiveServices = captiveServices;
     }
 
-    /* one of the main thing would be to get the birth cohorts of the captives per town per sex
+    /** one of the main thing would be to get the birth cohorts of the captives per town per sex
     * This could be a base for a lot of other function
     * the function needs to return the list of ids
     * {town : [[female], [male]]
@@ -32,7 +32,7 @@ public class Antropometrics {
 
     *   at this moment a List<Map<Integer, List<Integer>>  model looks like the good way to present this data
     *    The outer List is the collection. The Nested Map represents the cohorts where the key is the first year of the period.
-    *   The nested list will contain all the heights mapped on femail/male keys and the actual heights
+    *   The nested list will contain all the heights mapped on female/male keys and the actual heights
 */
     public void getCohortList(){
         List<Captive> captiveList = captiveServices.getAllTheCaptives();
