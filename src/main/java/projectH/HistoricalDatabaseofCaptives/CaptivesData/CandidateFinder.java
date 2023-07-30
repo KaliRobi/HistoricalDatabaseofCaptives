@@ -1,5 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
+import org.springframework.stereotype.Component;
+
 /**
  * One of the ways how this mostly statistical site could be brought closer to the visitors is to show the "face" of the captives
  * Unfortunately there are no images were taken, but someone's face is much more than his/her skull covered by tissues
@@ -10,6 +12,18 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
  *
  */
 
+@Component
+public class CandidateFinder {
 
-public class findTheCandidate {
+    private CaptiveServices captiveServices;
+
+    public Captive returnCandidate(int age, String visitorLocation, String maleOrFemale){
+
+// captive services will provide a search method
+//
+
+
+    }
+
+
 }

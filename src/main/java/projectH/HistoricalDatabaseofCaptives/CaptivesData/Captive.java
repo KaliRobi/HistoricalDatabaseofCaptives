@@ -352,6 +352,13 @@ public class Captive {
         this.arrest_site = arrest_site;
     }
 
+
+    public int getAge(){
+      int birthYear =    Integer.parseInt(getDate_of_birth().toString().substring(0,4));
+      int recordYear = Integer.parseInt(getCaptive_id().substring(0,4));
+      return recordYear - birthYear;
+    }
+
     @Override
     public String toString() {
         return "Captive{" +

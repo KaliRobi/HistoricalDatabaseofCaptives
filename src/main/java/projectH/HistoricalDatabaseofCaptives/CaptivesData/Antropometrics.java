@@ -70,6 +70,7 @@ public class Antropometrics {
                     int targetBase = cohortBase.get(i);
 //                    if the birth year larger than the current element of the cohortBase then we are good
                     if(currentBrithYear > targetBase){
+
                         if( null != currentPerson.get("n")) {
                             mapToCohortStartYears.get(targetBase).get(0).add(currentPerson.get("n"));
                             break;
