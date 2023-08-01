@@ -2,25 +2,29 @@ package projectH.HistoricalDatabaseofCaptives;
 
 
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Antropometrics;
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.CandidateFinder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
+
+import java.time.Instant;
 import java.util.*;
 
 
 
 @RestController
 public class FrontEndApiController {
-
+    private final CandidateFinder candidateFinder;
     private final Antropometrics antropometrics;
     private final CaptiveServices captiveServices;
 
     private final GeologicalOperations geologicalOperations;
     @Autowired
-    public FrontEndApiController(Antropometrics antropometrics, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
+    public FrontEndApiController(CandidateFinder candidateFinder, Antropometrics antropometrics, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
+        this.candidateFinder = candidateFinder;
         this.antropometrics = antropometrics;
 
         this.captiveServices = captiveServices;
@@ -51,7 +55,7 @@ public List<List<String>> exposeRelocations(){
 
     @GetMapping(path="/v1/test")
     public void testest()  {
-         antropometrics.getCohortList();
+         candidateFinder.returnCandidate(Instant.parse("1991-02-17T00:00:00Z"), "Debrecen", "female");
     }
 
 }

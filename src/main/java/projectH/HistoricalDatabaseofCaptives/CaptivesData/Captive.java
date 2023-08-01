@@ -5,6 +5,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 
 // The clas needs to describe all the attributes of a captive.
@@ -357,6 +359,49 @@ public class Captive {
       int birthYear =    Integer.parseInt(getDate_of_birth().toString().substring(0,4));
       int recordYear = Integer.parseInt(getCaptive_id().substring(0,4));
       return recordYear - birthYear;
+    }
+
+
+    public Set<String> getNonNullAttributes(){
+        Set<String> attribs = new HashSet<>();
+
+        if (id != 0 ) {
+            attribs.add("id");
+        }
+        if (volume != null) {
+            attribs.add("volume");
+        }
+        if (captive_id != null) {
+            attribs.add("captive_id");
+        }
+        if (name != null) {
+            attribs.add("name");
+        }
+        if (sex != null) {
+            attribs.add("sex");
+        }
+        if (height != null) {
+            attribs.add("height");
+        }
+        if (build != null) {
+            attribs.add("build");
+        }
+        if (date_of_birth != null) {
+            attribs.add("date_of_birth");
+        }
+        if (place_of_birth!= null) {
+            attribs.add("place_of_birth");
+        }
+        if (place_of_residence != null) {
+            attribs.add("place_of_residence");
+//            ...
+//
+
+        }
+
+    return attribs;
+
+
     }
 
     @Override

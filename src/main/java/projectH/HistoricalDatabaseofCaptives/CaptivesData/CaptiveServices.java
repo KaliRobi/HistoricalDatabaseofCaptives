@@ -88,6 +88,23 @@ public class CaptiveServices {
     }
 
 
+    // returns a captive by its attributes
+    public Captive findACaptive(Captive captive){
+           Set<String> captiveAttribs = captive.getNonNullAttributes();
+
+
+
+    return null;
+
+    }
+
+
+//    public List<Captive> findAGroupOfCaptives(){
+//
+//
+//
+//    }
+
 
 
 }
