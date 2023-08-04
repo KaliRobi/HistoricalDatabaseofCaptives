@@ -89,12 +89,23 @@ public class CaptiveServices {
 
 
     // returns a captive by its attributes
-    public Captive findACaptive(Captive captive){
+    public void findACaptive(Captive captive){
            Set<String> captiveAttribs = captive.getNonNullAttributes();
 
+        List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex("Debrecen", "n");
+        caps.stream().filter(e -> e.getAge() == 22).toList().stream().limit(1L).toList();
+        System.out.println(caps);
+//           there is the option to make the first call on a certain field and then just narrow it as much as possible
 
 
-    return null;
+        // what is the most typical attribute when we are looking for someone?
+//         location and sex because in a mathematical point of view this is how we can get the most specific portion of the whole
+
+
+
+        // going forward with additional attributes,
+//
+
 
     }
 

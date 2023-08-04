@@ -1,5 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -21,7 +22,7 @@ import java.util.Locale;
 
 @Component
 public class CandidateFinder {
-
+    @Autowired
     private CaptiveServices captiveServices;
 
     public void returnCandidate(Instant yearOfBirth, String visitorLocation, String maleOrFemale){
@@ -35,7 +36,7 @@ public class CandidateFinder {
         cap.setPlace_of_birth(visitorLocation);
         cap.setSex(maleOrFemale);
         cap.getNonNullAttributes();
-//        captiveServices.findACaptive(cap);
+        captiveServices.findACaptive(cap);
 
         System.out.println(cap.getNonNullAttributes());
 
