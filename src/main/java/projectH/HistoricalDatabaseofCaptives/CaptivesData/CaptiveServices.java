@@ -2,6 +2,7 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 import java.util.*;
 
@@ -89,11 +90,18 @@ public class CaptiveServices {
 
 
     // returns a captive by its attributes
-    public void findACaptive(Captive captive){
-           Set<String> captiveAttribs = captive.getNonNullAttributes();
+    public void findACaptive(Visitor visitor){
 
-        List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex("Debrecen", "n");
-        caps.stream().filter(e -> e.getAge() == 22).toList().stream().limit(1L).toList();
+        // probably this will eb alsi the part of IPerson
+//           Set<String> captiveAttribs = captive.getNonNullAttributes();
+
+
+
+        List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
+
+//        the issue here is that creating a captive from the visitor might be saving a class but
+        caps.stream().filter(e -> e.getAge() == 22).toList().stream().limit(1L).toList()
+                .stream().filter(e -> e.getAge() == visitor.getAge() );
         System.out.println(caps);
 //           there is the option to make the first call on a certain field and then just narrow it as much as possible
 

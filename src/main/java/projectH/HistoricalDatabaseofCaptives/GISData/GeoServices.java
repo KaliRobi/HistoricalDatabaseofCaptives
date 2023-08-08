@@ -2,14 +2,17 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchGeolocationAvailableException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.util.HashSet;
 import java.util.Set;
 
-
+    //TODO
+    //would be nice to control  everything in this package from here GeologicalOps for example.
 @Component
 public class GeoServices {
+
 
     private final GeologicalRepository geologicalRepository;
 
@@ -65,6 +68,7 @@ public class GeoServices {
 
     public GeoLocation getALocationByName(String name){
         return geologicalRepository.findByName(name);
+
 
     }
 

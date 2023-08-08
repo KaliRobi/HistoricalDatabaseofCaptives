@@ -8,7 +8,9 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
+import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 import java.time.Instant;
 import java.util.*;
@@ -21,13 +23,15 @@ public class FrontEndApiController {
     private final Antropometrics antropometrics;
     private final CaptiveServices captiveServices;
 
+    private final GeoServices geoServices;
     private final GeologicalOperations geologicalOperations;
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, Antropometrics antropometrics, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
+    public FrontEndApiController(CandidateFinder candidateFinder, Antropometrics antropometrics, CaptiveServices captiveServices, GeoServices geoServices, GeologicalOperations geologicalOperations) {
         this.candidateFinder = candidateFinder;
         this.antropometrics = antropometrics;
 
         this.captiveServices = captiveServices;
+        this.geoServices = geoServices;
         this.geologicalOperations = geologicalOperations;
     }
 
@@ -55,7 +59,9 @@ public List<List<String>> exposeRelocations(){
 
     @GetMapping(path="/v1/test")
     public void testest()  {
-         candidateFinder.returnCandidate(Instant.parse("1991-02-17T00:00:00Z"), "Debrecen", "female");
+
+        Visitor visitor =  new Visitor(geoServices.getALocationByName("Debrecen"), "n", Instant.parse("1991-02-17T00:00:00Z"));
+         candidateFinder.returnCandidate(visitor);
     }
 
 }

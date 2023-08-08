@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -361,6 +362,18 @@ public class Captive {
       return recordYear - birthYear;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Captive captive = (Captive) o;
+        return id == captive.id && Objects.equals(volume, captive.volume) && Objects.equals(captive_id, captive.captive_id) && Objects.equals(name, captive.name) && Objects.equals(sex, captive.sex) && Objects.equals(height, captive.height) && Objects.equals(build, captive.build) && Objects.equals(dentition, captive.dentition) && Objects.equals(special_peculiarities, captive.special_peculiarities) && Objects.equals(date_of_birth, captive.date_of_birth) && Objects.equals(place_of_birth, captive.place_of_birth) && Objects.equals(place_of_residence, captive.place_of_residence) && Objects.equals(religion, captive.religion) && Objects.equals(childhood_status, captive.childhood_status) && Objects.equals(marital_status, captive.marital_status) && Objects.equals(number_of_children, captive.number_of_children) && Objects.equals(occupation, captive.occupation) && Objects.equals(occupation_2, captive.occupation_2) && Objects.equals(occupation_3, captive.occupation_3) && Objects.equals(military_service, captive.military_service) && Objects.equals(literacy, captive.literacy) && Objects.equals(education, captive.education) && Objects.equals(criminal_history, captive.criminal_history) && Objects.equals(crime, captive.crime) && Objects.equals(sentence_begins, captive.sentence_begins) && Objects.equals(sentence_expires, captive.sentence_expires) && Objects.equals(prison_term_days, captive.prison_term_days) && Objects.equals(ransom, captive.ransom) && Objects.equals(associates, captive.associates) && Objects.equals(degree_of_crime, captive.degree_of_crime) && Objects.equals(degree_of_punishment, captive.degree_of_punishment) && Objects.equals(notes, captive.notes) && Objects.equals(arrest_site, captive.arrest_site );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, volume, captive_id, name, sex, height, build, dentition, special_peculiarities, date_of_birth, place_of_birth, place_of_residence, religion, childhood_status, marital_status, number_of_children, occupation, occupation_2, occupation_3, military_service, literacy, education, criminal_history, crime, sentence_begins, sentence_expires, prison_term_days, ransom, associates, degree_of_crime, degree_of_punishment, notes, arrest_site);
+    }
 
     public Set<String> getNonNullAttributes(){
         Set<String> attribs = new HashSet<>();
