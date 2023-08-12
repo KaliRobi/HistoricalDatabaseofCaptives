@@ -357,9 +357,13 @@ public class Captive {
 
 
     public int getAge(){
-      int birthYear =    Integer.parseInt(getDate_of_birth().toString().substring(0,4));
-      int recordYear = Integer.parseInt(getCaptive_id().substring(0,4));
-      return recordYear - birthYear;
+      int birthYear =  0;
+        if (getDate_of_birth() != null) {
+            birthYear = Integer.parseInt(getDate_of_birth().toString().substring(0, 4));
+        }
+        //based on the historical source this cannot be null
+        int recordYear = Integer.parseInt(getCaptive_id().substring(0,4));
+      return birthYear != 0 ? (recordYear - birthYear) : 0;
     }
 
     @Override

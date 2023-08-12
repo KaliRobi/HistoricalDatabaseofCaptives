@@ -42,7 +42,8 @@ public class Visitor implements IPerson{
     @Override
     public int getAge() {
         Calendar calendar =  new GregorianCalendar();
-                                             // this never works
+        //TODO
+        // UnsupportedTemporalTypeException: Unsupported field: Year again
         return calendar.get(Calendar.YEAR) - this.dateOfBirth.get(ChronoField.YEAR);
     }
 

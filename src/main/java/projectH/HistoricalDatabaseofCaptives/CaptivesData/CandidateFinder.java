@@ -30,10 +30,6 @@ public class CandidateFinder {
 
         captiveServices.findACaptive(visitor);
 
-
-
-
-
     }
 
 

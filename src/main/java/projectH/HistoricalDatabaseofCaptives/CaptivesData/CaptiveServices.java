@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CaptiveServices {
@@ -100,9 +101,12 @@ public class CaptiveServices {
         List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
 
 //        the issue here is that creating a captive from the visitor might be saving a class but
-        caps.stream().filter(e -> e.getAge() == 22).toList().stream().limit(1L).toList()
-                .stream().filter(e -> e.getAge() == visitor.getAge() );
-        System.out.println(caps);
+         Captive cand = caps.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).collect(Collectors.toList()).get(0);
+        System.out.println(cand);
+//        for(Captive c : caps){
+//            System.out.println(c.getAge() + " " + c.getDate_of_birth() + " " + c.getCaptive_id() + " " + c.getName());
+//        }
+
 //           there is the option to make the first call on a certain field and then just narrow it as much as possible
 
 

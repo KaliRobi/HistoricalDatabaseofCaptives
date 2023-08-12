@@ -60,7 +60,8 @@ public List<List<String>> exposeRelocations(){
     @GetMapping(path="/v1/test")
     public void testest()  {
 
-        Visitor visitor =  new Visitor(geoServices.getALocationByName("Debrecen"), "n", Instant.parse("1991-02-17T00:00:00Z"));
+        Visitor visitor =  new Visitor(geoServices.getALocationByName("Debrecen"), "n", Instant.parse("1990-02-17T00:00:00Z"));
+        System.out.println(visitor);
          candidateFinder.returnCandidate(visitor);
     }
 
