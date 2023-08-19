@@ -57,28 +57,28 @@ public List<List<String>> exposeRelocations(){
 //        return geologicalOperations.getCityData();
 //}
 
-    @GetMapping(path="/v1/test")
-    public Captive testest()  {
-        LocalDate visBirth =  LocalDate.of(1988, 06, 14);
-        Visitor visitor =  new Visitor(geoServices.getALocationByName("Budapest"), "f", visBirth );
-        System.out.println(visitor);
-        return  candidateFinder.returnCandidate(visitor);
-    }
+    // get one customer
+
+@GetMapping(path="/v1/test")
+public Captive testest()  {
+    LocalDate visBirth =  LocalDate.of(1988, 06, 14);
+    Visitor visitor =  new Visitor(geoServices.getALocationByName("Budapest"), "f", visBirth );
+    System.out.println(visitor);
+    return  candidateFinder.returnCandidate(visitor);
+}
 
 
 @PostMapping(path = "/v1/postNewCaptive/")
     public void postNewCaptive(@RequestBody Captive captive){
-    System.out.println(captive);
     captiveServices.addCaptive(captive);
 
 
 
 }
 
-@PutMapping(path = "/v1/postNewCaptive/")
-public void postNewCaptive(@RequestBody int Id, Captive captive){
-    System.out.println(captive);
-    captiveServices.addCaptive(captive);
+@PutMapping(path = "/v1/updateCaptive/")
+public void updateCaptive(@RequestBody Captive captive){
+    captiveServices.updateCaptive( captive);
 
 
 

@@ -25,9 +25,11 @@ public class CaptiveServices {
         captiveRecordRepository.save(captive);
 
     }
-    public void updateCaptive(int id, Captive captive){
-        captive.getNonNullAttributes();
-
+    public void updateCaptive(Captive captive){
+//        ALTER TABLE captives_data DROP CONSTRAINT captives_data_pkey;
+//        ALTER TABLE captives_data ADD PRIMARY KEY (id)
+// wants to create a new instance and the primary key does not allow it
+       captiveRecordRepository.save(captive);
     }
 
     public List<Captive> getAllTheCaptives(){

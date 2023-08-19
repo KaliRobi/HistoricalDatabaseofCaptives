@@ -4,7 +4,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
 import java.time.LocalDate;
-import java.time.Instant;
+
 import java.time.temporal.ChronoField;
 import java.util.HashSet;
 import java.util.Objects;
@@ -12,13 +12,13 @@ import java.util.Set;
 
 
 // The clas needs to describe all the attributes of a captive.
-// keeping instant for now
+
 @Table(name = "captives_data")
 @Entity(name="captive")
 public class Captive {
     @Id
     private long id;
-    private String volume;
+    private int volume;
     private String captive_id;
     private String name;
     private String sex;
@@ -29,6 +29,8 @@ public class Captive {
     private LocalDate date_of_birth;
     private String place_of_birth;
     private String place_of_residence;
+
+    private String residence;
 
     private String religion;
     private String childhood_status;
@@ -42,17 +44,22 @@ public class Captive {
     private String education;
     private String criminal_history;
     private String crime;
-    private Instant sentence_begins;
-    private Instant sentence_expires;
+    private LocalDate sentence_begins;
+    private LocalDate sentence_expires;
     private Integer prison_term_days;
-    private String ransom;
+    private int ransom;
     private String associates;
     private String degree_of_crime;
     private String degree_of_punishment;
     private String notes;
     private String arrest_site;
 
-    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, LocalDate dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Instant sentence_begins, Instant sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
+    //who inserted the captive to the db, not sure of the conventional insert_time, insert_user, update_time, update_user is needed in this small project
+    private  String username;
+
+
+
+    Captive(long id, int volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, LocalDate dateOfBirth, String place_of_birth, String place_of_residence, String residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, LocalDate sentence_begins, LocalDate sentence_expires, Integer prison_term_days, int ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site, String username) {
         this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
@@ -65,6 +72,7 @@ public class Captive {
         this.date_of_birth = dateOfBirth;
         this.place_of_birth = place_of_birth;
         this.place_of_residence = place_of_residence;
+        this.residence = residence;
         this.religion = religion;
         this.childhood_status = childhood_status;
         this.marital_status = marital_status;
@@ -86,6 +94,7 @@ public class Captive {
         this.degree_of_punishment = degree_of_punishment;
         this.notes = notes;
         this.arrest_site = arrest_site;
+        this.username = username;
     }
 
     public Captive() {
@@ -100,11 +109,11 @@ public class Captive {
         this.id = id;
     }
 
-    public String getVolume() {
+    public int getVolume() {
         return volume;
     }
 
-    public void setVolume(String volume) {
+    public void setVolume(int volume) {
         this.volume = volume;
     }
 
@@ -184,6 +193,13 @@ public class Captive {
     public String getPlace_of_residence() {
         return place_of_residence;
     }
+    public String getResidence() {
+        return residence;
+    }
+
+    public void setResidence(String residence) {
+        this.residence = residence;
+    }
 
     public void setPlace_of_residence(String place_of_residence) {
         this.place_of_residence = place_of_residence;
@@ -241,6 +257,8 @@ public class Captive {
         return occupation_3;
     }
 
+
+
     public void setOccupation_3(String occupation_3) {
         this.occupation_3 = occupation_3;
     }
@@ -285,19 +303,19 @@ public class Captive {
         this.crime = crime;
     }
 
-    public Instant getSentence_begins() {
+    public LocalDate getSentence_begins() {
         return sentence_begins;
     }
 
-    public void setSentence_begins(Instant sentence_begins) {
+    public void setSentence_begins(LocalDate sentence_begins) {
         this.sentence_begins = sentence_begins;
     }
 
-    public Instant getSentence_expires() {
+    public LocalDate getSentence_expires() {
         return sentence_expires;
     }
 
-    public void setSentence_expires(Instant sentence_expires) {
+    public void setSentence_expires(LocalDate sentence_expires) {
         this.sentence_expires = sentence_expires;
     }
 
@@ -309,11 +327,11 @@ public class Captive {
         this.prison_term_days = prison_term_days;
     }
 
-    public String getRansom() {
+    public int getRansom() {
         return ransom;
     }
 
-    public void setRansom(String ransom) {
+    public void setRansom(int ransom) {
         this.ransom = ransom;
     }
 
@@ -357,6 +375,13 @@ public class Captive {
         this.arrest_site = arrest_site;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getAge(){
       int birthYear =  0;
@@ -373,12 +398,12 @@ public class Captive {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Captive captive = (Captive) o;
-        return id == captive.id && Objects.equals(volume, captive.volume) && Objects.equals(captive_id, captive.captive_id) && Objects.equals(name, captive.name) && Objects.equals(sex, captive.sex) && Objects.equals(height, captive.height) && Objects.equals(build, captive.build) && Objects.equals(dentition, captive.dentition) && Objects.equals(special_peculiarities, captive.special_peculiarities) && Objects.equals(date_of_birth, captive.date_of_birth) && Objects.equals(place_of_birth, captive.place_of_birth) && Objects.equals(place_of_residence, captive.place_of_residence) && Objects.equals(religion, captive.religion) && Objects.equals(childhood_status, captive.childhood_status) && Objects.equals(marital_status, captive.marital_status) && Objects.equals(number_of_children, captive.number_of_children) && Objects.equals(occupation, captive.occupation) && Objects.equals(occupation_2, captive.occupation_2) && Objects.equals(occupation_3, captive.occupation_3) && Objects.equals(military_service, captive.military_service) && Objects.equals(literacy, captive.literacy) && Objects.equals(education, captive.education) && Objects.equals(criminal_history, captive.criminal_history) && Objects.equals(crime, captive.crime) && Objects.equals(sentence_begins, captive.sentence_begins) && Objects.equals(sentence_expires, captive.sentence_expires) && Objects.equals(prison_term_days, captive.prison_term_days) && Objects.equals(ransom, captive.ransom) && Objects.equals(associates, captive.associates) && Objects.equals(degree_of_crime, captive.degree_of_crime) && Objects.equals(degree_of_punishment, captive.degree_of_punishment) && Objects.equals(notes, captive.notes) && Objects.equals(arrest_site, captive.arrest_site );
+        return id == captive.id && Objects.equals(volume, captive.volume) && Objects.equals(captive_id, captive.captive_id) && Objects.equals(name, captive.name) && Objects.equals(sex, captive.sex) && Objects.equals(height, captive.height) && Objects.equals(build, captive.build) && Objects.equals(dentition, captive.dentition) && Objects.equals(special_peculiarities, captive.special_peculiarities) && Objects.equals(date_of_birth, captive.date_of_birth) && Objects.equals(place_of_birth, captive.place_of_birth) && Objects.equals(place_of_residence, captive.place_of_residence) && Objects.equals(residence, captive.residence) && Objects.equals(religion, captive.religion) && Objects.equals(childhood_status, captive.childhood_status) && Objects.equals(marital_status, captive.marital_status) && Objects.equals(number_of_children, captive.number_of_children) && Objects.equals(occupation, captive.occupation) && Objects.equals(occupation_2, captive.occupation_2) && Objects.equals(occupation_3, captive.occupation_3) && Objects.equals(military_service, captive.military_service) && Objects.equals(literacy, captive.literacy) && Objects.equals(education, captive.education) && Objects.equals(criminal_history, captive.criminal_history) && Objects.equals(crime, captive.crime) && Objects.equals(sentence_begins, captive.sentence_begins) && Objects.equals(sentence_expires, captive.sentence_expires) && Objects.equals(prison_term_days, captive.prison_term_days) && Objects.equals(ransom, captive.ransom) && Objects.equals(associates, captive.associates) && Objects.equals(degree_of_crime, captive.degree_of_crime) && Objects.equals(degree_of_punishment, captive.degree_of_punishment) && Objects.equals(notes, captive.notes) && Objects.equals(arrest_site, captive.arrest_site );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, volume, captive_id, name, sex, height, build, dentition, special_peculiarities, date_of_birth, place_of_birth, place_of_residence, religion, childhood_status, marital_status, number_of_children, occupation, occupation_2, occupation_3, military_service, literacy, education, criminal_history, crime, sentence_begins, sentence_expires, prison_term_days, ransom, associates, degree_of_crime, degree_of_punishment, notes, arrest_site);
+        return Objects.hash(id, volume, captive_id, name, sex, height, build, dentition, special_peculiarities, date_of_birth, place_of_birth, place_of_residence, residence, religion, childhood_status, marital_status, number_of_children, occupation, occupation_2, occupation_3, military_service, literacy, education, criminal_history, crime, sentence_begins, sentence_expires, prison_term_days, ransom, associates, degree_of_crime, degree_of_punishment, notes, arrest_site);
     }
 
     public Set<String> getNonNullAttributes(){
@@ -387,7 +412,7 @@ public class Captive {
         if (id != 0 ) {
             attribs.add("id");
         }
-        if (volume != null) {
+        if (volume >= 0) {
             attribs.add("volume");
         }
         if (captive_id != null) {
@@ -462,6 +487,7 @@ public class Captive {
                 ", date_of_birth=" + date_of_birth +
                 ", place_of_birth='" + place_of_birth + '\'' +
                 ", place_of_residence='" + place_of_residence + '\'' +
+                ", residence='" + residence + '\'' +
                 ", religion='" + religion + '\'' +
                 ", childhood_status='" + childhood_status + '\'' +
                 ", marital_status='" + marital_status + '\'' +
