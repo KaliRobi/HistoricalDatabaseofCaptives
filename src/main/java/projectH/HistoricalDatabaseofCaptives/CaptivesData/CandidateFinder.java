@@ -26,9 +26,9 @@ public class CandidateFinder {
     @Autowired
     private CaptiveServices captiveServices;
 
-    public void returnCandidate(Visitor visitor){
+    public Captive returnCandidate(Visitor visitor){
 
-        captiveServices.findACaptive(visitor);
+       return captiveServices.findACaptive(visitor);
 
     }
 

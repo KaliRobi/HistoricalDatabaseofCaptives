@@ -1,18 +1,18 @@
 package projectH.HistoricalDatabaseofCaptives;
 
 
+import org.springframework.web.bind.annotation.*;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Antropometrics;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CandidateFinder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -58,11 +58,32 @@ public List<List<String>> exposeRelocations(){
 //}
 
     @GetMapping(path="/v1/test")
-    public void testest()  {
-
-        Visitor visitor =  new Visitor(geoServices.getALocationByName("Debrecen"), "n", Instant.parse("1990-02-17T00:00:00Z"));
+    public Captive testest()  {
+        LocalDate visBirth =  LocalDate.of(1988, 06, 14);
+        Visitor visitor =  new Visitor(geoServices.getALocationByName("Budapest"), "f", visBirth );
         System.out.println(visitor);
-         candidateFinder.returnCandidate(visitor);
+        return  candidateFinder.returnCandidate(visitor);
     }
+
+
+@PostMapping(path = "/v1/postNewCaptive/")
+    public void postNewCaptive(@RequestBody Captive captive){
+    System.out.println(captive);
+    captiveServices.addCaptive(captive);
+
+
+
+}
+
+@PutMapping(path = "/v1/postNewCaptive/")
+public void postNewCaptive(@RequestBody int Id, Captive captive){
+    System.out.println(captive);
+    captiveServices.addCaptive(captive);
+
+
+
+}
+
+
 
 }

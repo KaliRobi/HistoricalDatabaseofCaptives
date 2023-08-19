@@ -3,10 +3,11 @@ package projectH.HistoricalDatabaseofCaptives.Users;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public interface IPerson {
 
-    public Instant getDateOfBirth();
+    public LocalDate getDateOfBirth();
 
 
     public int getAge();

@@ -21,6 +21,14 @@ public class CaptiveServices {
      return captiveRecordRepository.findById(num);
     }
 
+    public void addCaptive(Captive captive){
+        captiveRecordRepository.save(captive);
+
+    }
+    public void updateCaptive(int id, Captive captive){
+        captive.getNonNullAttributes();
+
+    }
 
     public List<Captive> getAllTheCaptives(){
         return captiveRecordRepository.findAll();
@@ -85,49 +93,24 @@ public class CaptiveServices {
                         .count())));
             }
         }
-
         return relocationsWithWeight;
     }
 
 
     // returns a captive by its attributes
-    public void findACaptive(Visitor visitor){
+    public Captive findACaptive(Visitor visitor){
 
-        // probably this will eb alsi the part of IPerson
-//           Set<String> captiveAttribs = captive.getNonNullAttributes();
+         List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
 
-
-
-        List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
-
-//        the issue here is that creating a captive from the visitor might be saving a class but
-         Captive cand = caps.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).collect(Collectors.toList()).get(0);
-        System.out.println(cand);
-//        for(Captive c : caps){
-//            System.out.println(c.getAge() + " " + c.getDate_of_birth() + " " + c.getCaptive_id() + " " + c.getName());
-//        }
-
-//           there is the option to make the first call on a certain field and then just narrow it as much as possible
-
-
-        // what is the most typical attribute when we are looking for someone?
-//         location and sex because in a mathematical point of view this is how we can get the most specific portion of the whole
-
-
-
-        // going forward with additional attributes,
-//
-
+         List<Captive> candidateToPresentList = caps.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
+         if(candidateToPresentList.size() > 0 ){
+             Captive candidateToPresent = candidateToPresentList.get(0);
+             return candidateToPresent;
+         }
+        else{
+             return new Captive();
+         }
 
     }
-
-
-//    public List<Captive> findAGroupOfCaptives(){
-//
-//
-//
-//    }
-
-
 
 }

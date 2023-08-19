@@ -2,6 +2,8 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -45,9 +47,8 @@ public class Antropometrics {
                     Map<Integer, Map<String, Integer>> personWithYear = new HashMap<>();
                     Map<String, Integer> personSexAndHeight = new HashMap<>();
                     personSexAndHeight.put(e.getSex(), e.getHeight());
-//                    Ideal would be e.getDate_of_birth().get(Chronfield.YEAR)  but no matter what format I did isSupported(Chronfield.YEAR) is always false
-//                     As it is not supported per documentation. Should go with NANO_OF_SECOND / MICRO_OF_SECON / MILLI_OF_SECOND
-                    personWithYear.put( Integer.valueOf(e.getDate_of_birth().toString().substring(0,4 )), personSexAndHeight);
+
+                    personWithYear.put( e.getDate_of_birth().get(ChronoField.YEAR), personSexAndHeight);
                     peopleList.add(personWithYear);
                         });
         List<Integer> cohortBase = getCohortsByFirstYear(5);

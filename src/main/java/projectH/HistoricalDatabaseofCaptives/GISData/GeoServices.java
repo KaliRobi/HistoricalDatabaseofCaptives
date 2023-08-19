@@ -55,10 +55,10 @@ public class GeoServices {
     public Set<String> getLocationsWithCoordinates() {
         Set<String> locationsWithLocationData = new HashSet<>();
 
-        geologicalRepository.findAll().forEach(loca -> {
-                    if (loca.getLatitude() != null  && loca.getLongitude() != null  ) {
+        geologicalRepository.findAll().forEach(l -> {
+                    if (l.getLatitude() != null  && l.getLongitude() != null  ) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithLocationData.add(loca.getSource_name());
+                        locationsWithLocationData.add(l.getSource_name());
                     }
                 }
         );
@@ -67,7 +67,8 @@ public class GeoServices {
     }
 
     public GeoLocation getALocationByName(String name){
-        return geologicalRepository.findByName(name);
+        GeoLocation location  = geologicalRepository.findByName(name);
+        return location != null ?  location : new GeoLocation();
 
 
     }

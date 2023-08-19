@@ -3,15 +3,16 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Entity;
-
+import java.time.LocalDate;
 import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 
 // The clas needs to describe all the attributes of a captive.
-
+// keeping instant for now
 @Table(name = "captives_data")
 @Entity(name="captive")
 public class Captive {
@@ -25,7 +26,7 @@ public class Captive {
     private String build;
     private String dentition;
     private String special_peculiarities;
-    private Instant date_of_birth;
+    private LocalDate date_of_birth;
     private String place_of_birth;
     private String place_of_residence;
 
@@ -51,7 +52,7 @@ public class Captive {
     private String notes;
     private String arrest_site;
 
-    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, Instant dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Instant sentence_begins, Instant sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
+    Captive(long id, String volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, LocalDate dateOfBirth, String place_of_birth, String place_of_residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, Instant sentence_begins, Instant sentence_expires, Integer prison_term_days, String ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site) {
         this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
@@ -108,7 +109,8 @@ public class Captive {
     }
 
     public String getCaptive_id() {
-        return captive_id;
+        //this number does not exist in the historical source
+        return captive_id != null ? captive_id : "0001";
     }
 
     public void setCaptive_id(String captive_id) {
@@ -163,11 +165,11 @@ public class Captive {
         this.special_peculiarities = special_peculiarities;
     }
 
-    public Instant getDate_of_birth() {
+    public LocalDate getDate_of_birth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(Instant date_of_birth) {
+    public void setDate_of_birth(LocalDate date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
@@ -359,7 +361,7 @@ public class Captive {
     public int getAge(){
       int birthYear =  0;
         if (getDate_of_birth() != null) {
-            birthYear = Integer.parseInt(getDate_of_birth().toString().substring(0, 4));
+            birthYear = getDate_of_birth().get(ChronoField.YEAR);
         }
         //based on the historical source this cannot be null
         int recordYear = Integer.parseInt(getCaptive_id().substring(0,4));
@@ -411,15 +413,39 @@ public class Captive {
         }
         if (place_of_residence != null) {
             attribs.add("place_of_residence");
+        }
+        if (religion != null) {
+            attribs.add("religion");
+        }
+        if (childhood_status != null) {
+            attribs.add("childhood_status");
+        }
+        if (marital_status != null) {
+            attribs.add("marital_status");
+        }
+        if (number_of_children != null) {
+            attribs.add("number_of_children");
+        }
+        if (occupation != null) {
+            attribs.add("occupation");
+        }
+        if (occupation_2 != null) {
+            attribs.add("occupation_2");
+        }
+        if (military_service != null) {
+            attribs.add("military_service");
+        }
+        return attribs;
+
 //            ...
 //
 
         }
 
-    return attribs;
 
 
-    }
+
+
 
     @Override
     public String toString() {

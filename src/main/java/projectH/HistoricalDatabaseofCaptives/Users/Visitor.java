@@ -3,26 +3,27 @@ package projectH.HistoricalDatabaseofCaptives.Users;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Visitor implements IPerson{
 //  do I want this to be changed ever?
-    private final Instant dateOfBirth;
+    private final LocalDate dateOfBirth;
     private String name;
     private GeoLocation location;
     private String sex;
     //TODO
     // refactor to builder pattern
-    public Visitor(String name, GeoLocation geoLocation, String sex, Instant dateOfBirth) {
+    public Visitor(String name, GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.name = name;
         this.location = geoLocation;
         this.sex = sex;
 
     }
-    public Visitor( GeoLocation geoLocation, String sex, Instant dateOfBirth) {
+    public Visitor( GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.name = "Anonymous";
         this.location = geoLocation;
@@ -34,7 +35,7 @@ public class Visitor implements IPerson{
 
 
     @Override
-    public Instant getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return this.dateOfBirth;
     }
 
@@ -42,9 +43,8 @@ public class Visitor implements IPerson{
     @Override
     public int getAge() {
         Calendar calendar =  new GregorianCalendar();
-        //TODO
-        // UnsupportedTemporalTypeException: Unsupported field: Year again
-        return calendar.get(Calendar.YEAR) - this.dateOfBirth.get(ChronoField.YEAR);
+
+        return calendar.get(Calendar.YEAR)- this.dateOfBirth.get(ChronoField.YEAR);
     }
 
 

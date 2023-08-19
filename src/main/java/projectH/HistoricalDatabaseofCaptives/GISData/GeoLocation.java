@@ -50,10 +50,11 @@ public class GeoLocation {
     }
 
     public String getSource_name() {
-        return source_name;
+        return this.source_name ;
     }
 
     public void setSource_name(String source_name) {
+
         this.source_name = source_name;
     }
 
