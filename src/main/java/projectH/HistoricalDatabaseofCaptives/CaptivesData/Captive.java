@@ -1,8 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 import java.time.temporal.ChronoField;
@@ -17,6 +16,7 @@ import java.util.Set;
 @Entity(name="captive")
 public class Captive {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private int volume;
     private String captive_id;

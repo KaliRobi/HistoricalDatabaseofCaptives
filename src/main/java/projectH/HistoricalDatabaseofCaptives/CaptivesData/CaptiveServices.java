@@ -25,7 +25,8 @@ public class CaptiveServices {
         captiveRecordRepository.save(captive);
 
     }
-    public void updateCaptive(Captive captive){
+    public void updateCaptive(long id, Captive captive){
+//        https://www.baeldung.com/spring-data-partial-update
 //        ALTER TABLE captives_data DROP CONSTRAINT captives_data_pkey;
 //        ALTER TABLE captives_data ADD PRIMARY KEY (id)
 // wants to create a new instance and the primary key does not allow it

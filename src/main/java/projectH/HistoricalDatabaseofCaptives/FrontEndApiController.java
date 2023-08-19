@@ -76,9 +76,9 @@ public Captive testest()  {
 
 }
 
-@PutMapping(path = "/v1/updateCaptive/")
-public void updateCaptive(@RequestBody Captive captive){
-    captiveServices.updateCaptive( captive);
+@PutMapping(path = "/v1/updateCaptive/{id}")
+public void postNewCaptive(@PathVariable("id") long Id,  @RequestBody Captive captive){
+    captiveServices.updateCaptive(Id, captive);
 
 
 
