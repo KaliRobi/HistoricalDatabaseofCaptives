@@ -1,6 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 
@@ -11,7 +12,6 @@ import java.util.Set;
 
 
 // The clas needs to describe all the attributes of a captive.
-
 @Table(name = "captives_data")
 @Entity(name="captive")
 public class Captive {
