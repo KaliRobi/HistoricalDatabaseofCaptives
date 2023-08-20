@@ -65,13 +65,13 @@ public Captive testest()  {
 
 @PostMapping(path = "/v1/postNewCaptive/")
     public void postNewCaptive(@RequestBody Captive captive){
-    geoServices.checkCaptiveLocationAgainstGeoEntity(captive);
+    geoServices.findLocationInDbOrFetchIt(captive);
     captiveServices.addCaptive(captive);
 }
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
 public void updateCaptive(@PathVariable("id") long Id,  @RequestBody Captive captive){
-    geoServices.checkCaptiveLocationAgainstGeoEntity(captive);
+    geoServices.findLocationInDbOrFetchIt(captive);
     captiveServices.updateCaptive(Id, captive);
     }
 }

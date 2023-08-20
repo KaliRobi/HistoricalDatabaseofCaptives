@@ -18,13 +18,15 @@ public class GeoServices {
 
     private final CaptiveServices captiveServices;
 
-    private  final GeologicalOperations geologicalOperations;
+    FindLocationInDbOrFetchIt findLocationInDbOrFetchIt;
+
+
 
     @Autowired
-    public GeoServices(GeologicalRepository geologicalRepository, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
+    public GeoServices(GeologicalRepository geologicalRepository, CaptiveServices captiveServices) {
         this.geologicalRepository = geologicalRepository;
         this.captiveServices = captiveServices;
-        this.geologicalOperations = geologicalOperations;
+
     }
 
     public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat, String country){
@@ -75,14 +77,9 @@ public class GeoServices {
 
     }
 
-
-    public void checkCaptiveLocationAgainstGeoEntity(Captive captive){
-        Set<String> locationSet = new HashSet<>();
-        locationSet.add(captive.getPlace_of_birth());
-        locationSet.add(captive.getPlace_of_residence());
-        locationSet.add(captive.getArrest_site());
-        geologicalOperations.getLocationData(locationSet);
-
+    public void findLocationInDbOrFetchIt(Captive captive){
+        findLocationInDbOrFetchIt.checkCaptiveLocationAgainstGeoEntity(captive);
     }
+
 
 }
