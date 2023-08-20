@@ -1,10 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.DynamicUpdate;
-
 import java.time.LocalDate;
-
 import java.time.temporal.ChronoField;
 import java.util.HashSet;
 import java.util.Objects;

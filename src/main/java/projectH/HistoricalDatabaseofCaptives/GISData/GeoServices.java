@@ -2,7 +2,7 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchGeolocationAvailableException;
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.util.HashSet;
@@ -18,11 +18,13 @@ public class GeoServices {
 
     private final CaptiveServices captiveServices;
 
-    @Autowired
-    public GeoServices(GeologicalRepository geologicalRepository, CaptiveServices captiveServices) {
-        this.geologicalRepository = geologicalRepository;
+    private  final GeologicalOperations geologicalOperations;
 
+    @Autowired
+    public GeoServices(GeologicalRepository geologicalRepository, CaptiveServices captiveServices, GeologicalOperations geologicalOperations) {
+        this.geologicalRepository = geologicalRepository;
         this.captiveServices = captiveServices;
+        this.geologicalOperations = geologicalOperations;
     }
 
     public void addGeographicalLocation(String sourceName, String OsvName, double lon, double lat, String country){
@@ -74,5 +76,13 @@ public class GeoServices {
     }
 
 
+    public void checkCaptiveLocationAgainstGeoEntity(Captive captive){
+        Set<String> locationSet = new HashSet<>();
+        locationSet.add(captive.getPlace_of_birth());
+        locationSet.add(captive.getPlace_of_residence());
+        locationSet.add(captive.getArrest_site());
+        geologicalOperations.getLocationData(locationSet);
+
+    }
 
 }

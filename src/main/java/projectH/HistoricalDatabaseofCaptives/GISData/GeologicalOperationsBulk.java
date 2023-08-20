@@ -31,12 +31,11 @@ public class GeologicalOperationsBulk implements IGeolocator {
     // Due to Historical reason the display name of many locations is written in ciril or romanian alphabet.
     // select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
-
-    public void getCityData() throws InterruptedException, ExecutionException, IOException {
-        Set<String> locations =  geoServices.getAllLocation();
-        locations.removeAll(geoServices.getLocationsWithCoordinates());
+    @Override
+    public void getLocationData(Set<String> targetTownSet) throws InterruptedException, ExecutionException, IOException {
+        targetTownSet.removeAll(geoServices.getLocationsWithCoordinates());
              //creating uri list while dealing with the special Hungarian characters
-        List<List<String>> targetLocations = bulkTownFeeder( locations.stream().toList(), 6);
+        List<List<String>> targetLocations = bulkTownFeeder( targetTownSet.stream().toList(), 6);
         produceCompleteables(targetLocations);
 
 
@@ -103,8 +102,6 @@ public class GeologicalOperationsBulk implements IGeolocator {
             for (String key : latLonsMap.keySet()) {
                 OSVJson osvJson = latLonsMap.get(key);
                 if (null != osvJson.getDisplay_name()) {
-                    System.out.println(key + " #########################################################################################");
-
                     geoServices.addGeographicalLocation(key,
                             osvJson.getDisplay_name().substring(0, osvJson.getDisplay_name().indexOf(',')),
                             osvJson.getLon(),
@@ -144,39 +141,5 @@ public class GeologicalOperationsBulk implements IGeolocator {
     }
 
 
-    //function calculates the distance between two point defined by coordinates (i.e. Cities) from the DB
-    // to avoid false location definition Budapest will be the 0 km and all if a location is more than 800 km away that will alert the admin.
-
-    public double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
-
-//        GeoLocation locationA, GeoLocation locationB
-//        convert to Radian is = degree * 3.1415926535 / 180;
-        double latA = Math.toRadians(locationB.getLatitude());
-        double latB = Math.toRadians(locationB.getLatitude());
-        double difLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
-        double difLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude()) ;
-//      Haversine formula
-//         based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
-//         https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
-
-        double atan2Base = Math.pow(Math.sin(difLat / 2),  2) + Math.cos(latA) * Math.cos(latB) * Math.pow(Math.sin(difLon / 2) ,2);
-
-        double distanceInKm =  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
-        System.out.println(distanceInKm);
-        return   distanceInKm;
-    }
-
-
-//    Test method , could be useful later, probably better to return the something like {geoLocation.getSource_name = {"locationName"="Debrecen", "Distance"=111}
-    public Set<String> returnDistanceBetweenLocations(GeoLocation geoLocation) {
-//        base
-        GeoLocation x = geoServices.getALocationByName(geoLocation.getSource_name());
-        Set<String> resultedDistanceString = new HashSet<>();
-
-        geoServices.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSource_name() + "is about " +
-                calculateLocationToLocationDistance( x, geoServices.getALocationByName(e) ) + " km"));
-        System.out.println(resultedDistanceString);
-        return resultedDistanceString;
-    }
 
 }

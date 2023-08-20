@@ -11,7 +11,7 @@ import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
-import java.time.Instant;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -52,12 +52,7 @@ public Map<String, HashMap<String, Long>> exposeSexDistribution(){
 public List<List<String>> exposeRelocations(){
     return captiveServices.getTheRelocated();
 }
-//@GetMapping(path="/v1/locations")
-//public Object settlementDetails() throws URISyntaxException,  InterruptedException, ExecutionException {
-//        return geologicalOperations.getCityData();
-//}
 
-    // get one customer
 
 @GetMapping(path="/v1/test")
 public Captive testest()  {
@@ -70,20 +65,13 @@ public Captive testest()  {
 
 @PostMapping(path = "/v1/postNewCaptive/")
     public void postNewCaptive(@RequestBody Captive captive){
+    geoServices.checkCaptiveLocationAgainstGeoEntity(captive);
     captiveServices.addCaptive(captive);
-
-
-
 }
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
 public void updateCaptive(@PathVariable("id") long Id,  @RequestBody Captive captive){
+    geoServices.checkCaptiveLocationAgainstGeoEntity(captive);
     captiveServices.updateCaptive(Id, captive);
-
-
-
-}
-
-
-
+    }
 }

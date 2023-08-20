@@ -4,11 +4,11 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
+
 
 import java.util.List;
 
-// Repository to connect to the databse
+// Repository to connect to the database
 @Repository
 public interface CaptiveRecordRepository extends JpaRepository<Captive, Long> {
 

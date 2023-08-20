@@ -4,9 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class CaptiveServices {
@@ -72,26 +70,24 @@ public class CaptiveServices {
 
 
     public List<List<String>> getTheRelocated(){
-           List<List<String>> list;
-            //TODO
-            // Change the output to a map with original, current, weight keys
+
         // get records where the location of birth and residence is not the same
         /// base for checking the relocation directions. This might be better as map? Org, dest, weight?
-        list  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
+        List<List<String>> relocatedCandidateList  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
                         .equals(captive.getPlace_of_birth())).toList()
                         .stream().map(captive ->  Arrays.asList(captive.getPlace_of_birth(), captive.getPlace_of_residence()))
                         .toList();
 
 
-        HashSet<List<String>> uniqueRelocations  = new HashSet<>(list);
+        HashSet<List<String>> uniqueRelocations  = new HashSet<>(relocatedCandidateList);
         List<List<String>> relocationsWithWeight = new ArrayList<>();
         for (List<String> uniqueRelocation : uniqueRelocations) {
-            long groupedValue = list.stream().filter(element -> element.equals(uniqueRelocation)).count();
+            long groupedValue = relocatedCandidateList.stream().filter(element -> element.equals(uniqueRelocation)).count();
 
             if (groupedValue > 10L) {
-                System.out.println(uniqueRelocation + " : " + list.stream().filter(element -> element.equals(uniqueRelocation)).count());
+                System.out.println(uniqueRelocation + " : " + relocatedCandidateList.stream().filter(element -> element.equals(uniqueRelocation)).count());
                 relocationsWithWeight.add(Arrays.asList(uniqueRelocation
-                        .get(0), uniqueRelocation.get(1), String.valueOf(list.stream()
+                        .get(0), uniqueRelocation.get(1), String.valueOf(relocatedCandidateList.stream()
                         .filter(element -> element.equals(uniqueRelocation))
                         .count())));
             }
@@ -103,9 +99,9 @@ public class CaptiveServices {
     // returns a captive by its attributes
     public Captive findACaptive(Visitor visitor){
 
-         List<Captive> caps =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
+         List<Captive> captivesList =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
 
-         List<Captive> candidateToPresentList = caps.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
+         List<Captive> candidateToPresentList = captivesList.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
          if(candidateToPresentList.size() > 0 ){
              Captive candidateToPresent = candidateToPresentList.get(0);
              return candidateToPresent;
