@@ -22,9 +22,13 @@ import java.util.stream.IntStream;
 public class GeologicalOperationsBulk implements IGeolocator {
 
     private final GeoServices geoServices;
+    private final GeologicalRepository geologicalRepository;
+    private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
-    public GeologicalOperationsBulk(GeoServices geoServices) {
+    public GeologicalOperationsBulk(GeoServices geoServices, GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
         this.geoServices = geoServices;
+        this.geologicalRepository = geologicalRepository;
+        this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
     // This version is for the larger mass of data retrieval. Timeout is needed to avoid closedConnectionException
@@ -33,7 +37,7 @@ public class GeologicalOperationsBulk implements IGeolocator {
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
     @Override
     public void getLocationData(Set<String> targetTownSet) throws InterruptedException, ExecutionException, IOException {
-        targetTownSet.removeAll(geoServices.getLocationsWithCoordinates());
+        targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
              //creating uri list while dealing with the special Hungarian characters
         List<List<String>> targetLocations = bulkTownFeeder( targetTownSet.stream().toList(), 6);
         produceCompleteables(targetLocations);
@@ -102,11 +106,11 @@ public class GeologicalOperationsBulk implements IGeolocator {
             for (String key : latLonsMap.keySet()) {
                 OSVJson osvJson = latLonsMap.get(key);
                 if (null != osvJson.getDisplay_name()) {
-                    geoServices.addGeographicalLocation(key,
+                   geologicalRepository.save(new GeoLocation(key,
                             osvJson.getDisplay_name().substring(0, osvJson.getDisplay_name().indexOf(',')),
                             osvJson.getLon(),
                             osvJson.getLat(),
-                            osvJson.getDisplay_name().substring(osvJson.getDisplay_name().lastIndexOf(',')+1).trim());
+                            osvJson.getDisplay_name().substring(osvJson.getDisplay_name().lastIndexOf(',')+1).trim()));
 
                 }
             }

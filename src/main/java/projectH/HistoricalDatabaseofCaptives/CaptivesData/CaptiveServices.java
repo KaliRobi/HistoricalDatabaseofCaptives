@@ -3,15 +3,21 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 import java.util.*;
+
+//TODO
+//Recosider the purpose of the class
+// should be facing out , instead provides different things to classes in and out side of the the package
 
 @Component
 public class CaptiveServices {
 
     private final CaptiveRecordRepository captiveRecordRepository;
     @Autowired
-    public CaptiveServices(CaptiveRecordRepository captiveRecordRepository) {
+    public CaptiveServices( CaptiveRecordRepository captiveRecordRepository) {
+
         this.captiveRecordRepository = captiveRecordRepository;
     }
 
@@ -21,11 +27,13 @@ public class CaptiveServices {
     }
 
     public void addCaptive(Captive captive){
+//        geoServices.findLocationInDbOrFetchIt(captive);
         captiveRecordRepository.save(captive);
 
     }
     public void updateCaptive(long captiveId, Captive captiveNewData){
         ModelMapper modelMapper = new ModelMapper();
+//        geoServices.findLocationInDbOrFetchIt(captiveNewData);
         Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
         modelMapper.map(captiveNewData, captiveToUpdate);
        captiveRecordRepository.save(captiveToUpdate);

@@ -10,14 +10,10 @@ import java.util.stream.IntStream;
 
 @Component
 public class Antropometrics {
-
-    public final CaptiveRecordRepository captiveRecordRepository;
-
     public final CaptiveServices captiveServices;
 
     @Autowired
     public Antropometrics(CaptiveRecordRepository captiveRecordRepository, CaptiveServices captiveServices) {
-        this.captiveRecordRepository = captiveRecordRepository;
         this.captiveServices = captiveServices;
     }
 

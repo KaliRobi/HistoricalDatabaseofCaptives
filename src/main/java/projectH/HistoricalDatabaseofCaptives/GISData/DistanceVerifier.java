@@ -10,12 +10,72 @@ import java.util.Set;
  * of the locations are not on Hu territories anymore.
  *
  * The class will audit the distances between Budapest and the returned data and will add the outstanding location name to a new table
+ *
+ * the whole Spherical math is well described here although at this moment in this small section of the earth I am not sure how large the difference will be if
+ * calculations are done via normal geometric way
+ * http://www.movable-type.co.uk/scripts/latlong.html
  */
-
 
 public class DistanceVerifier {
 
-    GeoServices geoServices;
+    private final GeoServices geoServices;
+    private final WithOrWithoutCoordinates withOrWithoutCoordinates;
+
+    public DistanceVerifier(GeoServices geoServices, WithOrWithoutCoordinates withOrWithoutCoordinates) {
+        this.geoServices = geoServices;
+        this.withOrWithoutCoordinates = withOrWithoutCoordinates;
+    }
+
+    public void findOutstandingGeolocationCandidate(){
+
+    }
+
+    private boolean isInGreatHungarianCube(){
+        //budapest 47.4978918 19.0401609
+
+// Latitude endpoints
+//        47.497891, 26.623009
+//        47.497891, 13.244427
+
+// Longitude endpoints
+//        50.125262, 19.040160
+//        44.545660, 19.040160
+        GeoLocation east = new GeoLocation("East", "East", 26.623009, 47.497891, null );
+        GeoLocation north = new GeoLocation("North", "North", 19.040160, 50.125262, null );
+        GeoLocation south = new GeoLocation("South", "South", 19.040160, 44.545660, null );
+        GeoLocation west = new GeoLocation("West", "West", 13.244427, 47.497891, null );
+        GeoLocation Budapest =  new GeoLocation("Budapest", "Budapest", 19.0401609, 47.4978918, "Hungary");
+        double distance = calculateLocationToLocationDistance(east, north);
+
+        Vector vector = vecorBetweenTwoPoints(Budapest, north);
+
+        System.out.println(vector);
+
+
+
+
+
+
+
+    return false;
+
+    }
+
+    private Vector vecorBetweenTwoPoints(GeoLocation geoFrom,GeoLocation geoTo ){
+       double x = geoTo.getLatitude() - geoFrom.getLatitude();
+       double y = geoTo.getLongitude() - geoTo.getLongitude();
+
+       return new Vector(x, y);
+
+    }
+
+    // find the distance of the two endpoints. Nort-West, North-east, South-West, South-East
+
+
+//    private GeoLocation geolocationFromPointAndVector (){
+//
+//    }
+
 
     private double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
 
@@ -37,17 +97,19 @@ public class DistanceVerifier {
     }
 
 
-    //    Test method , could be useful later, probably better to return the something like {geoLocation.getSource_name = {"locationName"="Debrecen", "Distance"=111}
+    //    Test method , could be useful later, probably better to return something like {geoLocation.getSource_name = {"locationName"="Debrecen", "Distance"=111}
     private Set<String> returnDistanceBetweenLocations(GeoLocation geoLocation) {
 //        base
         GeoLocation x = geoServices.getALocationByName(geoLocation.getSource_name());
         Set<String> resultedDistanceString = new HashSet<>();
 
-        geoServices.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSource_name() + "is about " +
+        withOrWithoutCoordinates.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSource_name() + "is about " +
                 calculateLocationToLocationDistance( x, geoServices.getALocationByName(e) ) + " km"));
         System.out.println(resultedDistanceString);
         return resultedDistanceString;
     }
+
+
 
 
 

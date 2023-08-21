@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 @Component
 public class GeologicalOperations implements IGeolocator{
 
-    private final GeoServices geoServices;
+    private final GeologicalRepository geologicalRepository;
+    private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
-    private  final  GeologicalOperationsBulk geologicalOperationsBulk;
 
     @Autowired
-    public GeologicalOperations(GeoServices geoServices, GeologicalOperationsBulk geologicalOperationsBulk) {
-        this.geoServices = geoServices;
-        this.geologicalOperationsBulk = geologicalOperationsBulk;
+    public GeologicalOperations(GeoServices geoServices, GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
+        this.geologicalRepository = geologicalRepository;
+        this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
 //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
@@ -34,7 +34,9 @@ public class GeologicalOperations implements IGeolocator{
     public void getLocationData(Set<String> targetTownSet) {
 
         //filter out the already processed locations
-        targetTownSet.removeAll(geoServices.getLocationsWithCoordinates());
+        //TODO
+        //getLocations
+        targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
 
         if (targetTownSet.size() > 0) {
             //creating uri list while dealing with the special Hungarian characters
@@ -75,10 +77,11 @@ public class GeologicalOperations implements IGeolocator{
                 } catch (InterruptedException | ExecutionException ex) {
                     throw new RuntimeException(ex);
                 }
-                geoServices.addGeographicalLocation(sourceName, osvName, Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")), country);
+                geologicalRepository.save(new GeoLocation(sourceName, osvName, Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")), country));
             }
 
         }
-    }  
+    }
+
 
 }
