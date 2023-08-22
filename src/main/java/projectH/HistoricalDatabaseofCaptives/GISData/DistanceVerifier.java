@@ -16,6 +16,10 @@ import java.util.Set;
  * the whole Spherical math is well described here although at this moment in this small section of the earth I am not sure how large the difference will be if
  * calculations are done via normal geometric way
  * http://www.movable-type.co.uk/scripts/latlong.html
+ *
+ * Even if the class might look a bit overkill for now, it is better to use an approach which provides us a more fundamental base for further features
+ *
+ *
  */
 
 @Component
@@ -30,10 +34,10 @@ public class DistanceVerifier {
     }
 
     public void findOutstandingGeolocationCandidate(){
-        isInGreatHungarianCube();
+        isInGreatHungarianRectangle();
     }
-    private boolean isInGreatHungarianCube(){
-
+    private boolean isInGreatHungarianRectangle(){
+        // rough estimation of the edges of Great Hungary
         GeoLocation east = new GeoLocation("East", "East", 26.623009, 47.497891, null );
         GeoLocation north = new GeoLocation("North", "North", 19.040160, 50.125262, null );
         GeoLocation south = new GeoLocation("South", "South", 19.040160, 44.545660, null );
@@ -56,7 +60,18 @@ public class DistanceVerifier {
 
     }
 
-    // find the distance of the two endpoints. Nort-West, North-east, South-West, South-East
+    private Vector vectorAddition(Vector vecFrom, Vector vecTo){
+        return new Vector(vecFrom.getX(), vecTo.getY());
+    }
+
+    private GeoLocation returnRectangleAngle(GeoLocation geoA, GeoLocation geoB){
+        String name = geoA.getSource_name() + "-" + geoB.getSource_name();
+
+        double lon = 0;
+        double lat = 0;
+
+        return new GeoLocation(name, name, )
+    }
 
 
 //    private GeoLocation geolocationFromPointAndVector (){
