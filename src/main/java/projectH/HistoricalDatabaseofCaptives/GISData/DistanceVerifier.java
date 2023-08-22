@@ -1,5 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +18,7 @@ import java.util.Set;
  * http://www.movable-type.co.uk/scripts/latlong.html
  */
 
+@Component
 public class DistanceVerifier {
 
     private final GeoServices geoServices;
@@ -27,19 +30,10 @@ public class DistanceVerifier {
     }
 
     public void findOutstandingGeolocationCandidate(){
-
+        isInGreatHungarianCube();
     }
-
     private boolean isInGreatHungarianCube(){
-        //budapest 47.4978918 19.0401609
 
-// Latitude endpoints
-//        47.497891, 26.623009
-//        47.497891, 13.244427
-
-// Longitude endpoints
-//        50.125262, 19.040160
-//        44.545660, 19.040160
         GeoLocation east = new GeoLocation("East", "East", 26.623009, 47.497891, null );
         GeoLocation north = new GeoLocation("North", "North", 19.040160, 50.125262, null );
         GeoLocation south = new GeoLocation("South", "South", 19.040160, 44.545660, null );
@@ -50,20 +44,13 @@ public class DistanceVerifier {
         Vector vector = vecorBetweenTwoPoints(Budapest, north);
 
         System.out.println(vector);
-
-
-
-
-
-
-
     return false;
 
     }
 
     private Vector vecorBetweenTwoPoints(GeoLocation geoFrom,GeoLocation geoTo ){
-       double x = geoTo.getLatitude() - geoFrom.getLatitude();
-       double y = geoTo.getLongitude() - geoTo.getLongitude();
+       double x = geoFrom.getLatitude() - geoTo.getLatitude();
+       double y = geoFrom.getLongitude() - geoTo.getLongitude();
 
        return new Vector(x, y);
 
@@ -78,9 +65,7 @@ public class DistanceVerifier {
 
 
     private double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
-
-//        GeoLocation locationA, GeoLocation locationB
-//        convert to Radian is = degree * 3.1415926535 / 180;
+        //        convert to Radian is = degree * 3.1415926535 / 180;
         double latA = Math.toRadians(locationB.getLatitude());
         double latB = Math.toRadians(locationB.getLatitude());
         double difLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());

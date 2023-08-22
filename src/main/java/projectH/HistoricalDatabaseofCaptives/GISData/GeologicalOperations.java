@@ -23,7 +23,7 @@ public class GeologicalOperations implements IGeolocator{
 
 
     @Autowired
-    public GeologicalOperations(GeoServices geoServices, GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
+    public GeologicalOperations(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
         this.geologicalRepository = geologicalRepository;
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }

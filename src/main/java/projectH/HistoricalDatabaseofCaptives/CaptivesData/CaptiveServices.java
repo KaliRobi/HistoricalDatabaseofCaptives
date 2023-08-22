@@ -3,6 +3,7 @@ package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchCaptiveIdFound;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 import java.util.*;
@@ -15,10 +16,12 @@ import java.util.*;
 public class CaptiveServices {
 
     private final CaptiveRecordRepository captiveRecordRepository;
-    @Autowired
-    public CaptiveServices( CaptiveRecordRepository captiveRecordRepository) {
 
+    private final GeoServices geoServices;
+    @Autowired
+    public CaptiveServices(CaptiveRecordRepository captiveRecordRepository, GeoServices geoServices) {
         this.captiveRecordRepository = captiveRecordRepository;
+        this.geoServices = geoServices;
     }
 
 
@@ -27,16 +30,24 @@ public class CaptiveServices {
     }
 
     public void addCaptive(Captive captive){
-//        geoServices.findLocationInDbOrFetchIt(captive);
+        geoServices.findLocationOrFetchIt(captive);
         captiveRecordRepository.save(captive);
 
     }
     public void updateCaptive(long captiveId, Captive captiveNewData){
         ModelMapper modelMapper = new ModelMapper();
-//        geoServices.findLocationInDbOrFetchIt(captiveNewData);
-        Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
-        modelMapper.map(captiveNewData, captiveToUpdate);
-       captiveRecordRepository.save(captiveToUpdate);
+        geoServices.findLocationOrFetchIt(captiveNewData);
+        try {
+            Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
+            modelMapper.map(captiveNewData, captiveToUpdate);
+            captiveRecordRepository.save(captiveToUpdate);
+        } catch (NoSuchCaptiveIdFound e){
+            throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
+        }
+
+
+
+
     }
 
     public List<Captive> getAllTheCaptives(){

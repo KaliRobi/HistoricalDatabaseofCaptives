@@ -6,13 +6,10 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CandidateFinder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import projectH.HistoricalDatabaseofCaptives.GISData.FindLocationInDbOrRetrieve;
-import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
-import projectH.HistoricalDatabaseofCaptives.GISData.GeologicalOperations;
+import projectH.HistoricalDatabaseofCaptives.GISData.DistanceVerifier;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -20,17 +17,16 @@ import java.util.*;
 @RestController
 public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
-    private final FindLocationInDbOrRetrieve findLocationInDbOrRetrieve;
+    private final DistanceVerifier distanceVerifier;
     private final CaptiveServices captiveServices;
 
-    private final GeoServices geoServices;
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, GeoServices geoServices, FindLocationInDbOrRetrieve findLocationInDbOrRetrieve, CaptiveServices captiveServices) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DistanceVerifier distanceVerifier, CaptiveServices captiveServices) {
         this.candidateFinder = candidateFinder;
-        this.findLocationInDbOrRetrieve = findLocationInDbOrRetrieve;
+        this.distanceVerifier = distanceVerifier;
         this.captiveServices = captiveServices;
-        this.geoServices = geoServices;
+
 
     }
 
@@ -56,17 +52,13 @@ return captiveServices.getAllTheCaptives();
 
 @GetMapping(path="/v1/test")
 public Captive testest()  { // expose internals, recors? DTO? java 11?
-    LocalDate visBirth =  LocalDate.of(1988, 06, 14);
-    Visitor visitor =  new Visitor(geoServices.getALocationByName("Budapest"), "f", visBirth );
-    System.out.println(visitor);
-    return  candidateFinder.returnCandidate(visitor);
-//    return null;
+        distanceVerifier.findOutstandingGeolocationCandidate();
+    return null;
 }
 
 
 @PostMapping(path = "/v1/postNewCaptive/")
     public void postNewCaptive(@RequestBody Captive captive){
-    findLocationInDbOrRetrieve.checkCaptiveLocationAgainstGeoEntity(captive);
     captiveServices.addCaptive(captive);
 }
 
@@ -77,7 +69,6 @@ public Captive testest()  { // expose internals, recors? DTO? java 11?
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
 public void updateCaptive(@PathVariable("id") long Id,  @RequestBody Captive captive){
-//    findLocationInDbOrRetrieve.checkCaptiveLocationAgainstGeoEntity(captive);
     captiveServices.updateCaptive(Id, captive);
     }
 //    add not found exception
