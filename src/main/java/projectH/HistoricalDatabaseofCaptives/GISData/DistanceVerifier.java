@@ -38,16 +38,25 @@ public class DistanceVerifier {
     }
     private boolean isInGreatHungarianRectangle(){
         // rough estimation of the edges of Great Hungary
-        GeoLocation east = new GeoLocation("East", "East", 26.623009, 47.497891, null );
-        GeoLocation north = new GeoLocation("North", "North", 19.040160, 50.125262, null );
-        GeoLocation south = new GeoLocation("South", "South", 19.040160, 44.545660, null );
-        GeoLocation west = new GeoLocation("West", "West", 13.244427, 47.497891, null );
+        GeoLocation eastPoint = new GeoLocation("East", "East", 26.623009, 47.497891, null );
+        GeoLocation northPoint = new GeoLocation("North", "North", 19.040160, 50.125262, null );
+        GeoLocation southPoint = new GeoLocation("South", "South", 19.040160, 44.545660, null );
+        GeoLocation westPoint = new GeoLocation("West", "West", 13.244427, 47.497891, null );
         GeoLocation Budapest =  new GeoLocation("Budapest", "Budapest", 19.0401609, 47.4978918, "Hungary");
-        double distance = calculateLocationToLocationDistance(east, north);
+//        double distance = calculateLocationToLocationDistance(east, north);
 
-        Vector vector = vecorBetweenTwoPoints(Budapest, north);
+        Vector northVector = vecorBetweenTwoPoints(Budapest, northPoint);
+        Vector southVector = vecorBetweenTwoPoints(Budapest, southPoint);
+        Vector eastVector = vecorBetweenTwoPoints(Budapest, eastPoint);
+        Vector westVector = vecorBetweenTwoPoints(Budapest, westPoint);
 
-        System.out.println(vector);
+        Vector northEastVector = vectorAddition(northVector, eastVector);
+        Vector northWestVector = vectorAddition(northVector, westVector);
+        Vector southEastVector = vectorAddition(southVector, eastVector);
+        Vector southWestVector = vectorAddition(southVector, westVector);
+
+
+//        System.out.println(vector);
     return false;
 
     }
@@ -69,8 +78,8 @@ public class DistanceVerifier {
 
         double lon = 0;
         double lat = 0;
-
-        return new GeoLocation(name, name, )
+        return  null;
+//        return new GeoLocation(name, name, )
     }
 
 
