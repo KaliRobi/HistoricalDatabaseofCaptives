@@ -56,7 +56,7 @@ public class DistanceVerifier {
         Vector southWestVector = vectorAddition(southVector, westVector);
 
 
-//        System.out.println(vector);
+        System.out.println();
     return false;
 
     }
@@ -68,19 +68,20 @@ public class DistanceVerifier {
        return new Vector(x, y);
 
     }
+    private GeoLocation returnGeolocationsFromVectors(Vector vectorOnX, Vector vectorOnY){
+        return new GeoLocation("vectorGeneratedLocation", "vectorGeneratedLocation", vectorOnX.getX(), vectorOnY.getY(), null );
+
+    }
+
+
+
 
     private Vector vectorAddition(Vector vecFrom, Vector vecTo){
         return new Vector(vecFrom.getX(), vecTo.getY());
     }
 
-    private GeoLocation returnRectangleAngle(GeoLocation geoA, GeoLocation geoB){
-        String name = geoA.getSource_name() + "-" + geoB.getSource_name();
 
-        double lon = 0;
-        double lat = 0;
-        return  null;
-//        return new GeoLocation(name, name, )
-    }
+
 
 
 //    private GeoLocation geolocationFromPointAndVector (){
