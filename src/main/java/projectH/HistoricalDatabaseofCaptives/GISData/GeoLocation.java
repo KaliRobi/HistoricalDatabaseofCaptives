@@ -21,6 +21,7 @@ public class GeoLocation {
     @Column( name = "country")
     private String country;
 
+    //convention is that longitude first then latitude
     public GeoLocation(String sourceName, String osvName, Double latitude, Double longitude, String country) {
         this.id = id;
         this.source_name = sourceName;
@@ -29,6 +30,12 @@ public class GeoLocation {
         this.Longitude = longitude;
         this.country = country;
     }
+    public GeoLocation(Double latitude, Double longitude) {
+        this.Latitude = latitude;
+        this.Longitude = longitude;
+
+    }
+
 
     public GeoLocation() {
     }

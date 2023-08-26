@@ -2,39 +2,58 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 public class Vector {
 
-    private double x;
-    private double y;
+    private double Ax;
+    private double Ay;
 
+    private double Bx;
+    private double By;
 
-
-    public Vector(double x, double y) {
-        this.x = x;
-        this.y = y;
-
+    public Vector(double ax, double ay, double bx, double by) {
+        Ax = ax;
+        Ay = ay;
+        Bx = bx;
+        By = by;
     }
 
-
-    public double getX() {
-        return x;
+    public double getAx() {
+        return Ax;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setAx(double ax) {
+        Ax = ax;
     }
 
-    public double getY() {
-        return y;
+    public double getAy() {
+        return Ay;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setAy(double ay) {
+        Ay = ay;
+    }
+
+    public double getBx() {
+        return Bx;
+    }
+
+    public void setBx(double bx) {
+        Bx = bx;
+    }
+
+    public double getBy() {
+        return By;
+    }
+
+    public void setBy(double by) {
+        By = by;
     }
 
     @Override
     public String toString() {
         return "Vector{" +
-                "x=" + x +
-                ", y=" + y +
+                "Ax=" + Ax +
+                ", Ay=" + Ay +
+                ", Bx=" + Bx +
+                ", By=" + By +
                 '}';
     }
 }
