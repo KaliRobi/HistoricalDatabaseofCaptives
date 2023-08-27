@@ -14,10 +14,21 @@ public class OutstandingGeolocation {
 
     private String source_name;
 
-    public OutstandingGeolocation(long id, String osv_name, String source_name) {
+    private long geological_location_id;
+
+    public OutstandingGeolocation(long id, String osv_name, String source_name, long geological_location_id) {
         this.id = id;
         this.osv_name = osv_name;
         this.source_name = source_name;
+        this.geological_location_id = geological_location_id;
+    }
+
+    public long getGeological_location_id() {
+        return geological_location_id;
+    }
+
+    public void setGeological_location_id(long geological_location_id) {
+        this.geological_location_id = geological_location_id;
     }
 
     public OutstandingGeolocation() {}

@@ -2,7 +2,6 @@ package projectH.HistoricalDatabaseofCaptives.Users;
 
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
@@ -14,8 +13,7 @@ public class Visitor implements IPerson{
     private String name;
     private GeoLocation location;
     private String sex;
-    //TODO
-    // refactor to builder pattern
+
     public Visitor(String name, GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.name = name;

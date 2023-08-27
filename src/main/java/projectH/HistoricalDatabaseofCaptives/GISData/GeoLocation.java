@@ -22,7 +22,7 @@ public class GeoLocation {
     private String country;
 
     //convention is that longitude first then latitude
-    public GeoLocation(String sourceName, String osvName, Double latitude, Double longitude, String country) {
+    public GeoLocation(String sourceName, String osvName,  Double longitude, Double latitude, String country) {
         this.id = id;
         this.source_name = sourceName;
         this.osv_name = osvName;
@@ -30,7 +30,7 @@ public class GeoLocation {
         this.Longitude = longitude;
         this.country = country;
     }
-    public GeoLocation(Double latitude, Double longitude) {
+    public GeoLocation(Double longitude ,Double latitude ) {
         this.Latitude = latitude;
         this.Longitude = longitude;
 
@@ -95,8 +95,8 @@ public class GeoLocation {
                 "id=" + id +
                 ", osv_name='" + osv_name + '\'' +
                 ", source_name='" + source_name + '\'' +
-                ", Latitude=" + Latitude +
                 ", Longitude=" + Longitude +
+                ", Latitude=" + Latitude +
                 ", country='" + country + '\'' +
                 '}';
     }

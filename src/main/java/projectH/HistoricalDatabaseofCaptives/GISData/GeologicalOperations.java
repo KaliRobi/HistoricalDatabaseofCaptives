@@ -34,8 +34,7 @@ public class GeologicalOperations implements IGeolocator{
     public void getLocationData(Set<String> targetTownSet) {
 
         //filter out the already processed locations
-        //TODO
-        //getLocations
+
         targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
 
         if (targetTownSet.size() > 0) {

@@ -2,10 +2,11 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchGeolocationAvailableException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 
 //TODO
-    //Recosider the purpose of the class
+    //Reconsider the purpose of the class
     // should be facing out , instead provides different things to classes in and out side of the the package
 @Component
 public class GeoServices {
@@ -26,10 +27,7 @@ public class GeoServices {
 
 
     public GeoLocation getALocationByName(String name){
-        GeoLocation location  = geologicalRepository.findByName(name);
-        return location != null ?  location : new GeoLocation();
-
-
+            return geologicalRepository.findByName(name);
     }
 
     public void findLocationOrFetchIt(Captive captive){

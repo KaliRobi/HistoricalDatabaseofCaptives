@@ -7,6 +7,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import projectH.HistoricalDatabaseofCaptives.GISData.DistanceVerifier;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 
@@ -19,6 +20,7 @@ public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
     private final DistanceVerifier distanceVerifier;
     private final CaptiveServices captiveServices;
+
 
 
     @Autowired
@@ -51,7 +53,7 @@ return captiveServices.getAllTheCaptives();
 
 
 @GetMapping(path="/v1/test")
-public Captive testest()  { // expose internals, recors? DTO? java 11?
+public GeoLocation testest()  { // expose internals, recors? DTO? java 11?
         distanceVerifier.findOutstandingGeolocationCandidate();
     return null;
 }

@@ -297,3 +297,13 @@
     //
     //
     //        List<List<Integer>>    cohortsList = iteratorList.stream().map(e -> yearRange.subList(e - subRangeSize, e)).toList();
+
+
+    GeoLocation Debrecen = new GeoLocation(47.531399, 21.6259782 );
+            GeoLocation Bekescsaba = new GeoLocation(46.6798003, 21.0985425 	);
+            GeoLocation ttt = new GeoLocation(36.3206, 46.0148	);
+            GeoLocation Arad = new GeoLocation(46.1753793, 21.3196342);
+            GeoLocation Brasso = new GeoLocation(45.6525105, 25.6105654);
+            GeoLocation Brasso2 = new GeoLocation(46.99769784507529, 28.84527583003865	);
+            GeoLocation Kossice = new GeoLocation(48.72849551597991 , 21.271323360124264 );
+            GeoLocation Pozsony = new GeoLocation(48.13908776119138, 17.07639933530841  );

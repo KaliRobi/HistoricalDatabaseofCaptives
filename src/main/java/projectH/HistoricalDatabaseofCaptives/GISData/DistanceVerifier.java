@@ -1,9 +1,10 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
+import org.modelmapper.internal.util.Lists;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.GeolocationAttributeMissing;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * GeologicalOperations/Bulk are not so smart at the moment to tell if it actually matched  the right data.
@@ -39,50 +40,49 @@ public class DistanceVerifier {
     }
 
     public void findOutstandingGeolocationCandidate(){
-//        isInGreatHungarianRectangle();
+        GeoLocation location = geoServices.getALocationByName("Brasso");
+        boolean ttt = isInGreatHungarianRectangle(location);
+        System.out.println(ttt);
     }
     private boolean isInGreatHungarianRectangle( GeoLocation location ) {
         // rough estimation of the edges of Great Hungary
-        GeoLocation eastPoint = new GeoLocation("East", "East", 26.623009, 47.497891, null);
-        GeoLocation northPoint = new GeoLocation("North", "North", 19.040160, 50.125262, null);
-        GeoLocation southPoint = new GeoLocation("South", "South", 19.040160, 44.545660, null);
-        GeoLocation westPoint = new GeoLocation("West", "West", 13.244427, 47.497891, null);
-        GeoLocation Budapest = new GeoLocation("Budapest", "Budapest", 19.0401609, 47.4978918, "Hungary");
-//        double distance = calculateLocationToLocationDistance(east, north);
+        GeoLocation eastPoint = new GeoLocation("East", "East", 47.497891, 26.623009,  null);
+        GeoLocation northPoint = new GeoLocation("North", "North", 50.125262,  19.040160, null);
+        GeoLocation southPoint = new GeoLocation("South", "South", 44.545660, 19.040160,  null);
+        GeoLocation westPoint = new GeoLocation("West", "West",47.497891,  13.244427,  null);
+        GeoLocation budapest = geoServices.getALocationByName("Budapest");
+        System.out.println(budapest);
 
         // x/y axes vectors
-        Vector eastVector = vectorBetweenTwoPointsInVector(Budapest, eastPoint);
-        Vector westVector = vectorBetweenTwoPointsInVector(Budapest, westPoint);
+        Vector eastVector = vectorBetweenTwoPointsInVector(budapest, eastPoint);
+        Vector westVector = vectorBetweenTwoPointsInVector(budapest, westPoint);
+
         GeoLocation northEastPoint = shiftLocationOnX(northPoint, eastVector);
         GeoLocation southWestPoint = shiftLocationOnX(southPoint, westVector);
 
 
-        GeoLocation Debrecen = new GeoLocation(21.6259782, 47.531399);
-        GeoLocation Bekescsaba = new GeoLocation(21.0985425, 46.6798003	);
-        GeoLocation ttt = new GeoLocation(46.0148,	36.3206);
-        GeoLocation Arad = new GeoLocation(21.3196342,	46.1753793);
-        GeoLocation Brasso = new GeoLocation(25.6105654,	45.6525105);
-        GeoLocation Brasso2 = new GeoLocation(28.84527583003865,	46.99769784507529);
-        GeoLocation Kossice = new GeoLocation(21.271323360124264, 48.72849551597991 );
-        GeoLocation Pozsony = new GeoLocation(17.07639933530841, 48.13908776119138 );
+        Map<String,Vector> baseVectors =  provideBaseVectorForTriangle(northEastPoint, southWestPoint, location);
 
-
-        // this needs to be get its own method
-        Vector nEToLocationVector = vectorBetweenTwoPointsInVector(northEastPoint, ttt );
-
-        Vector nEToSWVector = vectorBetweenTwoPointsInVector(northEastPoint, southWestPoint );
-
-        Vector sEToLocationVector = vectorBetweenTwoPointsInVector(southWestPoint, ttt );
-
-        Vector sEToSWVector = vectorBetweenTwoPointsInVector(southWestPoint, northEastPoint );
-
-
-        double northEastAngle = calculateAngleBetweenVectors(nEToLocationVector, nEToSWVector );
-        double southEastAngle = calculateAngleBetweenVectors(sEToLocationVector, sEToSWVector );
+        double northEastAngle = calculateAngleBetweenVectors(baseVectors.get("nEToLocationVector"), baseVectors.get("nEToSWVector") );
+        double southEastAngle = calculateAngleBetweenVectors(baseVectors.get("sEToLocationVector"), baseVectors.get("sEToSWVector") );
         System.out.println(northEastAngle + " ----- " + southEastAngle);
-    return false;
+
+        return (northEastAngle + southEastAngle) <= 90;
 
     }
+
+
+
+    // could take only the location but that would limit flexibility
+    private Map<String,Vector> provideBaseVectorForTriangle(GeoLocation northEastPoint, GeoLocation southWestPoint, GeoLocation location ){
+        Map<String,Vector> vectors = new HashMap<>();
+        vectors.put("nEToLocationVector", vectorBetweenTwoPointsInVector(northEastPoint, location ) );
+        vectors.put("nEToSWVector", vectorBetweenTwoPointsInVector(northEastPoint, southWestPoint ));
+        vectors.put("sEToLocationVector", vectorBetweenTwoPointsInVector(southWestPoint, location ));
+        vectors.put("sEToSWVector", vectorBetweenTwoPointsInVector(southWestPoint, northEastPoint ));
+        return vectors;
+    }
+
     private double calculateAngleBetweenVectors(Vector toLocation, Vector diagonalAxis){
         //magnitude of the vectors
         double nEToLocationMagnitude = Math.sqrt(Math.pow(toLocation.getX(),2) + Math.pow(toLocation.getY(), 2));
@@ -94,18 +94,23 @@ public class DistanceVerifier {
         return Math.round(Math.toDegrees(Math.acos( dotProductNO / (nEToLocationMagnitude * nEToSWMagnitude) )));
     }
 
-    private Vector vectorBetweenTwoPointsInCoordinates(GeoLocation geoFrom, GeoLocation geoTo ){
+    private Vector vectorBetweenTwoPointsInCoordinates(GeoLocation geoFrom, GeoLocation geoTo ) throws GeolocationAttributeMissing {
         // this gives the vector applied on the base location so it fits into context
         double x = geoFrom.getLatitude() + (geoTo.getLatitude() - geoFrom.getLatitude() );
         double y = geoFrom.getLongitude() + (geoTo.getLongitude() - geoFrom.getLongitude());
         return new Vector(x, y);
 
     }
-    private Vector vectorBetweenTwoPointsInVector(GeoLocation geoFrom, GeoLocation geoTo ){
+    private Vector vectorBetweenTwoPointsInVector(GeoLocation geoFrom, GeoLocation geoTo ) {
         // this gives the vector applied on the base location so it fits into context
-        double x = geoTo.getLatitude() - geoFrom.getLatitude();
-        double y = geoTo.getLongitude() - geoFrom.getLongitude();
-        return new Vector(x, y);
+        try {
+            double x = geoTo.getLatitude() - geoFrom.getLatitude();
+            double y = geoTo.getLongitude() - geoFrom.getLongitude();
+            return new Vector(x, y);
+        } catch (NullPointerException e){
+            throw  new GeolocationAttributeMissing("Geolocation" + geoTo + " or " + geoFrom + " has missing attributes");
+        }
+
     }
     //this needs to be based on something
     private GeoLocation geolocationFromVectors(Vector vectorOnX, Vector vectorOnY){
@@ -113,7 +118,7 @@ public class DistanceVerifier {
     }
 
     private GeoLocation shiftLocationOnX(GeoLocation baseLocation, Vector relativeVector){
-        return new GeoLocation(baseLocation.getLatitude() + relativeVector.getX(), baseLocation.getLongitude() );
+        return new GeoLocation(baseLocation.getLongitude(), baseLocation.getLatitude() + relativeVector.getX()  );
     }
 
     private Vector vectorAddition(Vector vecFrom, Vector vecTo){
@@ -149,9 +154,4 @@ public class DistanceVerifier {
         System.out.println(resultedDistanceString);
         return resultedDistanceString;
     }
-
-
-
-
-
 }

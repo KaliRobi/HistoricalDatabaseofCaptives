@@ -13,7 +13,6 @@ public class TargetLink {
     private   String target;
 
 
-
     public TargetLink(URI link, String target) {
         this.link = link;
 
