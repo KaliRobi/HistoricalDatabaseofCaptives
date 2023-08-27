@@ -1,8 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Outstanding_Geological_Location")
@@ -10,6 +10,10 @@ public class OutstandingGeolocation {
 
     @Id
     private long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp insert_time;
+
     private String osv_name;
 
     private String source_name;
@@ -29,6 +33,14 @@ public class OutstandingGeolocation {
 
     public void setGeological_location_id(long geological_location_id) {
         this.geological_location_id = geological_location_id;
+    }
+
+    public Timestamp getInsert_time() {
+        return insert_time;
+    }
+
+    public void setInsert_time(Timestamp insert_time) {
+        this.insert_time = insert_time;
     }
 
     public OutstandingGeolocation() {}

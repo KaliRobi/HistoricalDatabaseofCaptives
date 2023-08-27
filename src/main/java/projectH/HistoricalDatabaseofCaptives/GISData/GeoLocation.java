@@ -2,6 +2,8 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+
 
 @Table(name="geological_locations")
 @Entity(name="geological_location")
@@ -9,6 +11,9 @@ public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp insert_time;
 
     @Column(name = "osv_name")
     private String osv_name;
@@ -88,6 +93,14 @@ public class GeoLocation {
     public void setCountry(String country) {
         this.country = country;
     }
+    public Timestamp getInsert_time() {
+        return insert_time;
+    }
+
+    public void setInsert_time(Timestamp insert_time) {
+        this.insert_time = insert_time;
+    }
+
 
     @Override
     public String toString() {

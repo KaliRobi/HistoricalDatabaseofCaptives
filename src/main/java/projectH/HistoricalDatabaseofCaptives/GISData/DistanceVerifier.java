@@ -40,7 +40,7 @@ public class DistanceVerifier {
     }
 
     public void findOutstandingGeolocationCandidate(){
-        GeoLocation location = geoServices.getALocationByName("Brasso");
+        GeoLocation location = geoServices.getALocationByName("Kaba");
         boolean ttt = isInGreatHungarianRectangle(location);
         System.out.println(ttt);
     }
@@ -65,13 +65,11 @@ public class DistanceVerifier {
 
         double northEastAngle = calculateAngleBetweenVectors(baseVectors.get("nEToLocationVector"), baseVectors.get("nEToSWVector") );
         double southEastAngle = calculateAngleBetweenVectors(baseVectors.get("sEToLocationVector"), baseVectors.get("sEToSWVector") );
-        System.out.println(northEastAngle + " ----- " + southEastAngle);
+        System.out.println(northEastAngle +  southEastAngle);
 
         return (northEastAngle + southEastAngle) <= 90;
 
     }
-
-
 
     // could take only the location but that would limit flexibility
     private Map<String,Vector> provideBaseVectorForTriangle(GeoLocation northEastPoint, GeoLocation southWestPoint, GeoLocation location ){

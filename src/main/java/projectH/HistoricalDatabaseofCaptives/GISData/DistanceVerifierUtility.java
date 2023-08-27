@@ -19,7 +19,9 @@ public class DistanceVerifierUtility {
     }
 
 
-
+//    will check for candidates if the source_name equals osv_name
+//    isInGreatHungarianRectangle == true
+//    insert_time >= sysdate-1 / 7 depends on the setup
 
 
 

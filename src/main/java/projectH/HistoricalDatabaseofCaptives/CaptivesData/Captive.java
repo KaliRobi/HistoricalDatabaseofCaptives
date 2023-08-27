@@ -1,6 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.HashSet;
@@ -15,6 +17,9 @@ public class Captive {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp insert_time;
     private int volume;
     private String captive_id;
     private String name;
@@ -117,6 +122,14 @@ public class Captive {
     public String getCaptive_id() {
         //this number does not exist in the historical source
         return captive_id != null ? captive_id : "0001";
+    }
+
+    public Timestamp getInsert_time() {
+        return insert_time;
+    }
+
+    public void setInsert_time(Timestamp insert_time) {
+        this.insert_time = insert_time;
     }
 
     public void setCaptive_id(String captive_id) {
