@@ -15,7 +15,7 @@ import java.util.*;
  * The class will audit the distances between Budapest and the returned data and will add the outstanding location name to a new table
  *
  * the whole Spherical math is well described here although at this moment in this small section of the earth I am not sure how large the difference will be if
- * calculations are done via normal geometric way
+ * calculations are done via normal geometry
  * http://www.movable-type.co.uk/scripts/latlong.html
  *
  * Even if the class might look a bit overkill for now, it is better to use an approach which provides us a more fundamental base for further features
@@ -46,13 +46,12 @@ public class DistanceVerifier {
     }
     private boolean isInGreatHungarianRectangle( GeoLocation location ) {
         // rough estimation of the edges of Great Hungary
+        // should be added to the database and queried from there.
         GeoLocation eastPoint = new GeoLocation("East", "East", 47.497891, 26.623009,  null);
         GeoLocation northPoint = new GeoLocation("North", "North", 50.125262,  19.040160, null);
         GeoLocation southPoint = new GeoLocation("South", "South", 44.545660, 19.040160,  null);
         GeoLocation westPoint = new GeoLocation("West", "West",47.497891,  13.244427,  null);
         GeoLocation budapest = geoServices.getALocationByName("Budapest");
-        System.out.println(budapest);
-
         // x/y axes vectors
         Vector eastVector = vectorBetweenTwoPointsInVector(budapest, eastPoint);
         Vector westVector = vectorBetweenTwoPointsInVector(budapest, westPoint);
@@ -106,7 +105,13 @@ public class DistanceVerifier {
             double y = geoTo.getLongitude() - geoFrom.getLongitude();
             return new Vector(x, y);
         } catch (NullPointerException e){
-            throw  new GeolocationAttributeMissing("Geolocation" + geoTo + " or " + geoFrom + " has missing attributes");
+            //should point to the concrete missing attribute
+            if(geoFrom.getLongitude() == null || geoFrom.getLatitude() == null){
+                throw  new GeolocationAttributeMissing("Geolocation (from) with coordinates " + geoFrom.getLongitude() + " and " + geoFrom.getLatitude()+ " is not allowed");
+            }
+            throw  new GeolocationAttributeMissing("Geolocation (to) with coordinates " + geoTo.getLongitude() + " and " + geoTo.getLatitude()+ " is not allowed");
+
+
         }
 
     }
