@@ -1,6 +1,5 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
-import org.modelmapper.internal.util.Lists;
 import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.GeolocationAttributeMissing;
 
@@ -39,12 +38,8 @@ public class DistanceVerifier {
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
-    public void findOutstandingGeolocationCandidate(){
-        GeoLocation location = geoServices.getALocationByName("Kaba");
-        boolean ttt = isInGreatHungarianRectangle(location);
-        System.out.println(ttt);
-    }
-    private boolean isInGreatHungarianRectangle( GeoLocation location ) {
+
+    protected boolean isOutsideGreatHungarianRectangle(GeoLocation location ) {
         // rough estimation of the edges of Great Hungary
         // should be added to the database and queried from there.
         GeoLocation eastPoint = new GeoLocation("East", "East", 47.497891, 26.623009,  null);
@@ -66,7 +61,7 @@ public class DistanceVerifier {
         double southEastAngle = calculateAngleBetweenVectors(baseVectors.get("sEToLocationVector"), baseVectors.get("sEToSWVector") );
         System.out.println(northEastAngle +  southEastAngle);
 
-        return (northEastAngle + southEastAngle) <= 90;
+        return (northEastAngle + southEastAngle) >= 90;
 
     }
 

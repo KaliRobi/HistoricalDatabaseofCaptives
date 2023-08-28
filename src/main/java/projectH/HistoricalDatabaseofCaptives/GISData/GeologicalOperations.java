@@ -15,6 +15,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+/** a way to improve this extend osvobject and map the whole json file provided by osv
+ * Then decide filter out the object by priority countries
+ * 1. Hungary; 2 Slovenia, Austria, Slovakia, ukraine, Romania, Serbia; 3 all the rest.
+ */
+
 @Component
 public class GeologicalOperations implements IGeolocator{
 
