@@ -25,6 +25,7 @@ public class CaptiveServices {
     }
 
 
+
     public Optional<Captive> GetCaptiveById(Long num){
      return captiveRecordRepository.findById(num);
     }
@@ -46,10 +47,7 @@ public class CaptiveServices {
         }
 
 
-
-
     }
-
     public List<Captive> getAllTheCaptives(){
         return captiveRecordRepository.findAll();
 
