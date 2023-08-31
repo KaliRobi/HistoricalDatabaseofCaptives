@@ -6,7 +6,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CandidateFinder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import projectH.HistoricalDatabaseofCaptives.GISData.DistanceVerifier;
+import projectH.HistoricalDatabaseofCaptives.CaptivesData.CrimeStatistics;
 import projectH.HistoricalDatabaseofCaptives.GISData.DistanceVerifierUtility;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
@@ -21,16 +21,19 @@ public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
     private final DistanceVerifierUtility distanceVerifierUtility;
     private final CaptiveServices captiveServices;
+    
+    private final CrimeStatistics crimeStatistics;
 
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DistanceVerifierUtility distanceVerifierUtility, CaptiveServices captiveServices) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DistanceVerifierUtility distanceVerifierUtility, CaptiveServices captiveServices, CrimeStatistics crimeStatistics) {
         this.candidateFinder = candidateFinder;
         this.distanceVerifierUtility = distanceVerifierUtility;
         this.captiveServices = captiveServices;
 
 
+        this.crimeStatistics = crimeStatistics;
     }
 
 
@@ -54,9 +57,9 @@ return captiveServices.getAllTheCaptives();
 
 
 @GetMapping(path="/v1/test")
-public GeoLocation testest()  { // expose internals, recors? DTO? java 11?
-        distanceVerifierUtility.inspectLocationsForOutstandings();
-    return null;
+public Object testest()  { // expose internals, recors? DTO? java 11?
+
+    return crimeStatistics.frequencyOfCrimePerGender();
 }
 
 

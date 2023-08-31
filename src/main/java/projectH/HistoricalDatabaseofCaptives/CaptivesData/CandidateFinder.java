@@ -1,15 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * One of the ways how this mostly statistical site could be brought closer to the visitors is to show the "face" of the captives
@@ -23,8 +16,13 @@ import java.util.Locale;
 
 @Component
 public class CandidateFinder {
-    @Autowired
-    private CaptiveServices captiveServices;
+
+    private final CaptiveServices captiveServices;
+        public CandidateFinder(CaptiveServices captiveServices) {
+        this.captiveServices = captiveServices;
+    }
+
+
 
     public Captive returnCandidate(Visitor visitor){
 
