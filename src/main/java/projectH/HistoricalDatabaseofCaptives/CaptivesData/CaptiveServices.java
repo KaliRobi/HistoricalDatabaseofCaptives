@@ -8,9 +8,6 @@ import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 import java.util.*;
 
-//TODO
-//Recosider the purpose of the class
-// should be facing out , instead provides different things to classes in and out side of the the package
 
 @Component
 public class CaptiveServices {

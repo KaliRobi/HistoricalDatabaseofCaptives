@@ -28,6 +28,7 @@ public class FrontEndApiController {
 
 
 
+
     @Autowired
     public FrontEndApiController(CandidateFinder candidateFinder, DistanceVerifierUtility distanceVerifierUtility, CaptiveServices captiveServices, CrimeStatistics crimeStatistics) {
         this.candidateFinder = candidateFinder;
@@ -83,7 +84,7 @@ public class FrontEndApiController {
 @GetMapping(path="/v1/test")
 public Object testest()  {
 
-    return crimeStatistics.frequencyOfCrimePerGender();
+    return distanceVerifierUtility.inspectLocationsForOutstandings();
 }
 
 

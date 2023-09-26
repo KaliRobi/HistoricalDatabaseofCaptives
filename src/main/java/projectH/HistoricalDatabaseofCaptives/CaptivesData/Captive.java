@@ -20,6 +20,7 @@ public class Captive {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp insert_time;
+
     private int volume;
     private String captive_id;
     private String name;
@@ -120,8 +121,7 @@ public class Captive {
     }
 
     public String getCaptive_id() {
-        //this number does not exist in the historical source
-        return captive_id != null ? captive_id : "0001";
+        return captive_id;
     }
 
     public Timestamp getInsert_time() {
@@ -478,15 +478,12 @@ public class Captive {
         }
 
 
-
-
-
-
     @Override
     public String toString() {
         return "Captive{" +
                 "id=" + id +
-                ", volume='" + volume + '\'' +
+                ", insert_time=" + insert_time +
+                ", volume=" + volume +
                 ", captive_id='" + captive_id + '\'' +
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
@@ -509,16 +506,17 @@ public class Captive {
                 ", literacy='" + literacy + '\'' +
                 ", education='" + education + '\'' +
                 ", criminal_history='" + criminal_history + '\'' +
-                ", current='" + crime + '\'' +
+                ", crime='" + crime + '\'' +
                 ", sentence_begins=" + sentence_begins +
                 ", sentence_expires=" + sentence_expires +
-                ", prison_term=" + prison_term_days +
-                ", ransom='" + ransom + '\'' +
+                ", prison_term_days=" + prison_term_days +
+                ", ransom=" + ransom +
                 ", associates='" + associates + '\'' +
                 ", degree_of_crime='" + degree_of_crime + '\'' +
                 ", degree_of_punishment='" + degree_of_punishment + '\'' +
                 ", notes='" + notes + '\'' +
                 ", arrest_site='" + arrest_site + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

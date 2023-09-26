@@ -24,18 +24,20 @@ public class DistanceVerifierUtility {
     }
 
 
-    public void inspectLocationsForOutstandings(){
-        Set<GeoLocation> locationsWithDifferentNames = separateLocationsWithDifferentNames();
+    public Set<GeoLocation> inspectLocationsForOutstandings(){
+         Set<GeoLocation> locationsWithDifferentNames = separateLocationsWithDifferentNames();
 //        isOutsideGreatHungarianRectangle == true
         locationsWithDifferentNames.stream()
                 .filter(distanceVerifier::isOutsideGreatHungarianRectangle)
                 .toList()
                 .forEach(this::setAsOutstanding);
+
+        return locationsWithDifferentNames;
     }
 
 //    insert_time >= sysdate-1 / 7 depends on the setup  wil be done with a @Scheduler
 
-//    will check for candidates if the source_name !equals osv_name
+//    will check for candidates if the source_name !equals osv_name because of the difference in hungarian and surrounding nations.
     private Set<GeoLocation> separateLocationsWithDifferentNames(){
         return  geologicalRepository.findAll().stream().filter( e -> !e.getSource_name().equalsIgnoreCase(e.getOsv_name()))
                 .collect(Collectors.toSet());
