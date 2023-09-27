@@ -29,7 +29,7 @@ public class DataCleanerService {
 
     public void reviewHeight(){
         // check if everything is number length max 3 digits no less than 2
-        captiveServices.getAllTheCaptives().stream().filter(e -> e.getHeight());
+        captiveServices.getAllTheCaptives().stream().map(e -> e.getHeight()).filter(h -> )
 
         // check for outstandings
 
