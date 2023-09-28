@@ -10,7 +10,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CrimeStatistics;
-import projectH.HistoricalDatabaseofCaptives.GISData.DistanceVerifierUtility;
+import projectH.HistoricalDatabaseofCaptives.DataCleaner.DataCleanerService;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 
@@ -21,7 +21,7 @@ import java.util.*;
 @RestController
 public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
-    private final DistanceVerifierUtility distanceVerifierUtility;
+    private final  DataCleanerService dataCleanerService ;
     private final CaptiveServices captiveServices;
     
     private final CrimeStatistics crimeStatistics;
@@ -30,9 +30,10 @@ public class FrontEndApiController {
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DistanceVerifierUtility distanceVerifierUtility, CaptiveServices captiveServices, CrimeStatistics crimeStatistics) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, CrimeStatistics crimeStatistics) {
         this.candidateFinder = candidateFinder;
-        this.distanceVerifierUtility = distanceVerifierUtility;
+        this.dataCleanerService = dataCleanerService;
+
         this.captiveServices = captiveServices;
 
 
@@ -82,9 +83,9 @@ public class FrontEndApiController {
 
 
 @GetMapping(path="/v1/test")
-public Object testest()  {
+public void testest()  {
 
-    return distanceVerifierUtility.inspectLocationsForOutstandings();
+    dataCleanerService.reviewHeight();
 }
 
 
