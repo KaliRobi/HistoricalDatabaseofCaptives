@@ -42,15 +42,15 @@ public class DataCleanerService {
         List<Integer> heightListOfFemale = heightList.stream().filter(c -> c.getSex().equals("n"))
                 .map(Captive::getHeight).filter(Objects::nonNull).toList();
         // check if everything is number is between 100 and 200.
-        List<Integer> NonInRageHeightsMale = heightList.stream()
+        List<Integer> NonInRageHeightsFemale = heightListOfFemale.stream()
                 .filter(h -> h < 99 || h > 200).toList();
 
-        List<Integer> NonInRageHeightsMale = heightList.stream()
+        List<Integer> NonInRageHeightsMale = heightListOfMale.stream()
                 .filter(h -> h < 99 || h > 200).toList();
 
         // Find  interquartile range
 
-        List<Integer> uniqueHeightValues = new HashSet<>(heightList).stream().toList();
+        List<Integer> uniqueHeightValues = new HashSet<>(NonInRageHeightsFemale).stream().toList();
 
 
 
