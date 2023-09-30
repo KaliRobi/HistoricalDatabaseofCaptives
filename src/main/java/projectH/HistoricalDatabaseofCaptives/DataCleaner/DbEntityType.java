@@ -1,9 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
-public enum PropertyType {
+public enum DbEntityType {
 
-    HEIGHTM,
-    HEIGHTF;
+    CAPTIVE;
 
 
 

@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchCaptiveIdFound;
-import projectH.HistoricalDatabaseofCaptives.DataCleaner.PropertyType;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 import java.util.*;
@@ -127,22 +126,6 @@ public class CaptiveServices {
 
     }
 
-    public List<Long> getCaptiveIdFromProperty(int height, PropertyType type){
-        List<Long> resultList =  new ArrayList<>();
-        System.out.println("get id from height called");
-        // based on the column names
-        switch (type){
-            case HEIGHTM:
-                resultList = captiveRecordRepository.getCaptiveIdFromHeight(height, "f");
-                break;
-            case HEIGHTF:
-                resultList = captiveRecordRepository.getCaptiveIdFromHeight(height, "n");
-                break;
-            default:
-                return resultList ;
-        }
 
-        return resultList;
-    }
 
 }
