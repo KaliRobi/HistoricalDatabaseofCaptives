@@ -5,7 +5,6 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,14 +13,19 @@ import java.util.stream.Collectors;
 public class HeightVerifier {
     private final CaptiveServices captiveServices;
     private final FindOutliers findOutliers;
+    private final CreateReviewableEntity createReviewableEntity;
 
-    public HeightVerifier(CaptiveServices captiveServices, FindOutliers findOutliers) {
+    public HeightVerifier(CaptiveServices captiveServices, FindOutliers findOutliers, CreateReviewableEntity createReviewableEntity) {
         this.captiveServices = captiveServices;
         this.findOutliers = findOutliers;
+        this.createReviewableEntity = createReviewableEntity;
     }
 
+
+    // the method works but it is not efficient enough. I take the heights without the id and when I find what I want I get those ids again from
+    // the db just to save them to the db again. Rework is needed, but ok first version.
+
     public void reviewHeight(){
-// change this based on
 
         List<Captive> heightList = captiveServices.getAllTheCaptives().stream().distinct().toList();
 
@@ -29,24 +33,25 @@ public class HeightVerifier {
                 .map(Captive::getHeight).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Integer> heightListOfFemale = heightList.stream().filter(c -> c.getSex().equals("n"))
                 .map(Captive::getHeight).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
-        // check if everything is number is between 100 and 200.
-        List<Integer> NonInRageHeightsFemale = heightListOfFemale.stream()
-                .filter(h -> h < 99 || h > 200).toList();
 
-        List<Integer> NonInRageHeightsMale = heightListOfMale.stream()
-                .filter(h -> h < 99 || h > 200).toList();
 
-        // this group can be listed
-        heightListOfFemale.removeAll(NonInRageHeightsMale);
-        heightListOfFemale.removeAll(NonInRageHeightsFemale);
+        List<Integer> outliersFemale = findOutliers.findOuters(heightListOfFemale).stream().distinct().toList();
+        List<Integer> outliersMale = findOutliers.findOuters(heightListOfMale).stream().distinct().toList();
 
-        // Find  interquartile range
-        System.out.println( NonInRageHeightsMale );
-        System.out.println( NonInRageHeightsFemale );
-//        ArrayList<Integer> testList = new ArrayList<>(Arrays.asList(-2, -1,0,1,2,3,4,5,7,8,9,10,11,12,13, 35, 44, -4, -3));
-//        findOutliers.findOuters(heightListOfFemale);
-        System.out.println("***********************************");
-        System.out.println(findOutliers.findOuters(heightListOfFemale));
+//        outliersFemale.forEach (e -> captiveServices.getCaptiveIdFromProperty(e, PropertyType.HEIGHTF));
+
+        for(int height : outliersFemale){
+            captiveServices.getCaptiveIdFromProperty(height, PropertyType.HEIGHTF)
+                    .forEach(ca -> createReviewableEntity.registerReviewableEntity(ca, "Captive", "Height value(" + height + ") was out of range" ) );
+
+//
+        }
+//
+        for(int height : outliersMale){
+            captiveServices.getCaptiveIdFromProperty(height, PropertyType.HEIGHTM)
+                    .forEach(e-> createReviewableEntity.registerReviewableEntity(e, "Captive", "Height value(" + height + ") was out of range" ) );
+        }
+
 
 
     }

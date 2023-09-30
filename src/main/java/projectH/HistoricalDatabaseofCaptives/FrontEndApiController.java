@@ -92,6 +92,7 @@ public void testest()  {
 //    System.out.println(testList.size());
 //    findOutliers.findOuters(testList);
     dataCleanerService.startCleaning();
+
 }
 
 

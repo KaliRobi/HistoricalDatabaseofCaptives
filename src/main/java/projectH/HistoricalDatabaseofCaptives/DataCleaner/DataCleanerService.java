@@ -23,6 +23,7 @@ public class DataCleanerService {
 
 
     public void startCleaning(){
+
         heightVerifier.reviewHeight();
     }
 
