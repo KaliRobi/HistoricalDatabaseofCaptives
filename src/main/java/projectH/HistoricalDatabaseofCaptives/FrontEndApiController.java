@@ -11,6 +11,7 @@ import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CrimeStatistics;
 import projectH.HistoricalDatabaseofCaptives.DataCleaner.DataCleanerService;
+import projectH.HistoricalDatabaseofCaptives.DataCleaner.FindOutliers;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 
@@ -23,18 +24,21 @@ public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
     private final  DataCleanerService dataCleanerService ;
     private final CaptiveServices captiveServices;
-    
+
+
+    private  final FindOutliers findOutliers;
     private final CrimeStatistics crimeStatistics;
 
 
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, CrimeStatistics crimeStatistics) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, FindOutliers findOutliers, CrimeStatistics crimeStatistics) {
         this.candidateFinder = candidateFinder;
         this.dataCleanerService = dataCleanerService;
 
         this.captiveServices = captiveServices;
+        this.findOutliers = findOutliers;
 
 
         this.crimeStatistics = crimeStatistics;
@@ -84,8 +88,10 @@ public class FrontEndApiController {
 
 @GetMapping(path="/v1/test")
 public void testest()  {
-
-    dataCleanerService.reviewHeight();
+//    ArrayList<Integer> testList = new ArrayList<>(Arrays.asList(-2, -1,0,1,2,3,4,5,7,8,9,10,11,12,13, 35, 44, -3, -22));
+//    System.out.println(testList.size());
+//    findOutliers.findOuters(testList);
+    dataCleanerService.startCleaning();
 }
 
 
