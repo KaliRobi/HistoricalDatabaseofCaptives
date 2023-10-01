@@ -1,10 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveRecordRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class CreateReviewableEntity {

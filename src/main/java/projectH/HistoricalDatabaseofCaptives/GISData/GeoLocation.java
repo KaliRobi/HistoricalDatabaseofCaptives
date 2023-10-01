@@ -26,9 +26,8 @@ public class GeoLocation {
     @Column( name = "country")
     private String country;
 
-    //convention is that longitude first then latitude
+    //convention is that longitude first then latitude //this.id = id removed
     public GeoLocation(String sourceName, String osvName,  Double longitude, Double latitude, String country) {
-        this.id = id;
         this.source_name = sourceName;
         this.osv_name = osvName;
         this.Latitude = latitude;

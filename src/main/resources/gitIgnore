@@ -307,3 +307,44 @@
             GeoLocation Brasso2 = new GeoLocation(46.99769784507529, 28.84527583003865	);
             GeoLocation Kossice = new GeoLocation(48.72849551597991 , 21.271323360124264 );
             GeoLocation Pozsony = new GeoLocation(48.13908776119138, 17.07639933530841  );
+
+
+             for(int height : heightListOfFemale){
+                        captiveServices.getCaptiveIdFromProperty(height, "height")
+                                .forEach(e-> createReviewableEntity.registerReviewableEntity(e, "Captive", "Height value(" + height + ") was out of range" ) );
+                    }
+
+                    for(int height : heightListOfMale){
+                        captiveServices.getCaptiveIdFromProperty(height, "height")
+                                .forEach(e-> createReviewableEntity.registerReviewableEntity(e, "Captive", "Height value(" + height + ") was out of range" ) );
+                    }
+
+                    //    public List<Long> getCaptiveIdFromProperty(int height, PropertyType type){
+                    //        List<Long> resultList =  new ArrayList<>();
+                    //        System.out.println("get id from height called");
+                    //        // based on the column names
+                    //        switch (type){
+                    //            case HEIGHTM:
+                    //                resultList = captiveRecordRepository.getCaptiveIdFromHeight(height, "f");
+                    //                break;
+                    //            case HEIGHTF:
+                    //                resultList = captiveRecordRepository.getCaptiveIdFromHeight(height, "n");
+                    //                break;
+                    //            default:
+                    //                return resultList ;
+                    //        }
+                    //
+                    //        return resultList;
+                    //    }
+
+                     List<Map.Entry<Long, Integer>> mappedFemaleOutliers = outliersFemale.stream()
+                                      .map(e -> femaleIdHeightMap.entrySet()
+                                              .stream().filter(t -> e.equals(t.getValue()))
+                                              .toList()).toList().stream()
+                                      .flatMap(Collection::stream).toList();
+
+                            List<Map.Entry<Long, Integer>> mappedMaleOutliers = outliersMale.stream()
+                                    .map(e -> maleIdHeightMap.entrySet()
+                                            .stream().filter(t -> e.equals(t.getValue()))
+                                            .toList()).toList().stream()
+                                    .flatMap(Collection::stream).toList();

@@ -21,12 +21,11 @@ import java.util.stream.IntStream;
 @Component
 public class GeologicalOperationsBulk implements IGeolocator {
 
-    private final GeoServices geoServices;
+
     private final GeologicalRepository geologicalRepository;
     private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
-    public GeologicalOperationsBulk(GeoServices geoServices, GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
-        this.geoServices = geoServices;
+    public GeologicalOperationsBulk(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
         this.geologicalRepository = geologicalRepository;
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }

@@ -40,7 +40,7 @@ public class FindOutliers {
 
 
 
-//                     System.out.println("listsize : " + listSize);
+//                     System.out.println("listSize : " + listSize);
 //                     System.out.println("lowerLimit : " + lowerLimit);
 //                     System.out.println("upperLimit : " + upperLimit);
 //                     System.out.println("firstQuarter : " + firstQuarter);

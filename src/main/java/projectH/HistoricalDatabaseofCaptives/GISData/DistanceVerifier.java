@@ -22,11 +22,6 @@ import java.util.*;
  *
  */
 
-//TODO
-    // add extra method to get the decision if the degree of the angle  is larger that 90.
-    // save the location to ahe outstanding geolocations table if yes
-    // run this method through the new entries in the geological_locations table, maybe insert_time column would be great for all table
-
 @Component
 public class DistanceVerifier {
 

@@ -1,7 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.GISData.GeoServices;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 /**

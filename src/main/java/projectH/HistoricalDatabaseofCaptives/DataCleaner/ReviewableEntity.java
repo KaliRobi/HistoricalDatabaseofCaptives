@@ -12,7 +12,7 @@ public class ReviewableEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="insert_time", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp insert_time;
 
     private Long entity_id;

@@ -2,7 +2,6 @@ package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchGeolocationAvailableException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 
 //TODO
@@ -18,7 +17,7 @@ public class GeoServices {
 
 
     @Autowired
-    public GeoServices(GeologicalRepository geologicalRepository, FindLocationInDbOrRetrieve findLocationInDbOrRetrieve, FindLocationInDbOrRetrieve findLocationInDbOrRetrieve1) {
+    public GeoServices(GeologicalRepository geologicalRepository, FindLocationInDbOrRetrieve findLocationInDbOrRetrieve1) {
         this.geologicalRepository = geologicalRepository;
         this.findLocationInDbOrRetrieve = findLocationInDbOrRetrieve1;
     }

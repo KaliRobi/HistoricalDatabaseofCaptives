@@ -1,11 +1,9 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import jakarta.persistence.*;
-import org.apache.logging.log4j.CloseableThreadContext;
-
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Calendar;
+
 
 @Entity
 @Table(name = "Outstanding_Geological_Location")

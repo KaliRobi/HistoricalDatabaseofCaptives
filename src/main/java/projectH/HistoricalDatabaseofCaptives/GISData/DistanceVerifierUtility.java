@@ -50,7 +50,7 @@ public class DistanceVerifierUtility {
 
     // to avoid duplication
     private boolean isNotRepeatedCandidate (GeoLocation location) {
-       Set<Long> existingIds = outstandingGeolocationRepository.findAll().stream().map(e -> e.getGeological_location_id()).collect(Collectors.toSet());
+       Set<Long> existingIds = outstandingGeolocationRepository.findAll().stream().map(OutstandingGeolocation::getGeological_location_id).collect(Collectors.toSet());
       return !existingIds.contains(location.getId());
     }
 
