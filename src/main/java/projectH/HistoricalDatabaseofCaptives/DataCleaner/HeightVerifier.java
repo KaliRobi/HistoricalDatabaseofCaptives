@@ -1,6 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.UniqueConstraintViolationException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
@@ -19,7 +20,7 @@ public class HeightVerifier {
         this.createReviewableEntity = createReviewableEntity;
     }
 
-    public void reviewHeight(){
+    public void reviewHeight() throws UniqueConstraintViolationException {
 
         // what I need here is a map where the height is the key and the ids are
         List<Captive> captiveList = captiveServices.getAllTheCaptives().stream().filter(c -> c.getHeight() != null).toList();
@@ -44,12 +45,18 @@ public class HeightVerifier {
 
         // add an enum here as well;
         for(Map.Entry<Long, Integer> candidate : mappedFemaleOutliers){
-            createReviewableEntity.registerReviewableEntity(candidate.getKey(), "Captive", "Female, height value(" + candidate.getValue() + ") was out of range" );
+                           createReviewableEntity.registerReviewableEntity(candidate.getKey(),
+                        "Captive",
+                        "Female, height value(" + candidate.getValue() + ") was out of range" );
+
+
         }
 
         for(Map.Entry<Long, Integer> candidate : mappedMaleOutliers){
-            createReviewableEntity.registerReviewableEntity(candidate.getKey(), "Captive", "Male, height value(" + candidate.getValue() + ") was out of range" );
-        }
+              createReviewableEntity.registerReviewableEntity(candidate.getKey(),
+                        "Captive",
+                        "Male, height value(" + candidate.getValue() + ") was out of range" );
+         }
 
         femaleIdHeightMap.clear();
         maleIdHeightMap.clear();

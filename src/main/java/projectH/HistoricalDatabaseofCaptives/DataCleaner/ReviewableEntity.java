@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Table(name="Reviewable_Entity")
+
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uniqueEntityAndType", columnNames = {"entity_id", "entity_type" })})
 @Entity(name="Reviewable_Entity")
 public class ReviewableEntity {
 

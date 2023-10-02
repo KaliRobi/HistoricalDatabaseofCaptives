@@ -2,6 +2,7 @@ package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
 
 import org.springframework.stereotype.Component;
+import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.UniqueConstraintViolationException;
 
 /**
 Since the initial database was nothing else but merged Excel sheet on a couple of local machines written by 2-5 students the data is not really clean
@@ -22,7 +23,7 @@ public class DataCleanerService {
     }
 
 
-    public void startCleaning(){
+    public void startCleaning() throws UniqueConstraintViolationException {
 
         heightVerifier.reviewHeight();
     }
