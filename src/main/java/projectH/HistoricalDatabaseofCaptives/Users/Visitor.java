@@ -12,7 +12,7 @@ public class Visitor implements IPerson{
     private final LocalDate dateOfBirth;
     private String name;
     private GeoLocation location;
-    private String sex;
+    private final String sex;
 
     public Visitor(String name, GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
