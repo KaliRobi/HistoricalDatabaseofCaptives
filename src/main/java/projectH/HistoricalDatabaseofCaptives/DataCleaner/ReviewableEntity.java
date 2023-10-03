@@ -22,7 +22,7 @@ public class ReviewableEntity {
 
     private  String reason; // reason to review the given entity.
 
-    public ReviewableEntity(Long id, Timestamp insert_time, Long entity_id, String entity_type, String reason) {
+    public ReviewableEntity(Long id, Timestamp insert_time, long entity_id, String entity_type, String reason) {
         Id = id;
         this.insert_time = insert_time;
         this.entity_id = entity_id;

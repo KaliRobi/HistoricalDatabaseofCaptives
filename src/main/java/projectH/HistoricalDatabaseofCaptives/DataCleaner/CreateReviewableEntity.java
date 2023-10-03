@@ -1,10 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.UniqueConstraintViolationException;
-
-import java.sql.SQLException;
 
 
 @Component
@@ -16,25 +12,21 @@ public class CreateReviewableEntity {
         this.reviewableEntityRepository = reviewableEntityRepository;
 
     }
+    public void registerReviewableEntity(long entityId, String EntityType, String reason )  {
 
-
-    public void registerReviewableEntity(Long entityId, String EntityType, String reason )  {
-
-        ReviewableEntity reviewableEntity = new ReviewableEntity();
-        reviewableEntity.setEntity_id(entityId); reviewableEntity.setEntity_type(EntityType) ; reviewableEntity.setReason(reason);
-
-        try {
+        if (!isReviewablePresent(entityId, EntityType)){
+            ReviewableEntity reviewableEntity = new ReviewableEntity();
+            reviewableEntity.setEntity_id(entityId); reviewableEntity.setEntity_type(EntityType) ; reviewableEntity.setReason(reason);
             reviewableEntityRepository.save(reviewableEntity);
-        } catch (RuntimeException e){
-            throw new UniqueConstraintViolationException(e);
+            System.out.println(entityId+ " " + EntityType + " was added "  );
         }
-
-
-
+        System.out.println(entityId+ " " + EntityType + " is already present "  );
 
     }
 
+    private boolean isReviewablePresent(Long entityId, String EntityType){
+        // entity_ID column ended up being character varying for some reason
+        return reviewableEntityRepository.findByEntityTypeAndID(String.valueOf(entityId), EntityType).isPresent();
 
-
-
+    }
 }

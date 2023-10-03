@@ -4,7 +4,6 @@ package projectH.HistoricalDatabaseofCaptives;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.UniqueConstraintViolationException;
 import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.NoSuchCaptiveIdFound;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CandidateFinder;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
@@ -88,7 +87,7 @@ public class FrontEndApiController {
 
 
 @GetMapping(path="/v1/test")
-public void testest() throws UniqueConstraintViolationException {
+public void testest()  {
 //    ArrayList<Integer> testList = new ArrayList<>(Arrays.asList(-2, -1,0,1,2,3,4,5,7,8,9,10,11,12,13, 35, 44, -3, -22));
 //    System.out.println(testList.size());
 //    findOutliers.findOuters(testList);

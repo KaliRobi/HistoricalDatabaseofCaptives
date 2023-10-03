@@ -1,7 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
 import org.springframework.stereotype.Component;
-import projectH.HistoricalDatabaseofCaptives.ApplicationExceptions.UniqueConstraintViolationException;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.Captive;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CaptiveServices;
 
@@ -14,13 +13,14 @@ public class HeightVerifier {
     private final FindOutliers findOutliers;
     private final CreateReviewableEntity createReviewableEntity;
 
+
     public HeightVerifier(CaptiveServices captiveServices, FindOutliers findOutliers, CreateReviewableEntity createReviewableEntity) {
         this.captiveServices = captiveServices;
         this.findOutliers = findOutliers;
         this.createReviewableEntity = createReviewableEntity;
     }
 
-    public void reviewHeight() throws UniqueConstraintViolationException {
+    public void reviewHeight() {
 
         // what I need here is a map where the height is the key and the ids are
         List<Captive> captiveList = captiveServices.getAllTheCaptives().stream().filter(c -> c.getHeight() != null).toList();
@@ -57,7 +57,7 @@ public class HeightVerifier {
                         "Captive",
                         "Male, height value(" + candidate.getValue() + ") was out of range" );
          }
-
+// these collections can be quite large better to destroy them right after usage.
         femaleIdHeightMap.clear();
         maleIdHeightMap.clear();
         heightListOfMale.clear();
@@ -72,6 +72,8 @@ public class HeightVerifier {
                         .toList()).toList().stream()
                 .flatMap(Collection::stream).toList();
     }
+
+
 
 
 }
