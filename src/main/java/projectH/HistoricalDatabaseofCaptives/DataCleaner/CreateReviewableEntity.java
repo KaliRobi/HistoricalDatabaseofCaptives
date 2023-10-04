@@ -24,9 +24,10 @@ public class CreateReviewableEntity {
 
     }
 
-    private boolean isReviewablePresent(Long entityId, String EntityType){
+    private boolean isReviewablePresent(long entityId, String EntityType){
         // entity_ID column ended up being character varying for some reason
-        return reviewableEntityRepository.findByEntityTypeAndID(String.valueOf(entityId), EntityType).isPresent();
+
+        return reviewableEntityRepository.findByEntityTypeAndID(entityId, EntityType).isPresent();
 
     }
 }
