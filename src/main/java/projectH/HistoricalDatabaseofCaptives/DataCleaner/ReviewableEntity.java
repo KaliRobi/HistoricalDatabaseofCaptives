@@ -1,6 +1,8 @@
 package projectH.HistoricalDatabaseofCaptives.DataCleaner;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 
 import java.sql.Timestamp;
 
@@ -13,7 +15,7 @@ public class ReviewableEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-    @Column(name="insert_time", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private Timestamp insert_time;
 
     private Long entity_id;

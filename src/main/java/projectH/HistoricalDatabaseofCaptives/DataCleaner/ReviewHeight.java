@@ -8,13 +8,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class HeightVerifier {
+public class ReviewHeight {
     private final CaptiveServices captiveServices;
     private final FindOutliers findOutliers;
     private final CreateReviewableEntity createReviewableEntity;
 
 
-    public HeightVerifier(CaptiveServices captiveServices, FindOutliers findOutliers, CreateReviewableEntity createReviewableEntity) {
+    public ReviewHeight(CaptiveServices captiveServices, FindOutliers findOutliers, CreateReviewableEntity createReviewableEntity) {
         this.captiveServices = captiveServices;
         this.findOutliers = findOutliers;
         this.createReviewableEntity = createReviewableEntity;

@@ -16,15 +16,15 @@ This package will aim to create a utility what will run from time to time and re
 @Component
 public class DataCleanerService {
 
-    private final HeightVerifier heightVerifier;
-    public DataCleanerService(HeightVerifier heightVerifier) {
-        this.heightVerifier = heightVerifier;
+    private final ReviewHeight reviewHeight;
+    public DataCleanerService(ReviewHeight reviewHeight) {
+        this.reviewHeight = reviewHeight;
     }
 
 
     public void startCleaning()  {
 
-        heightVerifier.reviewHeight();
+        reviewHeight.reviewHeight();
     }
 
 

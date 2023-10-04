@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import projectH.HistoricalDatabaseofCaptives.CaptivesData.CrimeStatistics;
 import projectH.HistoricalDatabaseofCaptives.DataCleaner.DataCleanerService;
 import projectH.HistoricalDatabaseofCaptives.DataCleaner.FindOutliers;
+import projectH.HistoricalDatabaseofCaptives.DataCleaner.LocalAbbreviatedEntity;
+import projectH.HistoricalDatabaseofCaptives.DataCleaner.ReviewAbbreviations;
 import projectH.HistoricalDatabaseofCaptives.Users.Visitor;
 
 
@@ -25,7 +27,7 @@ public class FrontEndApiController {
     private final  DataCleanerService dataCleanerService ;
     private final CaptiveServices captiveServices;
 
-
+    private final ReviewAbbreviations reviewAbbreviations;
     private  final FindOutliers findOutliers;
     private final CrimeStatistics crimeStatistics;
 
@@ -33,11 +35,12 @@ public class FrontEndApiController {
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, FindOutliers findOutliers, CrimeStatistics crimeStatistics) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewAbbreviations reviewAbbreviations, FindOutliers findOutliers, CrimeStatistics crimeStatistics) {
         this.candidateFinder = candidateFinder;
         this.dataCleanerService = dataCleanerService;
 
         this.captiveServices = captiveServices;
+        this.reviewAbbreviations = reviewAbbreviations;
         this.findOutliers = findOutliers;
 
 
@@ -109,6 +112,16 @@ public void testest()  {
     } catch (Exception e){
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    }
+
+    @PostMapping(path="/v1/AddAbbrevs")
+    public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
+        try{
+            reviewAbbreviations.addAbbreviations(list);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
