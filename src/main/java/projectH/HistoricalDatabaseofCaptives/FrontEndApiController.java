@@ -47,7 +47,8 @@ public class FrontEndApiController {
         this.crimeStatistics = crimeStatistics;
     }
 
-
+//return file.isEmpty() ?
+//        new ResponseEntity<String>(HttpStatus.NOT_FOUND) : new ResponseEntity<String>(HttpStatus.OK);
 @GetMapping(path = "/v1/allTheCaptives")
     public ResponseEntity<List<Captive>> exposeCaptives(){
     try {
@@ -91,9 +92,6 @@ public class FrontEndApiController {
 
 @GetMapping(path="/v1/test")
 public void testest()  {
-//    ArrayList<Integer> testList = new ArrayList<>(Arrays.asList(-2, -1,0,1,2,3,4,5,7,8,9,10,11,12,13, 35, 44, -3, -22));
-//    System.out.println(testList.size());
-//    findOutliers.findOuters(testList);
     dataCleanerService.startCleaning();
 
 }
@@ -114,15 +112,16 @@ public void testest()  {
     }
     }
 
-    @PostMapping(path="/v1/AddAbbrevs")
-    public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
-        try{
-            reviewAbbreviations.addAbbreviations(list);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping(path="/v1/AddAbbrevs")
+//    public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
+//        try{
+//            reviewAbbreviations.addAbbreviations(list);
+//            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//    }
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
 public ResponseEntity<String> updateCaptive(@PathVariable("id") long Id, @RequestBody Captive captive){
