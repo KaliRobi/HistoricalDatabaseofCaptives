@@ -112,16 +112,16 @@ public void testest()  {
     }
     }
 
-//    @PostMapping(path="/v1/AddAbbrevs")
-//    public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
-//        try{
-//            reviewAbbreviations.addAbbreviations(list);
-//            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//    }
+    @PostMapping(path="/v1/AddAbbrevs")
+    public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
+        try{
+            reviewAbbreviations.addAbbreviations(list);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 @PutMapping(path = "/v1/updateCaptive/{id}")
 public ResponseEntity<String> updateCaptive(@PathVariable("id") long Id, @RequestBody Captive captive){
