@@ -19,6 +19,7 @@ public class FindLocationInDbOrRetrieve {
         locationSet.add(captive.getPlace_of_birth());
         locationSet.add(captive.getPlace_of_residence());
         locationSet.add(captive.getArrest_site());
+
         geologicalOperations.getLocationData(locationSet);
 
     }

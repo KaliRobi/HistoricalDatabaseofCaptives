@@ -47,8 +47,6 @@ public class FrontEndApiController {
         this.crimeStatistics = crimeStatistics;
     }
 
-//return file.isEmpty() ?
-//        new ResponseEntity<String>(HttpStatus.NOT_FOUND) : new ResponseEntity<String>(HttpStatus.OK);
 @GetMapping(path = "/v1/allTheCaptives")
     public ResponseEntity<List<Captive>> exposeCaptives(){
     try {
@@ -58,11 +56,11 @@ public class FrontEndApiController {
     }
 
 }
-@GetMapping(path="/v1/CitiesOfLocation")
+@GetMapping(path="/v1/LocationsOfResidence")
 // this iterable needs to be changed
-    public ResponseEntity<Iterable<String>> exposeCitiesOfResidence(){
+    public ResponseEntity<Iterable<String>> exposeLocationsOfResidence(){
     try {
-        return new ResponseEntity<>(captiveServices.getCitiesOfResidence(), HttpStatus.OK);
+        return new ResponseEntity<>(captiveServices.getLocationsOfResidence(), HttpStatus.OK);
     } catch (Exception e){
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

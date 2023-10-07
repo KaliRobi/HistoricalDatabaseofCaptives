@@ -41,8 +41,9 @@ public class GeologicalOperations implements IGeolocator{
         //filter out the already processed locations
 
         targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
+        System.out.println(targetTownSet.size());
 
-        if (targetTownSet.size() > 0) {
+        if (!targetTownSet.isEmpty() && targetTownSet.toArray()[0] != null) {
             //creating uri list while dealing with the special Hungarian characters
             List<URI> targetUris = targetTownSet.stream().map(target ->
             {

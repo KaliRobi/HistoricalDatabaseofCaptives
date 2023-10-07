@@ -32,6 +32,9 @@ public class CaptiveServices {
         captiveRecordRepository.save(captive);
 
     }
+
+    /// rewörk needed, originally I was planning to resend the whole captive object fom font end when updating.
+//   but why resend the whole object when it should be possible to just update certain fields. Smaller web calls.
     public void updateCaptive(long captiveId, Captive captiveNewData){
         ModelMapper modelMapper = new ModelMapper();
         geoServices.findLocationOrFetchIt(captiveNewData);
@@ -49,13 +52,13 @@ public class CaptiveServices {
         return captiveRecordRepository.findAll();
 
     }
-    public TreeSet<String> getCitiesOfResidence() {
+    public TreeSet<String> getLocationsOfResidence() {
         TreeSet<String> citiesOfResidence = new TreeSet<>();
         getAllTheCaptives().forEach(capt -> citiesOfResidence.add(capt.getPlace_of_residence()));
         return citiesOfResidence;
     }
 
-    public TreeSet<String> getCitiesOfBirth() {
+    public TreeSet<String> getLocationsOfBirth() {
         TreeSet<String> citiesOfBirth = new TreeSet<>();
         getAllTheCaptives().forEach(capt -> citiesOfBirth.add(capt.getPlace_of_birth()));
         return citiesOfBirth;
@@ -64,7 +67,7 @@ public class CaptiveServices {
     public Map<String, HashMap<String, Long>> getSexDistribution(){
 //      initiate a map with the nested map where the outer keys are the settlements in the database, the inner keys male / female
         Map<String, HashMap<String, Long>> sexDistribution = new HashMap<>();
-        Set<String> settlements = new TreeSet<>( getCitiesOfResidence() );
+        Set<String> settlements = new TreeSet<>( getLocationsOfResidence() );
         List<Captive> captiveList =   getAllTheCaptives();
         settlements.forEach(
                 town -> {
