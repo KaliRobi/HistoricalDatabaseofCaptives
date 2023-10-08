@@ -64,9 +64,30 @@ public class FrontControllerTest {
                 "{ \"abbr\": \"kg\",  \"value_hu\" :  \"közép görnyedt\",  \"value_en\" :  \"NA\", \"table_column\" :  \"Build\",  \"related_table\":   \"captives_data\"},\n" +
                 "{ \"abbr\": \"sug\",  \"value_hu\" :  \"sugar\",  \"value_en\" :  \"NA\", \"table_column\" :  \"Build\",  \"related_table\":   \"captives_data\"},\n" +
                 "{ \"abbr\": \"ker\",  \"value_hu\" :  \"kerek\",  \"value_en\" :  \"NA\", \"table_column\" :  \"Build\",  \"related_table\":   \"captives_data\"}]";
+
+        String jsonReligion = "[{\"abbr\":\"b\"  , \"value_hu\" : \"baptista\",\"value_en\" :  \"Baptist\",  \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"e\"  , \"value_hu\" : \"evangélikus\"      ,\"value_en\" :  \"Evangelic\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"fn\" , \"value_hu\" : \"felekezet nélküli\" ,\"value_en\" : \"Without denomination\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"gk\" , \"value_hu\" : \"görög keleti\"      ,\"value_en\" : \"Greek Orthodox\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"i\"  , \"value_hu\" : \"izraelita\"         ,\"value_en\" : \"Israelite\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"lu\" , \"value_hu\" : \"luteránus\"         ,\"value_en\" : \"Lutheran\",  \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"r\"  , \"value_hu\" : \"református\"        ,\"value_en\" : \"Reformed\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"rk\" , \"value_hu\" : \"római katólikus\"   ,\"value_en\" : \"Roman Catholic\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"u\"  , \"value_hu\" : \"unitárius\"         ,\"value_en\" : \"Unitarian\",   \"table_column\" : \"religion\", \"related_table\":  \"captives_data\"}]";
+
+
+        String jsonMaritalStatus  = "[{\"abbr\":\"e\" , \"value_hu\" : \"elvált\" ,\"value_en\" :\"divorced\" ,\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"eá\", \"value_hu\" : \"egyedülálló\"  ,\"value_en\" :\"single\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"evh\", \"value_hu\" :\"elvált, vadháhzas\" ,\"value_en\" :\"divorced lives in concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"h\" , \"value_hu\" :\"házas\"  ,\"value_en\" :\"married\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"hké\", \"value_hu\" :\"házas de külön élnek\",\"value_en\" : \"separated\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"hvh\", \"value_hu\" :\"házas de vadházastársi kapcsolata van\",\"value_en\" : \"married lives in concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"ö\"\", \"value_hu\" :\"özvegy\" ,\"value_en\" :\"widow\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"vh\", \"value_hu\" :\"vadházas\",\"value_en\" :\"concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"vhö\", \"value_hu\" :\"vadházas, özvegy\" ,\"value_en\" :\"widow lives in concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"}]";
         HttpRequest req = HttpRequest.newBuilder()
                 .header("Content-Type", "application/json")
-                .uri(new URI("http://localhost:8081/v1/AddAbbrevs")).POST(HttpRequest.BodyPublishers.ofString(json2)).build();
+                .uri(new URI("http://localhost:8081/v1/AddAbbrevs")).POST(HttpRequest.BodyPublishers.ofString(jsonMaritalStatus)).build();
 
          CompletableFuture<HttpResponse<String>> response =  httpClient.sendAsync(req, HttpResponse.BodyHandlers.ofString());
         assertEquals(HttpStatus.ACCEPTED.value(), response.get().statusCode() );
