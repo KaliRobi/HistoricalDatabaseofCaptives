@@ -34,7 +34,6 @@ public class ReviewStringColumnsCaptiveData {
 //     compare the db to the lists of ValidatingString
 
     // where something is wrong it goes to the reviewable table]
-
     // would be nice if all the check would finnish before it goes there
     // this needs a string what is always appending ReasonWriter string with static variable. it is used only once at the given time.
     //and after all the check this is added to this.reviewableEntity.reason
