@@ -10,6 +10,9 @@ import java.util.Optional;
 public interface LocalAbbreviatedEntityRepository extends JpaRepository< LocalAbbreviatedEntity, Long> {
 
     @Query("select lae.abbr from local_abbreviated_entity lae where lae.abbr = ?1  and lae.related_table = ?2")
-    Optional<LocalAbbreviatedEntity> findByColumnNameAndRelatedTable(String column, String related_table );
+    Optional<LocalAbbreviatedEntity> findByColumnNameAndRelatedTable(String column );
+
+    @Query("select lae.abbr from local_abbreviated_entity lae where lae.abbr = ?1 ")
+    Optional<LocalAbbreviatedEntity> findByColumnName(String column  );
 
 }

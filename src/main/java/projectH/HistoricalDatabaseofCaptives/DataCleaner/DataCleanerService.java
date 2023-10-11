@@ -17,14 +17,17 @@ This package will aim to create a utility what will run from time to time and re
 public class DataCleanerService {
 
     private final ReviewHeight reviewHeight;
-    public DataCleanerService(ReviewHeight reviewHeight) {
+    private final ReviewStringColumnsCaptiveData reviewStringColumnsCaptiveData;
+    public DataCleanerService(ReviewHeight reviewHeight, ReviewStringColumnsCaptiveData reviewStringColumnsCaptiveData) {
         this.reviewHeight = reviewHeight;
+        this.reviewStringColumnsCaptiveData = reviewStringColumnsCaptiveData;
     }
 
 
     public void startCleaning()  {
 
-        reviewHeight.reviewHeight();
+//        reviewHeight.reviewHeight();
+        reviewStringColumnsCaptiveData.goForIt();
     }
 
 

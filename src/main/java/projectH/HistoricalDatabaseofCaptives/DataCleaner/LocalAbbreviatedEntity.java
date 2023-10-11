@@ -5,7 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Entity(name = "LocalAbbreviatedEntity")
+@Entity(name = "local_abbreviated_entity")
 @Table(name = "local_abbreviated_entity")
 public class LocalAbbreviatedEntity {
 
