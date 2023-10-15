@@ -29,7 +29,7 @@ public class DataCleanerService {
     public void startCleaning()  {
 
 //        reviewHeight.reviewHeight();
-        reviewStringColumnsCaptiveData.goForIt();
+        reviewStringColumnsCaptiveData.executeNowNameItLater();
     }
 
 

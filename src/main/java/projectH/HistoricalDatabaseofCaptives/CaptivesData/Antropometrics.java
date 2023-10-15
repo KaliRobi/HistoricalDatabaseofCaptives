@@ -13,7 +13,7 @@ public class Antropometrics {
     public final CaptiveServices captiveServices;
 
     @Autowired
-    public Antropometrics(CaptiveRecordRepository captiveRecordRepository, CaptiveServices captiveServices) {
+    public Antropometrics( CaptiveServices captiveServices) {
         this.captiveServices = captiveServices;
     }
 
