@@ -19,8 +19,9 @@ public class CreateReviewableEntity {
             reviewableEntity.setEntity_id(entityId); reviewableEntity.setEntity_type(EntityType) ; reviewableEntity.setReason(reason);
             reviewableEntityRepository.save(reviewableEntity);
             System.out.println(entityId+ " " + EntityType + " was added "  );
-        }
+        } else {
         System.out.println(entityId+ " " + EntityType + " is already present "  );
+        }
 
     }
 

@@ -32,18 +32,7 @@ public class ReviewStringColumnsCaptiveData {
 
      // need  a switch which loops though the keys (tables) and each table will loops though the columns
 
-    public void executeNowNameItLater(){
-        Map<String, List<String>> ValidatingString  =  getMapsForColumnsAndAbbreviations();
-
-
-
-
-        System.out.println(ValidatingString);
-        reviewColumns();
-
-    }
-
- public void reviewColumns(){
+    public void reviewColumns(){
      List<String> columnsWithAbbrebs = getMapsForColumnsAndAbbreviations().keySet().stream().toList();
     for(String column : columnsWithAbbrebs){
 
@@ -51,11 +40,12 @@ public class ReviewStringColumnsCaptiveData {
         for(Long usedAbbreviationID : localRelevantCaptiveData.keySet() ){
             List  listOfAbbreviations = getMapsForColumnsAndAbbreviations().get(column);
             if(!listOfAbbreviations.contains(localRelevantCaptiveData.get(usedAbbreviationID))){
-
                 createReviewableEntity.registerReviewableEntity(usedAbbreviationID,
                         "Captive",
-                        localRelevantCaptiveData.get(usedAbbreviationID) + " is not in " +  listOfAbbreviations
+                        localRelevantCaptiveData.get(usedAbbreviationID) + " is not in " +  listOfAbbreviations + "," + "in column: " +column
                 );
+            } else{
+                System.out.println(localRelevantCaptiveData.get(usedAbbreviationID) + " is in " +  listOfAbbreviations + " column: " + column);
             }
         }
     }

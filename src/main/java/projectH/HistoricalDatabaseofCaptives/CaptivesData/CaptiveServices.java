@@ -1,5 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,24 @@ public class CaptiveServices {
 
 
     }
+//    the expected json would be {"id": {"changedAttribute1key": "attr1", "changedAttribute2": "attr2"}}
+
+    public void updateCaptiveV2(long captiveId, Map<String, Object> dataToUpdate){
+
+
+        try {
+            // getting the captive
+            Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
+
+
+
+        } catch (NoSuchCaptiveIdFound e){
+            throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
+        }
+
+
+    }
+
     public List<Captive> getAllTheCaptives(){
         return captiveRecordRepository.findAll();
 

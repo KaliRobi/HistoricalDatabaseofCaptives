@@ -85,6 +85,11 @@ public class FrontControllerTest {
                 "{\"abbr\":\"ö\"\", \"value_hu\" :\"özvegy\" ,\"value_en\" :\"widow\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
                 "{\"abbr\":\"vh\", \"value_hu\" :\"vadházas\",\"value_en\" :\"concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"},\n" +
                 "{\"abbr\":\"vhö\", \"value_hu\" :\"vadházas, özvegy\" ,\"value_en\" :\"widow lives in concubinage\",\"table_column\" : \"marital_status\", \"related_table\":  \"captives_data\"}]";
+        
+        
+        String jsonDegreeOfPunishment = "[{\"abbr\":\"f\" , \"value_hu\" : \"fogház\" ,\"value_en\" :\"detention\" ,\"table_column\" : \"degree_of_punishment\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"fe\", \"value_hu\" :\"fegyház\",\"value_en\" : \"penitentiary\",\"table_column\" : \"degree_of_punishment\", \"related_table\":  \"captives_data\"},\n" +
+                "{\"abbr\":\"szd\", \"value_hu\" :\"szigorított dologház\" ,\"value_en\" :\"workhouse\",\"table_column\" : \"degree_of_punishment\", \"related_table\":  \"captives_data\"}]";
         HttpRequest req = HttpRequest.newBuilder()
                 .header("Content-Type", "application/json")
                 .uri(new URI("http://localhost:8081/v1/AddAbbrevs")).POST(HttpRequest.BodyPublishers.ofString(jsonMaritalStatus)).build();
