@@ -28,23 +28,19 @@ public class FrontEndApiController {
     private final CaptiveServices captiveServices;
 
     private final ReviewAbbreviations reviewAbbreviations;
-    private  final FindOutliers findOutliers;
-    private final CrimeStatistics crimeStatistics;
+
 
 
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewAbbreviations reviewAbbreviations, FindOutliers findOutliers, CrimeStatistics crimeStatistics) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewAbbreviations reviewAbbreviations) {
         this.candidateFinder = candidateFinder;
         this.dataCleanerService = dataCleanerService;
 
         this.captiveServices = captiveServices;
         this.reviewAbbreviations = reviewAbbreviations;
-        this.findOutliers = findOutliers;
 
-
-        this.crimeStatistics = crimeStatistics;
     }
 
 @GetMapping(path = "/v1/allTheCaptives")
@@ -120,15 +116,25 @@ public void testest()  {
         }
 
     }
+// keeping the old version for now.
+//@PutMapping(path = "/v1/updateCaptive/{id}")
+//public ResponseEntity<String> updateCaptive(@PathVariable("id") long Id, @RequestBody Captive captive){
+//    try{
+//        captiveServices.updateCaptive(Id, captive);
+//    } catch (NoSuchCaptiveIdFound e){
+//        return new ResponseEntity<>("Captive with id " + Id + "does not exists", HttpStatus.NOT_FOUND);
+//    }
+//    return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
-@PutMapping(path = "/v1/updateCaptive/{id}")
-public ResponseEntity<String> updateCaptive(@PathVariable("id") long Id, @RequestBody Captive captive){
-    try{
-        captiveServices.updateCaptive(Id, captive);
-    } catch (NoSuchCaptiveIdFound e){
-        return new ResponseEntity<>("Captive with id " + Id + "does not exists", HttpStatus.NOT_FOUND);
-    }
-    return new ResponseEntity<>(HttpStatus.OK);
+@PutMapping(path = "/v1/updateCaptiveV2/{id}")
+    public ResponseEntity<String> updateCaptiveV2(@PathVariable("id") long Id, @RequestBody Map<String, Object>  updateAttribute){
+        try{
+            captiveServices.updateCaptiveV2(Id, updateAttribute);
+        } catch (NoSuchCaptiveIdFound e){
+            return new ResponseEntity<>("Captive with id " + Id + "does not exists", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,6 @@
 package projectH.HistoricalDatabaseofCaptives.CaptivesData;
 
-import com.fasterxml.jackson.databind.JsonNode;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,55 +16,58 @@ public class CaptiveServices {
     private final CaptiveRecordRepository captiveRecordRepository;
 
     private final GeoServices geoServices;
+
     @Autowired
     public CaptiveServices(CaptiveRecordRepository captiveRecordRepository, GeoServices geoServices) {
         this.captiveRecordRepository = captiveRecordRepository;
         this.geoServices = geoServices;
     }
 
-
-
-    public Optional<Captive> GetCaptiveById(Long num){
-     return captiveRecordRepository.findById(num);
+    public Optional<Captive> GetCaptiveById(Long num) {
+        return captiveRecordRepository.findById(num);
     }
 
-    public void addCaptive(Captive captive){
-        geoServices.findLocationOrFetchIt(captive);
+    public void addCaptive(Captive captive) {
+        //Temporary solution, this will get its own method
+        geoServices.findLocationOrFetchIt(captive.getPlace_of_residence());
+        geoServices.findLocationOrFetchIt(captive.getPlace_of_birth());
+        geoServices.findLocationOrFetchIt(captive.getArrest_site());
         captiveRecordRepository.save(captive);
 
     }
 
-    /// rewörk needed, originally I was planning to resend the whole captive object fom font end when updating.
-//   but why resend the whole object when it should be possible to just update certain fields. Smaller web calls.
-    public void updateCaptive(long captiveId, Captive captiveNewData){
+    /// reworked with name of updateCaptiveV2, keeping this version just in case
+//    public void updateCaptive(long captiveId, Captive captiveNewData){
+//        ModelMapper modelMapper = new ModelMapper();
+//        geoServices.findLocationOrFetchIt(captiveNewData);
+//        try {
+//            Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
+//            modelMapper.map(captiveNewData, captiveToUpdate);
+//            captiveRecordRepository.save(captiveToUpdate);
+//        } catch (NoSuchCaptiveIdFound e){
+//            throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
+//        }
+//}
+
+    public void updateCaptiveV2(long captiveId, Map<String, Object> inboundMap){
         ModelMapper modelMapper = new ModelMapper();
-        geoServices.findLocationOrFetchIt(captiveNewData);
+        updateGeolocationsIfNeeded(inboundMap);
         try {
             Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
-            modelMapper.map(captiveNewData, captiveToUpdate);
+            modelMapper.map(inboundMap, captiveToUpdate);
             captiveRecordRepository.save(captiveToUpdate);
         } catch (NoSuchCaptiveIdFound e){
             throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
         }
-
-
     }
-//    the expected json would be {"id": {"changedAttribute1key": "attr1", "changedAttribute2": "attr2"}}
+    // return which one is present
+    private List<String> ListPresentGeoRelatedAttributesToUpdate(Map<String, Object> inboundMap) {
+        List<String> geoRelatedColumns = Arrays.asList("place_of_birth", "place_of_residence", "arrest_site");
+       return inboundMap.keySet().stream().filter(geoRelatedColumns::contains).toList();
+    }
 
-    public void updateCaptiveV2(long captiveId, Map<String, Object> dataToUpdate){
-
-
-        try {
-            // getting the captive
-            Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
-
-
-
-        } catch (NoSuchCaptiveIdFound e){
-            throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
-        }
-
-
+    private void updateGeolocationsIfNeeded(Map<String, Object> inboundMap){
+        ListPresentGeoRelatedAttributesToUpdate(inboundMap).forEach(e -> geoServices.findLocationOrFetchIt(String.valueOf(inboundMap.get(e))));
     }
 
     public List<Captive> getAllTheCaptives(){
@@ -108,7 +111,7 @@ public class CaptiveServices {
     public List<List<String>> getTheRelocated(){
 
         // get records where the location of birth and residence is not the same
-        /// base for checking the relocation directions. This might be better as map? Org, dest, weight?
+        /// base for checking the relocation directions. This might be better to be a map? Org, dest, weight?
         List<List<String>> relocatedCandidateList  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
                         .equals(captive.getPlace_of_birth())).toList()
                         .stream().map(captive ->  Arrays.asList(captive.getPlace_of_birth(), captive.getPlace_of_residence()))
@@ -139,8 +142,7 @@ public class CaptiveServices {
 
          List<Captive> candidateToPresentList = captivesList.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
          if(candidateToPresentList.size() > 0 ){
-             Captive candidateToPresent = candidateToPresentList.get(0);
-             return candidateToPresent;
+             return candidateToPresentList.get(0);
          }
         else{
              return new Captive();

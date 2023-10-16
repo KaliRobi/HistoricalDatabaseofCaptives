@@ -29,8 +29,8 @@ public class GeoServices {
             return geologicalRepository.findByName(name);
     }
 
-    public void findLocationOrFetchIt(Captive captive){
-        findLocationInDbOrRetrieve.checkCaptiveLocationAgainstGeoEntity(captive);
+    public void findLocationOrFetchIt(String geolocation){
+        findLocationInDbOrRetrieve.checkCaptiveLocationAgainstGeoEntity(geolocation);
     }
 
 }

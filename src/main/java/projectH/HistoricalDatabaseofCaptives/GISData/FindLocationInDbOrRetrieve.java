@@ -14,12 +14,10 @@ public class FindLocationInDbOrRetrieve {
         this.geologicalOperations = geologicalOperations;
     }
 
-    public void checkCaptiveLocationAgainstGeoEntity(Captive captive){
+    public void checkCaptiveLocationAgainstGeoEntity(String location){
+        // this pat is a bit wacky
         Set<String> locationSet = new HashSet<>();
-        locationSet.add(captive.getPlace_of_birth());
-        locationSet.add(captive.getPlace_of_residence());
-        locationSet.add(captive.getArrest_site());
-
+        locationSet.add(location);
         geologicalOperations.getLocationData(locationSet);
 
     }

@@ -33,7 +33,7 @@ public class FrontControllerTest {
 
     }
     @Test
-    public void abbreviation_post_request_upload_test() throws URISyntaxException, ExecutionException, InterruptedException, IOException {
+    public void abbreviation_post_request_upload_test() throws URISyntaxException, ExecutionException, InterruptedException {
         String json =  "[{\"abbr\":\"b\", \"value_hu\" : \"börtön\", \"value_en\" : \"prison\", \"table_column\" : \"degree_of_punishment\", \"related_table\":  \"captives_data\"}, {\"abbr\":\"e\",\"value_hu\" : \"elzárás\",\"value_en\" : \"enclosure\",\"table_column\" : \"degree_of_punishment\",\"related_table\":  \"captives_data\"}]";
         String json2 = "[{ \"abbr\": \"a\",  \"value_hu\" :  \"alacsony\",  \"value_en\" :  \"titch\",  \"table_column\" :  \"Build\",  \"related_table\":   \"captives_data\"},\n" +
                 "{ \"abbr\": \"e\",  \"value_hu\" :  \"erős\",  \"value_en\" :  \"strong\", \"table_column\" :  \"Build\",  \"related_table\":   \"captives_data\"},\n" +
@@ -107,15 +107,15 @@ public class FrontControllerTest {
     public void update_a_captive() throws URISyntaxException, ExecutionException, InterruptedException {
 
         Long id = 11L;
-        String newPeculiarity = "{\"special_peculiarities\" : \"new peculiarity\"}";
+        String newPeculiarity = "{\"special_peculiarities\" : null, \"height\" : \"153\"}";
 
        HttpRequest req =  HttpRequest.newBuilder().header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(newPeculiarity))
-                .uri(new URI("http://localhost:8081/v1/updateCaptive/" + id )).build();
+                .uri(new URI("http://localhost:8081/v1/updateCaptiveV2/" + id )).build();
 
         CompletableFuture<HttpResponse<String>> response = httpClient.sendAsync(req, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(HttpStatus.ACCEPTED.value(), response.get().statusCode() );
+        assertEquals(HttpStatus.OK.value(), response.get().statusCode() );
 
 
     }
