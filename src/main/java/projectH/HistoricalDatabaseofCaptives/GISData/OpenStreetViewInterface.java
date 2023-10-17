@@ -21,28 +21,29 @@ import java.util.stream.Collectors;
  */
 
 @Component
-public class GeologicalOperations implements IGeolocator{
+public class OpenStreetViewInterface implements IGeolocator{
 
     private final GeologicalRepository geologicalRepository;
     private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
 
     @Autowired
-    public GeologicalOperations(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
+    public OpenStreetViewInterface(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
         this.geologicalRepository = geologicalRepository;
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
 //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
-//    This version of the class should be used for normal operations as supposed to be faster than the bulk version.
+//    This version of the class should be used for normal operations because it is supposedly faster than the bulk version.
     @Override
     public void getLocationData(Set<String> targetTownSet) {
 
         //filter out the already processed locations
-
-        targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
-        System.out.println(targetTownSet.size());
-
+        try {
+            targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
+        } catch (NullPointerException e){
+            throw new NullPointerException("targetTownSet is empty");
+        }
         if (!targetTownSet.isEmpty() && targetTownSet.toArray()[0] != null) {
             //creating uri list while dealing with the special Hungarian characters
             List<URI> targetUris = targetTownSet.stream().map(target ->

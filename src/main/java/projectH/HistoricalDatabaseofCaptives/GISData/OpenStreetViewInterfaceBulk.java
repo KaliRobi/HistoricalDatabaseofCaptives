@@ -19,13 +19,13 @@ import java.util.stream.IntStream;
 
 
 @Component
-public class GeologicalOperationsBulk implements IGeolocator {
+public class OpenStreetViewInterfaceBulk implements IGeolocator {
 
 
     private final GeologicalRepository geologicalRepository;
     private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
-    public GeologicalOperationsBulk(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
+    public OpenStreetViewInterfaceBulk(GeologicalRepository geologicalRepository, WithOrWithoutCoordinates withOrWithoutCoordinates) {
         this.geologicalRepository = geologicalRepository;
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
