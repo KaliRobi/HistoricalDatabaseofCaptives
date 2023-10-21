@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 @Component
 public class OpenStreetViewInterface implements IGeolocator{
 
-    private final GeologicalRepository geologicalRepository;
-    private final WithOrWithoutCoordinates withOrWithoutCoordinates;
+    private  GeologicalRepository geologicalRepository;
+    private  WithOrWithoutCoordinates withOrWithoutCoordinates;
 
 
     @Autowired
@@ -33,7 +33,11 @@ public class OpenStreetViewInterface implements IGeolocator{
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
-//    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
+    public OpenStreetViewInterface() {
+
+    }
+
+    //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
 //    This version of the class should be used for normal operations because it is supposedly faster than the bulk version.
     @Override
     public void getLocationData(Set<String> targetTownSet) {
