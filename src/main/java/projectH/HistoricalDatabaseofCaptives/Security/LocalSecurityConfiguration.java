@@ -10,8 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
+
 @EnableWebSecurity(debug = true)
+@Configuration
 public class LocalSecurityConfiguration {
 
     @Autowired
@@ -22,16 +23,15 @@ public class LocalSecurityConfiguration {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-                auth.inMemoryAuthentication().withUser("hdc_user1").password(passwordEncoder().encode("123"))
+                auth.inMemoryAuthentication().withUser("hdc_user1").password("123")
                 .authorities("NO");
     }
-//
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSec) throws Exception {
         httpSec.authorizeRequests()
-                .antMatchers("/securityNone")
+                .antMatchers("/auth/")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -43,9 +43,10 @@ public class LocalSecurityConfiguration {
         return httpSec.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
 }

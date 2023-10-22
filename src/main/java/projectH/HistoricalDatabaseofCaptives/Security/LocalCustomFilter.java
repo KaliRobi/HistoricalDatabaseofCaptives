@@ -12,11 +12,9 @@ import java.io.IOException;
 @Component
 public class LocalCustomFilter extends GenericFilterBean {
 
+
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(request, response);
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
     }
 }

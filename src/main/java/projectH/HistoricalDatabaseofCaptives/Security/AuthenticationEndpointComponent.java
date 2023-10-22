@@ -1,6 +1,5 @@
 package projectH.HistoricalDatabaseofCaptives.Security;
 
-import jakarta.servlet.ServletException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
