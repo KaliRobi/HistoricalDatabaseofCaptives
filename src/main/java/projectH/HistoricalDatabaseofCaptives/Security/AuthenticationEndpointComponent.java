@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public class AuthenticationEndpointComponent extends BasicAuthenticationEntryPoint {
-    @Override
+public class AuthenticationEndpointComponent  {
+
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
             throws IOException {
@@ -21,9 +21,5 @@ public class AuthenticationEndpointComponent extends BasicAuthenticationEntryPoi
         writer.println("HTTP Status 401 - " + authEx.getMessage());
     }
 
-    @Override
-    public void afterPropertiesSet() {
-        setRealmName("HDC");
-        super.afterPropertiesSet();
-    }
+
 }
