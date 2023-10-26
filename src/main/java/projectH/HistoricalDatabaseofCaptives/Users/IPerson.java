@@ -8,7 +8,7 @@ public interface IPerson {
     LocalDate getDateOfBirth();
 
 
-     int getAge();
+    int getAge();
 
     String getName();
     void setName(String name);
