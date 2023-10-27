@@ -10,6 +10,6 @@ public interface IGeolocator {
 
 
     //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
-    //    This version of the class should be used for normal operations as supposed to be faster than the bulk version.
+
 
 }

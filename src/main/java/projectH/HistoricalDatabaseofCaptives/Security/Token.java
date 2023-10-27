@@ -1,9 +1,7 @@
 package projectH.HistoricalDatabaseofCaptives.Security;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import projectH.HistoricalDatabaseofCaptives.Users.User;
+
 
 @Entity
 public class Token {
@@ -21,11 +19,7 @@ public class Token {
 
     public boolean expired;
 
-//    @JdbcTypeCode(SqlTypes.JSON)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "hdc_user")
-//    @JoinColumn(name = "user_id")
-//    public User user;
+
 }
 
 

@@ -1,21 +1,27 @@
 package projectH.HistoricalDatabaseofCaptives.Users;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import projectH.HistoricalDatabaseofCaptives.GISData.GeoLocation;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "hdc_user")
-public class User implements IPerson{
+public class User implements IPerson, UserDetails {
 // in the first release only manual user creation will be possible.
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private final long user_id;
-
-    private final Instant Insert_time;
+    @Temporal(TemporalType.TIMESTAMP)
+    private final Timestamp Insert_time;
     private final Instant Birth_Date;
     private final String Name;
 
@@ -29,7 +35,10 @@ public class User implements IPerson{
 
     private String EmailAddress;
 
-    public User(long userid, Instant insert_time, Instant birthDate, String name, GeoLocation geoLocation, String sex, String username, String emailAddress) {
+    @Enumerated
+    private Role role;
+
+    public User(long userid, Timestamp insert_time, Instant birthDate, String name, GeoLocation geoLocation, String sex, String username, String emailAddress) {
         user_id = userid;
         Insert_time = insert_time;
         Birth_Date = birthDate;
@@ -48,8 +57,40 @@ public class User implements IPerson{
         return Birth_Date;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return Password;
+    }
+
+    @Override
     public String getUsername() {
         return Username;
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
     public void setUsername(String username) {
@@ -76,7 +117,7 @@ public class User implements IPerson{
 
     @Override
     public String getName() {
-        return null;
+        return Name;
     }
 
     @Override
@@ -87,7 +128,7 @@ public class User implements IPerson{
 
     @Override
     public GeoLocation getLocation() {
-        return null;
+        return Location;
     }
 
     @Override
@@ -97,7 +138,7 @@ public class User implements IPerson{
 
     @Override
     public String getSex() {
-        return null;
+        return Sex;
     }
 
 

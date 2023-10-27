@@ -7,7 +7,6 @@ public interface IPerson {
 
     LocalDate getDateOfBirth();
 
-
     int getAge();
 
     String getName();
@@ -15,7 +14,6 @@ public interface IPerson {
 
     GeoLocation getLocation();
     void setLocation(GeoLocation geoLocation );
-
 
     String getSex();
 

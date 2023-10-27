@@ -1,16 +1,19 @@
 package projectH.HistoricalDatabaseofCaptives.GISData;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
 
-
+@Entity
 @Table(name="geological_locations")
-@Entity(name="geological_location")
+
 public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp insert_time;
