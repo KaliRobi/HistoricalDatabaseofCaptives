@@ -10,7 +10,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import projectH.historicaldatabaseofcaptives.applicationexceptions.UserNotFoundException;
 import projectH.historicaldatabaseofcaptives.users.UserPermission;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import projectH.historicaldatabaseofcaptives.users.UserRepository;
 
 
 @EnableWebSecurity(debug = true)
@@ -18,7 +21,9 @@ import projectH.historicaldatabaseofcaptives.users.UserPermission;
 public class LocalSecurityConfiguration {
 
     @Autowired
-    private AuthenticationEndpointComponent authenticationEntryPoint ;
+    private final AuthenticationEndpointComponent authenticationEntryPoint ;
+
+    private final UserRepository userRepository;
 
 // everything will be jwt
     private static final String[] PUBLIC_ENDPOINTS = {
@@ -43,6 +48,11 @@ public class LocalSecurityConfiguration {
 
     };
 
+    public LocalSecurityConfiguration(AuthenticationEndpointComponent authenticationEntryPoint, UserRepository userRepository) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.userRepository = userRepository;
+    }
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -60,6 +70,12 @@ public class LocalSecurityConfiguration {
        return httpSec.build();
     }
 
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return username -> userRepository.findByUsername(username)
+                .orElseThrow( () -> new UserNotFoundException("user with the following username does not exists" + username))
+                ;
+    }
 
 
     private PasswordEncoder passwordEncoder() {
