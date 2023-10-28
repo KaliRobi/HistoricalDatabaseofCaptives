@@ -103,7 +103,7 @@
 
 
 
-   package projectH.HistoricalDatabaseofCaptives.GISData;
+   package projectH.historicaldatabaseofcaptives.gisdata;
 
    import com.fasterxml.jackson.annotation.JsonIgnore;
    import com.fasterxml.jackson.annotation.JsonProperty;
@@ -348,3 +348,68 @@
                                             .stream().filter(t -> e.equals(t.getValue()))
                                             .toList()).toList().stream()
                                     .flatMap(Collection::stream).toList();
+
+
+
+//    public Set<String> getNonNullAttributes(){
+//        Set<String> attribs = new HashSet<>();
+//
+//        if (id != 0 ) {
+//            attribs.add("id");
+//        }
+//        if (volume >= 0) {
+//            attribs.add("volume");
+//        }
+//        if (captive_id != null) {
+//            attribs.add("captive_id");
+//        }
+//        if (name != null) {
+//            attribs.add("name");
+//        }
+//        if (sex != null) {
+//            attribs.add("sex");
+//        }
+//        if (height != null) {
+//            attribs.add("height");
+//        }
+//        if (build != null) {
+//            attribs.add("build");
+//        }
+//        if (date_of_birth != null) {
+//            attribs.add("date_of_birth");
+//        }
+//        if (place_of_birth!= null) {
+//            attribs.add("place_of_birth");
+//        }
+//        if (place_of_residence != null) {
+//            attribs.add("place_of_residence");
+//        }
+//        if (religion != null) {
+//            attribs.add("religion");
+//        }
+//        if (childhood_status != null) {
+//            attribs.add("childhood_status");
+//        }
+//        if (marital_status != null) {
+//            attribs.add("marital_status");
+//        }
+//        if (number_of_children != null) {
+//            attribs.add("number_of_children");
+//        }
+//        if (occupation != null) {
+//            attribs.add("occupation");
+//        }
+//        if (occupation_2 != null) {
+//            attribs.add("occupation_2");
+//        }
+//        if (military_service != null) {
+//            attribs.add("military_service");
+//        }
+//        return attribs;
+//
+////            ...
+////
+//
+//        }
+
+                System.out.println(uniqueRelocation + " : " + relocatedCandidateList.stream().filter(element -> element.equals(uniqueRelocation)).count());
