@@ -55,7 +55,6 @@ public class LocalSecurityConfiguration {
         httpSec.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
-//            authorizationManagerRequestMatcherRegistry.requestMatchers("/test").denyAll();
                     authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).hasAuthority(UserPermission.USER.name());
                 });
        return httpSec.build();

@@ -20,14 +20,14 @@ public class ReviewStringColumnsCaptiveData {
     private final LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository;
     private final CaptiveServices captiveServices;
     private final CreateReviewableEntity createReviewableEntity;
-    private final JdbcTemplate jdbcTemplate;
 
 
-    public ReviewStringColumnsCaptiveData(LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository, CaptiveServices captiveServices, CreateReviewableEntity createReviewableEntity, JdbcTemplate jdbcTemplate) {
+
+    public ReviewStringColumnsCaptiveData(LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository, CaptiveServices captiveServices, CreateReviewableEntity createReviewableEntity) {
         this.localAbbreviatedEntityRepository = localAbbreviatedEntityRepository;
         this.captiveServices = captiveServices;
         this.createReviewableEntity = createReviewableEntity;
-        this.jdbcTemplate = jdbcTemplate;
+
     }
 
      // need  a switch which loops though the keys (tables) and each table will loops though the columns
@@ -37,15 +37,13 @@ public class ReviewStringColumnsCaptiveData {
     for(String column : columnsWithAbbrebs){
 
         Map<Long, String>  localRelevantCaptiveData = returnMapToReview(column) ;
-        for(Long usedAbbreviationID : localRelevantCaptiveData.keySet() ){
-            List  listOfAbbreviations = getMapsForColumnsAndAbbreviations().get(column);
-            if(!listOfAbbreviations.contains(localRelevantCaptiveData.get(usedAbbreviationID))){
-                createReviewableEntity.registerReviewableEntity(usedAbbreviationID,
+        for(Map.Entry<Long, String> usedAbbreviationEntity : localRelevantCaptiveData.entrySet() ){
+            List<String>  listOfAbbreviations = getMapsForColumnsAndAbbreviations().get(column);
+            if(!listOfAbbreviations.contains(localRelevantCaptiveData.get(usedAbbreviationEntity.getKey()))){
+                createReviewableEntity.registerReviewableEntity(usedAbbreviationEntity.getKey(),
                         "Captive",
-                        localRelevantCaptiveData.get(usedAbbreviationID) + " is not in " +  listOfAbbreviations + "," + "in column: " +column
+                        localRelevantCaptiveData.get(usedAbbreviationEntity.getKey()) + " is not in " +  listOfAbbreviations + "," + "in column: " +column
                 );
-            } else{
-                System.out.println(localRelevantCaptiveData.get(usedAbbreviationID) + " is in " +  listOfAbbreviations + " column: " + column);
             }
         }
     }

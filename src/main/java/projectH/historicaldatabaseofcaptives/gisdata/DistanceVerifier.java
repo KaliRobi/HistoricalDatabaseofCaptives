@@ -119,7 +119,7 @@ public class DistanceVerifier {
 
     private double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
         /*
-        convert to Radian is = degree * 3.1415926535 / 180;
+        convert to Radian is  degree * 3.1415926535 / 180;
          */
 
         double latA = Math.toRadians(locationB.getLatitude());
@@ -145,7 +145,6 @@ public class DistanceVerifier {
 
         withOrWithoutCoordinates.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSourceName() + "is about " +
                 calculateLocationToLocationDistance( x, geoServices.getALocationByName(e) ) + " km"));
-        System.out.println(resultedDistanceString);
         return resultedDistanceString;
     }
 }

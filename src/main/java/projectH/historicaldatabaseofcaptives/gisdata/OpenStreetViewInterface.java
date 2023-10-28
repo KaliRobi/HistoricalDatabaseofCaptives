@@ -81,7 +81,7 @@ public class OpenStreetViewInterface implements IGeolocator{
 
                     sourceName = Arrays.stream(lonLat.get().split("=")).toList().subList(1, 2).get(0);
                     collect = Arrays.stream(Arrays.asList(lonLat.get().split("}")).get(0).split(","))
-                            .map(part -> part.replaceAll("\"", "").split(":"))
+                            .map(part -> part.replace("\"", "").split(":"))
                             .filter(p -> p.length > 1)
                             .collect(Collectors.toMap(s -> s[0], s -> s[1])
                             );

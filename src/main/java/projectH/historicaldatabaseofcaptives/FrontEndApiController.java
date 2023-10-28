@@ -114,16 +114,6 @@ public void testest()  {
         }
 
     }
-// keeping the old version for now.
-//@PutMapping(path = "/v1/updateCaptive/{id}")
-//public ResponseEntity<String> updateCaptive(@PathVariable("id") long Id, @RequestBody Captive captive){
-//    try{
-//        captiveServices.updateCaptive(Id, captive);
-//    } catch (NoSuchCaptiveIdFound e){
-//        return new ResponseEntity<>("Captive with id " + Id + "does not exists", HttpStatus.NOT_FOUND);
-//    }
-//    return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
 @PutMapping(path = "/v1/updateCaptiveV2/{id}")
     public ResponseEntity<String> updateCaptiveV2(@PathVariable("id") long Id, @RequestBody Map<String, Object>  updateAttribute){
