@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class OpenStreetViewInterface implements IGeolocator{
-    private final static  String DISPLAY_NAME = "display_name";
+    private static final  String DISPLAY_NAME = "display_name";
     private  GeologicalRepository geologicalRepository;
     private  WithOrWithoutCoordinates withOrWithoutCoordinates;
 

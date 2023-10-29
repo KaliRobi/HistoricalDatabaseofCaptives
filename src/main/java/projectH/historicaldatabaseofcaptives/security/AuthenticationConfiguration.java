@@ -43,7 +43,6 @@ private final LocalSecurityConfiguration  localSecurityConfiguration;
 
     public AuthenticationConfiguration(JwtAuthenticationFilter jwtAuthFilter, JwtService jwtService, AuthenticationProvider authenticationProvider, LocalSecurityConfiguration localSecurityConfiguration) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.jwtService = jwtService;
         this.authenticationProvider = authenticationProvider;
         this.localSecurityConfiguration = localSecurityConfiguration;
     }

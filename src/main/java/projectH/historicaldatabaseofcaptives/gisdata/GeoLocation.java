@@ -1,6 +1,9 @@
 package projectH.historicaldatabaseofcaptives.gisdata;
 
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.sql.Timestamp;
 
 @Entity
@@ -8,23 +11,29 @@ import java.sql.Timestamp;
 public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "insert_time")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Timestamp insertTime;
 
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "osv_name")
     private String osvName;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column( name = "source_name")
     private String sourceName;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column( name = "latitude")
     private Double latitude;
 
-
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column( name = "longitude")
     private Double longitude;
-
+//    @JdbcType
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column( name = "country")
     private String country;
 
