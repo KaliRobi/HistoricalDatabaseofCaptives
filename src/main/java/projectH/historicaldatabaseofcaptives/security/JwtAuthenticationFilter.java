@@ -5,8 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import projectH.historicaldatabaseofcaptives.users.User;
@@ -40,9 +42,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     jwToken = authenticationHeader.substring(7);
     userName = jwtService.getUserName(jwToken);
     if (userName != null && SecurityContextHolder.getContext().getAuthentication() != null){
+        // user details from the DB
         User userDetails = (User) this.userDetailsService.loadUserByUsername(userName);
-        userDetails.getAge();
-    }
 
+       // check if the token is still valid
+        if(jwtService.isTokenValid(jwToken, userDetails)){
+
+            UsernamePasswordAuthenticationToken authToken =  new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities()
+            );
+            authToken.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
+    }
+    // pass the filter to execute it
+    filterChain.doFilter(request, response);
     }
 }

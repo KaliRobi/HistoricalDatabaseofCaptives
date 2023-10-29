@@ -3,13 +3,19 @@ package projectH.historicaldatabaseofcaptives.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import projectH.historicaldatabaseofcaptives.applicationexceptions.UserNotFoundException;
 import projectH.historicaldatabaseofcaptives.users.UserPermission;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,9 +26,9 @@ import projectH.historicaldatabaseofcaptives.users.UserRepository;
 @Configuration
 public class LocalSecurityConfiguration {
 
-    @Autowired
-    private final AuthenticationEndpointComponent authenticationEntryPoint ;
 
+    private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthFilter;
     private final UserRepository userRepository;
 
 // everything will be jwt
@@ -48,16 +54,10 @@ public class LocalSecurityConfiguration {
 
     };
 
-    public LocalSecurityConfiguration(AuthenticationEndpointComponent authenticationEntryPoint, UserRepository userRepository) {
-        this.authenticationEntryPoint = authenticationEntryPoint;
+    public LocalSecurityConfiguration( AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtAuthFilter, UserRepository userRepository) {
+        this.authenticationProvider = authenticationProvider;
+        this.jwtAuthFilter = jwtAuthFilter;
         this.userRepository = userRepository;
-    }
-
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("hdc_user1").password(passwordEncoder().encode("55555"))
-                .authorities("NO");
     }
 
     @Bean
@@ -66,7 +66,11 @@ public class LocalSecurityConfiguration {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
                     authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).hasAuthority(UserPermission.USER.name());
-                });
+                })
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
        return httpSec.build();
     }
 
@@ -77,9 +81,24 @@ public class LocalSecurityConfiguration {
                 ;
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
 
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+
+
 
 }

@@ -57,6 +57,15 @@ public class JwtService {
                 .signWith(getSignInKey())
                 .compact();
      }
+    public  String createToken( UserDetails userDetails) {
+
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000*24*60))
+                .signWith(getSignInKey())
+                .compact();
+    }
 
      final boolean isTokenValid(String token, UserDetails userDetails){
          final String userName = getUserName(token);
