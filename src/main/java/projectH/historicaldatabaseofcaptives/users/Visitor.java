@@ -21,7 +21,7 @@ public class Visitor implements IPerson{
         this.sex = sex;
 
     }
-    public Visitor( GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
+    public Visitor(GeoLocation geoLocation, String sex, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.name = "Anonymous";
         this.location = geoLocation;

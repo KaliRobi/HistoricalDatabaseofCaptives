@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name="geological_locations")
-
 public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,22 +18,25 @@ public class GeoLocation {
     private String osvName;
     @Column( name = "source_name")
     private String sourceName;
+    @Column( name = "latitude")
     private Double latitude;
 
+
+    @Column( name = "longitude")
     private Double longitude;
 
     @Column( name = "country")
     private String country;
 
     //convention is that longitude first then latitude //this.id = id removed
-    public GeoLocation(String sourceName, String osvName,  Double longitude, Double latitude, String country) {
+    public GeoLocation(String sourceName, String osvName, Double longitude, Double latitude, String country) {
         this.sourceName = sourceName;
         this.osvName = osvName;
         this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
     }
-    public GeoLocation(Double longitude ,Double latitude ) {
+    public GeoLocation(Double longitude , Double latitude ) {
         this.latitude = latitude;
         this.longitude = longitude;
 
@@ -44,7 +46,7 @@ public class GeoLocation {
     public GeoLocation() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

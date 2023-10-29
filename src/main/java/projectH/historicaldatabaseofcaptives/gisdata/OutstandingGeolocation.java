@@ -19,7 +19,6 @@ public class OutstandingGeolocation {
     private String osv_name;
 
     private String source_name;
-
     private long geological_location_id;
 
     public OutstandingGeolocation(long id, Timestamp insert_time, String osv_name, String source_name, long geological_location_id) {

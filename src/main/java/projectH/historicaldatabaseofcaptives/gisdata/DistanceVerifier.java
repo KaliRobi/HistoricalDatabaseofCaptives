@@ -8,8 +8,7 @@ import java.util.*;
 /**
  * GeologicalOperations/Bulk are not so smart at the moment to tell if it actually matched  the right data.
  * In some cases like the Hungarian town Kaba , Kabul is pulled because it is listed on the top.
- * Because of historical reasons there is no way to limit these methods to find the entry where Hungary is the current country because many
- * of the locations are not on Hu territories anymore.
+ * Because of historical reasons there is no way to limit these methods to find the entry where Hungary is the current country.
  *
  * The class will audit the distances between Budapest and the returned data and will add the outstanding location name to a new table
  *
