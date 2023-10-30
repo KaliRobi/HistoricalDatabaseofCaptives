@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GeologicalRepository extends JpaRepository<GeoLocation, Long> {
-    @Query("select loc from geological_location loc WHERE loc.source_name = ?1")
+    @Query("select loc from geological_location loc WHERE loc.sourceName = ?1")
     GeoLocation findByName(String Name);
 
 }

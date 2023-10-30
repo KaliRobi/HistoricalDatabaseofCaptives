@@ -139,10 +139,10 @@ public class DistanceVerifier {
     //    Test method , could be useful later, probably better to return something like {geoLocation.getSource_name = {"locationName"="Debrecen", "Distance"=111}
     private Set<String> returnDistanceBetweenLocations(GeoLocation geoLocation) {
 //        base
-        GeoLocation x = geoServices.getALocationByName(geoLocation.getSourceName());
+        GeoLocation x = geoServices.getALocationByName(geoLocation.getSource_name());
         Set<String> resultedDistanceString = new HashSet<>();
 
-        withOrWithoutCoordinates.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSourceName() + "is about " +
+        withOrWithoutCoordinates.getLocationsWithCoordinates().forEach(e-> resultedDistanceString.add("The distance between " + e + " and " + geoLocation.getSource_name() + "is about " +
                 calculateLocationToLocationDistance( x, geoServices.getALocationByName(e) ) + " km"));
         return resultedDistanceString;
     }

@@ -133,7 +133,7 @@ public class CaptiveServices {
     // returns a captive by its attributes
     public Captive findACaptive(Visitor visitor){
 
-         List<Captive> captivesList =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSourceName(), visitor.getSex());
+         List<Captive> captivesList =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
 
          List<Captive> candidateToPresentList = captivesList.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
          if(!candidateToPresentList.isEmpty() ){

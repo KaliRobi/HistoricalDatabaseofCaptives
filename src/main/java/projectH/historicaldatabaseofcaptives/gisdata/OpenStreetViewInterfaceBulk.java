@@ -32,7 +32,7 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
 
     // This version is for the larger mass of data retrieval. Timeout is needed to avoid closedConnectionException
     // Due to Historical reason the display name of many locations is written in ciril or romanian alphabet.
-    // select * from geological_locations where regexp_like(name, '[а-яА-ЯёЁ]');
+    // select * from geological_location where regexp_like(name, '[а-яА-ЯёЁ]');
     // so in geological_locations table there is "source_name"  "osv_name" columns for names
     @Override
     public void getLocationData(Set<String> targetTownSet) throws InterruptedException, ExecutionException, IOException {

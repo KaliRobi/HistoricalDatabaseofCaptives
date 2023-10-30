@@ -20,7 +20,7 @@ public class WithOrWithoutCoordinates {
         geologicalRepository.findAll().forEach(location -> {
                     if (location.getLatitude() == null || location.getLongitude() == null) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithoutLocationData.add(location.getSourceName());
+                        locationsWithoutLocationData.add(location.getSource_name());
                     }
                 }
         );
@@ -34,7 +34,7 @@ public class WithOrWithoutCoordinates {
         geologicalRepository.findAll().forEach(l -> {
                     if (l.getLatitude() != null  && l.getLongitude() != null  ) {
 //                        both value need to be in the db to not get prepared for a new fetch
-                        locationsWithLocationData.add(l.getSourceName());
+                        locationsWithLocationData.add(l.getSource_name());
                     }
                 }
         );

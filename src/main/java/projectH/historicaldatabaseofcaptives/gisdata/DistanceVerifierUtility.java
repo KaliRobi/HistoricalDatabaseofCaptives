@@ -39,7 +39,7 @@ public class DistanceVerifierUtility {
 
 //    will check for candidates if the source_name !equals osv_name because of the difference in hungarian and surrounding nations.
     private Set<GeoLocation> separateLocationsWithDifferentNames(){
-        return  geologicalRepository.findAll().stream().filter( e -> !e.getSourceName().equalsIgnoreCase(e.getOsvName()))
+        return  geologicalRepository.findAll().stream().filter( e -> !e.getSource_name().equalsIgnoreCase(e.getOsv_name()))
                 .collect(Collectors.toSet());
     }
 

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
+@Entity(name = "hdc_user")
 @Table(name = "hdc_user")
 public class User implements IPerson, UserDetails {
 // in the first release only manual user creation will be possible.
@@ -26,12 +26,15 @@ public class User implements IPerson, UserDetails {
     private final String Name;
 
     private final String Sex;
+    @ManyToOne(targetEntity = GeoLocation.class, fetch = FetchType.LAZY)
+    @MapsId
     private GeoLocation Location;
     private String Username;
 
     private String Password;
 
     private boolean IsActive;
+
 
     private String EmailAddress;
 

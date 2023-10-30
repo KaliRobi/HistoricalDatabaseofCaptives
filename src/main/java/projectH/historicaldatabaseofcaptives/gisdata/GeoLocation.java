@@ -1,39 +1,38 @@
 package projectH.historicaldatabaseofcaptives.gisdata;
 
-import jakarta.persistence.*;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name="geological_locations")
+@Entity(name = "geological_location")
+@Table(name="geological_location")
 public class GeoLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private Long id;
+    @Basic
+    private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "insert_time")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    @Basic
     private Timestamp insertTime;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Basic
     @Column(name = "osv_name")
     private String osvName;
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Basic
     @Column( name = "source_name")
     private String sourceName;
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Basic
     @Column( name = "latitude")
     private Double latitude;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Basic
     @Column( name = "longitude")
     private Double longitude;
 //    @JdbcType
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Basic
     @Column( name = "country")
     private String country;
 
@@ -63,19 +62,19 @@ public class GeoLocation {
         this.id = id;
     }
 
-    public String getOsvName() {
+    public String getOsv_name() {
         return osvName;
     }
 
-    public void setOsvName(String osvName) {
+    public void setOsv_name(String osvName) {
         this.osvName = osvName;
     }
 
-    public String getSourceName() {
+    public String getSource_name() {
         return this.sourceName;
     }
 
-    public void setSourceName(String sourceName) {
+    public void setSource_name(String sourceName) {
 
         this.sourceName = sourceName;
     }
@@ -103,11 +102,11 @@ public class GeoLocation {
     public void setCountry(String country) {
         this.country = country;
     }
-    public Timestamp getInsertTime() {
+    public Timestamp getInsert_time() {
         return insertTime;
     }
 
-    public void setInsertTime(Timestamp insertTime) {
+    public void setInsert_time(Timestamp insertTime) {
         this.insertTime = insertTime;
     }
 
