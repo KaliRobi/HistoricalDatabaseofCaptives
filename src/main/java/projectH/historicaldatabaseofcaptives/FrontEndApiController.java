@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import projectH.historicaldatabaseofcaptives.datacleaner.DataCleanerService;
 import projectH.historicaldatabaseofcaptives.datacleaner.LocalAbbreviatedEntity;
 import projectH.historicaldatabaseofcaptives.datacleaner.ReviewAbbreviations;
+import projectH.historicaldatabaseofcaptives.datacleaner.ReviewLocations;
 import projectH.historicaldatabaseofcaptives.users.Visitor;
 
 
@@ -24,6 +25,7 @@ public class FrontEndApiController {
     private final CandidateFinder candidateFinder;
     private final  DataCleanerService dataCleanerService ;
     private final CaptiveServices captiveServices;
+    private final ReviewLocations reviewLocations;
 
     private final ReviewAbbreviations reviewAbbreviations;
 
@@ -32,11 +34,12 @@ public class FrontEndApiController {
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewAbbreviations reviewAbbreviations) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewLocations reviewLocations, ReviewAbbreviations reviewAbbreviations) {
         this.candidateFinder = candidateFinder;
         this.dataCleanerService = dataCleanerService;
 
         this.captiveServices = captiveServices;
+        this.reviewLocations = reviewLocations;
         this.reviewAbbreviations = reviewAbbreviations;
 
     }
@@ -84,7 +87,7 @@ public class FrontEndApiController {
 
 @GetMapping(path="/v1/test")
 public void testest()  {
-    dataCleanerService.startCleaning();
+   reviewLocations.reviewLocations();
 
 }
 

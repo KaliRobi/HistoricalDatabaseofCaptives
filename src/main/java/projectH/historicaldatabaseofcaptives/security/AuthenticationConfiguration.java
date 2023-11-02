@@ -25,6 +25,7 @@ private final LocalSecurityConfiguration  localSecurityConfiguration;
             "/SexDistributionPerCities",
             "/relocations",
             "/whoWasSimilarToMe"
+            "/v1/test"
 
     };
 
