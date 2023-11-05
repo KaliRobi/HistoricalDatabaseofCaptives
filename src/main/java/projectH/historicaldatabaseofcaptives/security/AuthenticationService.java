@@ -1,6 +1,5 @@
 package projectH.historicaldatabaseofcaptives.security;
 
-import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -8,10 +7,9 @@ import projectH.historicaldatabaseofcaptives.users.User;
 import projectH.historicaldatabaseofcaptives.users.UserRepository;
 
 @Service
-@AllArgsConstructor
 public class AuthenticationService {
 
-    // no sign in option yet first registration will be manual through the db
+    // no sign up option yet first registration will be manual through the db
     // change password option should be implemented.
 
 
@@ -20,9 +18,16 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
+    public AuthenticationService(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+    }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
-       authenticationManager.authenticate(
+       authenticationManager.authenticate
+               (
                new UsernamePasswordAuthenticationToken(
                        authenticationRequest.getUsername(),
                        authenticationRequest.getPassword()

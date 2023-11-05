@@ -1,5 +1,6 @@
 package projectH.historicaldatabaseofcaptives.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,17 +15,17 @@ import projectH.historicaldatabaseofcaptives.users.UserPermission;
 
 @Configuration
 @EnableWebSecurity(debug = true)
-public class AuthenticationConfiguration {
+public class LocalAuthenticationConfiguration {
     private  final  JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-private final LocalSecurityConfiguration  localSecurityConfiguration;
+
 
     private static final String[] PUBLIC_ENDPOINTS = {
             "/allTheCaptives",
             "/LocationsOfResidence",
             "/SexDistributionPerCities",
             "/relocations",
-            "/whoWasSimilarToMe"
+            "/whoWasSimilarToMe",
             "/v1/test"
 
     };
@@ -42,19 +43,14 @@ private final LocalSecurityConfiguration  localSecurityConfiguration;
 
     };
 
-    public AuthenticationConfiguration(JwtAuthenticationFilter jwtAuthFilter, JwtService jwtService, AuthenticationProvider authenticationProvider, LocalSecurityConfiguration localSecurityConfiguration) {
+    public LocalAuthenticationConfiguration(JwtAuthenticationFilter jwtAuthFilter,
+                                            AuthenticationProvider authenticationProvider) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
-        this.localSecurityConfiguration = localSecurityConfiguration;
+
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(localSecurityConfiguration.userDetailsService());
-        authProvider.setPasswordEncoder(localSecurityConfiguration.passwordEncoder());
-        return authProvider;
-    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSec) throws Exception {
