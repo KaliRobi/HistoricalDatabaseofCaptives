@@ -10,6 +10,7 @@ import projectH.historicaldatabaseofcaptives.captivesdata.Captive;
 import projectH.historicaldatabaseofcaptives.captivesdata.CaptiveServices;
 import projectH.historicaldatabaseofcaptives.gisdata.GeologicalRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 @Component
@@ -29,8 +30,8 @@ public class ReviewLocations {
         // first with one column
         Map<Long, String> locations = captiveServices.getAllTheCaptives()
                 .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_residence));
-
         locations.entrySet().stream().sorted();
+
 
 
     }

@@ -21,20 +21,20 @@ public class LocalAuthenticationConfiguration {
 
 
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/allTheCaptives",
-            "/LocationsOfResidence",
-            "/SexDistributionPerCities",
-            "/relocations",
-            "/whoWasSimilarToMe",
+            "/v1/allTheCaptives",
+            "/v1/LocationsOfResidence",
+            "/v1/SexDistributionPerCities",
+            "/v1/relocations",
+            "/v1//whoWasSimilarToMe",
             "/v1/test"
 
     };
 
     private static final String[] USER_ENDPOINTS = {
-            "/postNewCaptive",
-            "/AddAbbrevs",
-            "/updateCaptiveV2/{id}",
-            "/relocations"
+            "/v1/postNewCaptive",
+            "/v1/AddAbbrevs",
+            "/v1/updateCaptiveV2/{id}",
+            "/v1/relocations"
 
     };
 

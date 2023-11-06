@@ -19,14 +19,13 @@ import projectH.historicaldatabaseofcaptives.users.UserRepository;
 public class LocalSecurityConfiguration {
 
     private final UserRepository userRepository;
-    private final LocalSecurityConfiguration  localSecurityConfiguration;
 
 // everything will be jwt
 
 
-    public LocalSecurityConfiguration(UserRepository userRepository, LocalSecurityConfiguration localSecurityConfiguration) {
+    public LocalSecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.localSecurityConfiguration = localSecurityConfiguration;
+
     }
 
 
@@ -41,22 +40,8 @@ public class LocalSecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(localSecurityConfiguration.userDetailsService());
-        authProvider.setPasswordEncoder(localSecurityConfiguration.passwordEncoder());
-        return authProvider;
-    }
-
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-
-
 
 }
