@@ -1,9 +1,9 @@
 package projectH.historicaldatabaseofcaptives.users;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 import projectH.historicaldatabaseofcaptives.gisdata.GeoLocation;
 
 import java.sql.Timestamp;
@@ -14,7 +14,9 @@ import java.util.List;
 
 @Entity(name = "hdc_user")
 @Table(name = "hdc_user")
-public class User implements IPerson, UserDetails {
+public class User implements IPerson {
+
+//    , UserDetails
 // in the first release only manual user creation will be possible.
 
     @Id
@@ -60,41 +62,41 @@ public class User implements IPerson, UserDetails {
         return Birth_Date;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority(role.name()));
+//    }
 
-    @Override
-    public String getPassword() {
-        return Password;
-    }
-
-    @Override
-    public String getUsername() {
-        return Username;
-    }
-
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
+//    @Override
+//    public String getPassword() {
+//        return Password;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return Username;
+//    }
+//
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return false;
+//    }
 
     public void setUsername(String username) {
         Username = username;

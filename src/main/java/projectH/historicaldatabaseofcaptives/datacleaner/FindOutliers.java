@@ -37,13 +37,3 @@ public class FindOutliers {
         return   sortedList.stream().filter(e -> !(e < upperLimit && e > lowerLimit) ).distinct().collect(Collectors.toCollection(ArrayList::new));
     }
 }
-
-
-
-//                     System.out.println("listSize : " + listSize);
-//                     System.out.println("lowerLimit : " + lowerLimit);
-//                     System.out.println("upperLimit : " + upperLimit);
-//                     System.out.println("firstQuarter : " + firstQuarter);
-//                     System.out.println("thirdQuarter : " + thirdQuarter);
-//                     System.out.println("median :"  + median);
-//                     System.out.println("innerQuarterRange :" + innerQuarterRange);
