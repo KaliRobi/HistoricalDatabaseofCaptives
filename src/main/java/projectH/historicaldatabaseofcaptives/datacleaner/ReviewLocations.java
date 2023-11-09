@@ -12,9 +12,7 @@ import projectH.historicaldatabaseofcaptives.captivesdata.CaptiveServices;
 import projectH.historicaldatabaseofcaptives.gisdata.GeoLocation;
 import projectH.historicaldatabaseofcaptives.gisdata.GeologicalRepository;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 @Component
 public class ReviewLocations {
@@ -22,28 +20,61 @@ public class ReviewLocations {
 
     private final GeologicalRepository geologicalRepository;
     private final CaptiveServices captiveServices;
+    private final ReviewableEntityRepository reviewableEntityRepository;
 
 
-    public ReviewLocations(GeologicalRepository geologicalRepository, CaptiveServices captiveServices) {
+    public ReviewLocations(GeologicalRepository geologicalRepository, CaptiveServices captiveServices, ReviewableEntityRepository reviewableEntityRepository) {
         this.geologicalRepository = geologicalRepository;
         this.captiveServices = captiveServices;
+        this.reviewableEntityRepository = reviewableEntityRepository;
     }
 
-    public void reviewLocations(){
-        Set<String> osvNameList = geologicalRepository.findAll().stream().map(GeoLocation::getOsv_name)
-//                this deals with the cyryllic and arabic letters, the former will be a different topic because there the locations are correct just the language is dufferent
-//                Same with Slovakian and Romanian places
-                .filter(e -> e.matches("([A-Z]([a-záéúőóüö.]+))")).collect(Collectors.toSet());
-        System.out.println(osvNameList);
-        System.out.println(geologicalRepository.findAll().stream().map(GeoLocation::getOsv_name).toList());
-        // first with one column
-        Map<Long, String> locations = captiveServices.getAllTheCaptives()
+//    This three should be combined with map computeifpresent/computeifabsent
+
+
+    public void reviewResidenceLocation(){
+        Set<String> osvNameList = getOSVNames();
+        List<ReviewableEntity> reviewableLocations = new ArrayList<>();
+
+        Map<Long, String> placeOfResidence = captiveServices.getAllTheCaptives()
                 .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_residence));
-        Set<Map.Entry<Long, String>> entities = new HashSet<>(locations.entrySet());
+        Set<Map.Entry<Long, String>> entitiesOfResidence = new HashSet<>(placeOfResidence.entrySet());
 
-//        entities;
+        for(Map.Entry<Long, String> entity : entitiesOfResidence){
+            if(!osvNameList.contains(entity.getValue())){
+                reviewableLocations
+                        .add(new ReviewableEntity(entity.getKey(), entity.getValue(), "the locationOfResidence name "+entity.getValue()+"is not valid for captive with id "+ entity.getKey()));
+            }
+
+        }
+       
+
+    }
 
 
+
+    private void reviewBirthPlaces(){
+        Set<String> osvNameList = getOSVNames();
+        List<ReviewableEntity> reviewableLocations = new ArrayList<>();
+        Map<Long, String> placeOfBirth = captiveServices.getAllTheCaptives()
+                .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_birth));
+
+
+    }
+
+    private void reviewArrestSites(){
+        Map<Long, String> arrestSites = captiveServices.getAllTheCaptives()
+                .stream().collect(Collectors.toMap(Captive::getId, Captive::getArrest_site));
+
+
+    }
+
+
+    private Set<String> getOSVNames(){
+       return geologicalRepository.findAll().stream().map(GeoLocation::getOsv_name)
+//                this deals with the cyryllic and arabic letters, the former will be a different topic because there the locations are correct just the language is different
+//                Same with Slovakian and Romanian places
+               .filter(e -> e.matches("([A-Z]([a-záéúőóüö.]+))")).collect(Collectors.toSet());
 
     }
 
