@@ -34,6 +34,9 @@ public class ReviewableEntity {
     }
 
     public ReviewableEntity(Long entity_id, String entity_type, String reason) {
+        this.entity_id = entity_id;
+        this.entity_type = entity_type;
+        this.reason = reason;
     }
 
     public Long getId() {

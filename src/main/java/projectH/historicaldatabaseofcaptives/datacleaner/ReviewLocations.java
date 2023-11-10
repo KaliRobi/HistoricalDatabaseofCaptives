@@ -12,6 +12,7 @@ import projectH.historicaldatabaseofcaptives.captivesdata.CaptiveServices;
 import projectH.historicaldatabaseofcaptives.gisdata.GeoLocation;
 import projectH.historicaldatabaseofcaptives.gisdata.GeologicalRepository;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 @Component
@@ -29,7 +30,9 @@ public class ReviewLocations {
         this.reviewableEntityRepository = reviewableEntityRepository;
     }
 
-//    This three should be combined with map computeifpresent/computeifabsent
+    public void callTem(){
+        trycompute();
+    }
 
 
     public void reviewResidenceLocation(){
@@ -47,19 +50,22 @@ public class ReviewLocations {
             }
 
         }
-       
+
 
     }
-
-
-
     private void reviewBirthPlaces(){
         Set<String> osvNameList = getOSVNames();
         List<ReviewableEntity> reviewableLocations = new ArrayList<>();
         Map<Long, String> placeOfBirth = captiveServices.getAllTheCaptives()
                 .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_birth));
+        Set<Map.Entry<Long, String>> entitiesOfResidence = new HashSet<>(placeOfBirth.entrySet());
+        for(Map.Entry<Long, String> entity : entitiesOfResidence) {
+            if (!osvNameList.contains(entity.getValue())) {
+                reviewableLocations
+                        .add(new ReviewableEntity(entity.getKey(), entity.getValue(), "the locationOfResidence name " + entity.getValue() + "is not valid for captive with id " + entity.getKey()));
+            }
 
-
+        }
     }
 
     private void reviewArrestSites(){
@@ -75,6 +81,27 @@ public class ReviewLocations {
 //                this deals with the cyryllic and arabic letters, the former will be a different topic because there the locations are correct just the language is different
 //                Same with Slovakian and Romanian places
                .filter(e -> e.matches("([A-Z]([a-záéúőóüö.]+))")).collect(Collectors.toSet());
+
+    }
+
+
+
+    private void trycompute(){
+
+
+        Map<Long, String> placeOfBirth = captiveServices.getAllTheCaptives()
+                .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_birth));
+        Map<Long, String> placeOfResidence = captiveServices.getAllTheCaptives()
+                .stream().collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_residence));
+
+//        Map<Long, String> sak = new HashMap<>(placeOfBirth);
+        Set<Map.Entry<Long, String>> Ab = new HashSet<>(placeOfBirth.entrySet());
+//        Set<Map.Entry<Long, String>> CD = new HashSet<>(placeOfResidence.entrySet());
+
+        Ab.forEach( e->
+                        placeOfResidence.computeIfPresent(e.getKey(), (k, v) -> v + v)
+
+                );
 
     }
 
