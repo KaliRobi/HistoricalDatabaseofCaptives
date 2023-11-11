@@ -87,7 +87,7 @@ public class FrontEndApiController {
 
 @GetMapping(path="/v1/test")
 public void testest()  {
-   reviewLocations.callTem();
+   reviewLocations.reviewLocations();
 
 }
 

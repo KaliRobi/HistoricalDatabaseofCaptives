@@ -29,12 +29,13 @@ public class ReviewLocations {
         this.reviewableEntityRepository = reviewableEntityRepository;
     }
 
-    public void callTem(){
-        mergeNonMatchingLocations();
+    public void reviewLocations(){
+        Map<Long, String>  reviewableCandidates =  mergeNonMatchingLocations();
+        saveReviewableEntities(reviewableCandidates);
     }
 
 
-    public Map<Long, String>  reviewResidences(){
+    private Map<Long, String>  reviewResidences(){
         Map<Long, String> placeOfResidence = captiveServices.getAllTheCaptives()
                 .stream().filter(e -> e.getPlace_of_residence()!= null).collect(Collectors.toMap(Captive::getId, Captive::getPlace_of_residence));
         return extractReviewables(placeOfResidence);
@@ -75,7 +76,7 @@ public class ReviewLocations {
 
     }
 
-    private void mergeNonMatchingLocations(){
+    private Map<Long, String> mergeNonMatchingLocations(){
         Map<Long, String>  birthPlaceMap = reviewBirthPlaces();
         Map<Long, String>  residenceMap = reviewResidences();
         Map<Long, String>  arrestSiteMap = reviewArrestSites();
@@ -94,10 +95,21 @@ public class ReviewLocations {
                 birthPlaceMap.computeIfAbsent(e.getKey(), s-> e.getValue())
         );
 
+        return birthPlaceMap;
+
     }
 
     private String returnNewValue(String value, String valueToAdd){
          return value.equals(valueToAdd) ? value : value + ", " + valueToAdd;
     }
 
+    private void saveReviewableEntities(Map<Long, String> candidateMap){
+
+        for(Map.Entry<Long, String> entity : candidateMap.entrySet()){
+            reviewableEntityRepository.save(
+            new ReviewableEntity(entity.getKey(), entity.getValue(), "Invalid location name(s) "+entity.getValue()+" for captive with id "+ entity.getKey()));
+
+        }
+
+    }
 }
