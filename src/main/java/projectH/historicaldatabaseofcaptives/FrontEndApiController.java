@@ -13,6 +13,9 @@ import projectH.historicaldatabaseofcaptives.datacleaner.DataCleanerService;
 import projectH.historicaldatabaseofcaptives.datacleaner.LocalAbbreviatedEntity;
 import projectH.historicaldatabaseofcaptives.datacleaner.ReviewAbbreviations;
 import projectH.historicaldatabaseofcaptives.datacleaner.ReviewLocations;
+import projectH.historicaldatabaseofcaptives.security.AuthenticationRequest;
+import projectH.historicaldatabaseofcaptives.security.AuthenticationResponse;
+import projectH.historicaldatabaseofcaptives.security.AuthenticationService;
 import projectH.historicaldatabaseofcaptives.users.Visitor;
 
 
@@ -28,20 +31,20 @@ public class FrontEndApiController {
     private final ReviewLocations reviewLocations;
 
     private final ReviewAbbreviations reviewAbbreviations;
+    private final AuthenticationService authenticationService;
 
 
 
 
 
     @Autowired
-    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewLocations reviewLocations, ReviewAbbreviations reviewAbbreviations) {
+    public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewLocations reviewLocations, ReviewAbbreviations reviewAbbreviations, AuthenticationService authenticationService) {
         this.candidateFinder = candidateFinder;
         this.dataCleanerService = dataCleanerService;
-
         this.captiveServices = captiveServices;
         this.reviewLocations = reviewLocations;
         this.reviewAbbreviations = reviewAbbreviations;
-
+        this.authenticationService = authenticationService;
     }
 
 @GetMapping(path = "/v1/allTheCaptives")
@@ -126,6 +129,13 @@ public void testest()  {
             return new ResponseEntity<>("Captive with id " + Id + "does not exists", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/v1/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request
+    ) {
+        return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
 }

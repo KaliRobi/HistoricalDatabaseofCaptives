@@ -86,11 +86,11 @@
             <version>24.0.1</version>
             <scope>compile</scope>
         </dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--			<version>3.1.5</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>3.1.5</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
 <!--		<dependency>-->
 <!--			<groupId>javax.servlet</groupId>-->
