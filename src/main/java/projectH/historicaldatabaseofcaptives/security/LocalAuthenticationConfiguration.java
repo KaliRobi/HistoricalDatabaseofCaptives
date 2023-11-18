@@ -1,12 +1,9 @@
 package projectH.historicaldatabaseofcaptives.security;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,8 +31,7 @@ public class LocalAuthenticationConfiguration {
     private static final String[] USER_ENDPOINTS = {
             "/v1/postNewCaptive",
             "/v1/AddAbbrevs",
-            "/v1/updateCaptiveV2/{id}",
-            "/v1/relocations"
+            "/v1/updateCaptiveV2/{id}"
 
     };
 
@@ -56,9 +52,12 @@ public class LocalAuthenticationConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSec) throws Exception {
         httpSec.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
-                    authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
-                    authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).hasAuthority(UserPermission.USER.name());
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->  {
+//                    authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
+//                    authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).hasAuthority(UserPermission.USER.name());
+//                    authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).denyAll();
+                    authorizationManagerRequestMatcherRegistry.anyRequest().permitAll();
+//                    authorizationManagerRequestMatcherRegistry.requestMatchers("/v1/authenticate").hasAuthority(UserPermission.ADMIN.name());
                 })
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

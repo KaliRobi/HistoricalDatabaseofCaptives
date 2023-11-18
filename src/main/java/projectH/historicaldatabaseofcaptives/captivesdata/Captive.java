@@ -21,7 +21,7 @@ public class Captive {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp insert_time;
 
-    private int volume;
+    private Integer volume;
     private String captive_id;
     private String name;
     private String sex;
@@ -50,7 +50,7 @@ public class Captive {
     private LocalDate sentence_begins;
     private LocalDate sentence_expires;
     private Integer prison_term_days;
-    private int ransom;
+    private Integer ransom;
     private String associates;
     private String degree_of_crime;
     private String degree_of_punishment;

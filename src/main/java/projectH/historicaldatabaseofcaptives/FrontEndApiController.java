@@ -17,8 +17,6 @@ import projectH.historicaldatabaseofcaptives.security.AuthenticationRequest;
 import projectH.historicaldatabaseofcaptives.security.AuthenticationResponse;
 import projectH.historicaldatabaseofcaptives.security.AuthenticationService;
 import projectH.historicaldatabaseofcaptives.users.Visitor;
-
-
 import java.util.*;
 
 
@@ -29,13 +27,8 @@ public class FrontEndApiController {
     private final  DataCleanerService dataCleanerService ;
     private final CaptiveServices captiveServices;
     private final ReviewLocations reviewLocations;
-
     private final ReviewAbbreviations reviewAbbreviations;
     private final AuthenticationService authenticationService;
-
-
-
-
 
     @Autowired
     public FrontEndApiController(CandidateFinder candidateFinder, DataCleanerService dataCleanerService, CaptiveServices captiveServices, ReviewLocations reviewLocations, ReviewAbbreviations reviewAbbreviations, AuthenticationService authenticationService) {
@@ -64,7 +57,6 @@ public class FrontEndApiController {
     } catch (Exception e){
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
  }
 @GetMapping(path="/v1/SexDistributionPerCities")
     public ResponseEntity<Map<String, HashMap<String, Long>>> exposeSexDistribution(){
@@ -73,8 +65,6 @@ public class FrontEndApiController {
     } catch (Exception e){
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-
 }
 
 @GetMapping(path="/v1/relocations")
@@ -85,15 +75,6 @@ public class FrontEndApiController {
         return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
-
-
-
-@GetMapping(path="/v1/test")
-public void testest()  {
-   reviewLocations.reviewLocations();
-
-}
-
 
 @PostMapping(path = "/v1/postNewCaptive/")
     public ResponseEntity<String> postNewCaptive(@RequestBody Captive captive){
@@ -108,7 +89,7 @@ public void testest()  {
     } catch (Exception e){
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    }
+}
 
     @PostMapping(path="/v1/AddAbbrevs")
     public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
@@ -135,7 +116,14 @@ public void testest()  {
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
+        System.out.println(request);
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @GetMapping(path="/v1/test")
+    public void testest()  {
+        reviewLocations.reviewLocations();
+
     }
 
 }
