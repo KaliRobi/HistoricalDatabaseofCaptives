@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import projectH.historicaldatabaseofcaptives.users.UserPermission;
 
 @Configuration
 //@EnableWebSecurity(debug = true)
@@ -23,7 +22,7 @@ public class LocalAuthenticationConfiguration {
             "/v1/SexDistributionPerCities",
             "/v1/relocations",
             "/v1/whoWasSimilarToMe",
-            "/v1/authenticate/"
+            "/v1/authenticate"
 
 
     };
@@ -53,11 +52,11 @@ public class LocalAuthenticationConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSec) throws Exception {
         httpSec.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->  {
-//                    authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
-//                    authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).hasAuthority(UserPermission.USER.name());
-//                    authorizationManagerRequestMatcherRegistry.requestMatchers(USER_ENDPOINTS).denyAll();
-                    authorizationManagerRequestMatcherRegistry.anyRequest().permitAll();
-//                    authorizationManagerRequestMatcherRegistry.requestMatchers("/v1/authenticate").hasAuthority(UserPermission.ADMIN.name());
+                    authorizationManagerRequestMatcherRegistry.requestMatchers(PUBLIC_ENDPOINTS).permitAll();
+//                    authorizationManagerRequestMatcherRegistry
+//                            .requestMatchers("/v1/relocations").hasRole("ADMIN");
+//                    authorizationManagerRequestMatcherRegistry
+//                            .requestMatchers("/v1/authenticate").hasRole("ADMIN");
                 })
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

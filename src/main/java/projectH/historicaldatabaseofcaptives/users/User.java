@@ -19,42 +19,43 @@ import java.util.List;
 @Table(name = "hdc_user")
 public class User implements IPerson , UserDetails {
 
-//    , UserDetails
 // in the first release only manual user creation will be possible.
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final long user_id;
+    private long user_id;
     @Temporal(TemporalType.TIMESTAMP)
     private final Timestamp Insert_time;
     private final Instant Birth_Date;
-    private final String Name;
+    private String Name;
 
     private final String Sex;
     @ManyToOne(targetEntity = GeoLocation.class, fetch = FetchType.LAZY)
-    @MapsId
-    private GeoLocation Location;
-    private String Username;
+    private final GeoLocation Location;
+    private  String Username;
 
     private String Password;
 
-    private boolean IsActive;
+    private  boolean IsActive;
 
 
-    private String EmailAddress;
+    private  String EmailAddress;
 
-    @Enumerated
-    private UserPermission role;
 
-    public User(long userid, Timestamp insert_time, Instant birthDate, String name, GeoLocation geoLocation, String sex, String username, String emailAddress) {
-        user_id = userid;
-        Insert_time = insert_time;
-        Birth_Date = birthDate;
-        Name = name;
-        Location = geoLocation;
-        Sex = sex;
-        Username = username;
-        EmailAddress = emailAddress;
+    private final String role;
+
+    public User(long user_id, Timestamp insert_time, Instant birthDate, String name, GeoLocation geoLocation, String sex, String username, String password, boolean isActive, String emailAddress, String role) {
+        this.user_id = user_id;
+        this.Insert_time = insert_time;
+        this.Birth_Date = birthDate;
+        this.Name = name;
+        this.Location = geoLocation;
+        this.Sex = sex;
+        this.Username = username;
+        Password = password;
+        IsActive = isActive;
+        this.EmailAddress = emailAddress;
+        this.role = role;
     }
 
     public long getUser_id() {
@@ -66,8 +67,8 @@ public class User implements IPerson , UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+    public Collection<GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -130,7 +131,7 @@ public class User implements IPerson , UserDetails {
 
     @Override
     public void setName(String name) {
-
+        this.Name = name;
     }
 
 
@@ -147,6 +148,10 @@ public class User implements IPerson , UserDetails {
     @Override
     public String getSex() {
         return Sex;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
     }
 
 

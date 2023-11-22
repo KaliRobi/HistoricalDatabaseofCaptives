@@ -1,6 +1,6 @@
 package projectH.historicaldatabaseofcaptives.users;
 
-public enum Role {
+public enum UserRole {
     USER,
     ADMIN
 }

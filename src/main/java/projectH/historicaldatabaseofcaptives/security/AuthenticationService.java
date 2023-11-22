@@ -3,7 +3,6 @@ package projectH.historicaldatabaseofcaptives.security;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import projectH.historicaldatabaseofcaptives.users.UserRepository;
 
@@ -27,7 +26,8 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
-        System.out.println(authenticationRequest.getUsername());
+        System.out.println(userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow());
+
        authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(
                        authenticationRequest.getUsername(),
                        authenticationRequest.getPassword()));
