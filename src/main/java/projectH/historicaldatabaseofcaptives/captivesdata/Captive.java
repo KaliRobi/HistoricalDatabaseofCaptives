@@ -17,10 +17,8 @@ public class Captive {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp insert_time;
-
     private Integer volume;
     private String captive_id;
     private String name;
@@ -62,7 +60,15 @@ public class Captive {
 
 
 
-    Captive(long id, int volume, String captive_id, String name, String sex, Integer height, String build, String dentition, String special_peculiarities, LocalDate dateOfBirth, String place_of_birth, String place_of_residence, String residence, String religion, String childhood_status, String marital_status, Integer number_of_children, String occupation, String occupation_2, String occupation_3, String military_service, String literacy, String education, String criminal_history, String crime, LocalDate sentence_begins, LocalDate sentence_expires, Integer prison_term_days, int ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes, String arrest_site, String username) {
+    Captive(long id, int volume, String captive_id, String name,
+            String sex, Integer height, String build, String dentition,
+            String special_peculiarities, LocalDate dateOfBirth, String place_of_birth, String place_of_residence,
+            String residence, String religion, String childhood_status, String marital_status,
+            Integer number_of_children, String occupation, String occupation_2, String occupation_3,
+            String military_service, String literacy, String education, String criminal_history,
+            String crime, LocalDate sentence_begins, LocalDate sentence_expires, Integer prison_term_days,
+            int ransom, String associates, String degree_of_crime, String degree_of_punishment, String notes,
+            String arrest_site, String username) {
         this.id = id;
         this.volume = volume;
         this.captive_id = captive_id;
@@ -101,7 +107,6 @@ public class Captive {
     }
 
     public Captive() {
-
     }
 
     public long getId() {
@@ -267,8 +272,6 @@ public class Captive {
         return occupation_3;
     }
 
-
-
     public void setOccupation_3(String occupation_3) {
         this.occupation_3 = occupation_3;
     }
@@ -415,8 +418,6 @@ public class Captive {
     public int hashCode() {
         return Objects.hash(id, volume, captive_id, name, sex, height, build, dentition, special_peculiarities, date_of_birth, place_of_birth, place_of_residence, residence, religion, childhood_status, marital_status, number_of_children, occupation, occupation_2, occupation_3, military_service, literacy, education, criminal_history, crime, sentence_begins, sentence_expires, prison_term_days, ransom, associates, degree_of_crime, degree_of_punishment, notes, arrest_site);
     }
-//
-
 
     @Override
     public String toString() {

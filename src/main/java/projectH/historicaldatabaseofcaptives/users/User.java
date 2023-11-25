@@ -44,7 +44,12 @@ public class User implements IPerson , UserDetails {
 
     private final String role;
 
-    public User(long user_id, Timestamp insert_time, Instant birthDate, String name, GeoLocation geoLocation, String sex, String username, String password, boolean isActive, String emailAddress, String role) {
+    public User(long user_id, Timestamp insert_time,
+                Instant birthDate, String name,
+                GeoLocation geoLocation, String sex,
+                String username, String password,
+                boolean isActive, String emailAddress,
+                String role) {
         this.user_id = user_id;
         this.Insert_time = insert_time;
         this.Birth_Date = birthDate;

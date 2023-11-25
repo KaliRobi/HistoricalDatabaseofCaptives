@@ -40,56 +40,55 @@ public class FrontEndApiController {
         this.authenticationService = authenticationService;
     }
 
-@GetMapping(path = "/v1/allTheCaptives")
+    @GetMapping(path = "/v1/allTheCaptives")
     public ResponseEntity<List<Captive>> exposeCaptives(){
-    try {
-        return new ResponseEntity<>(captiveServices.getAllTheCaptives(), HttpStatus.OK);
-    } catch (Exception e){
-        return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            return new ResponseEntity<>(captiveServices.getAllTheCaptives(), HttpStatus.OK);
+        } catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
-}
-@GetMapping(path="/v1/LocationsOfResidence")
+    @GetMapping(path="/v1/LocationsOfResidence")
 // this iterable needs to be changed
     public ResponseEntity<Iterable<String>> exposeLocationsOfResidence(){
-    try {
-        return new ResponseEntity<>(captiveServices.getLocationsOfResidence(), HttpStatus.OK);
-    } catch (Exception e){
-        return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
- }
-@GetMapping(path="/v1/SexDistributionPerCities")
+        try {
+            return new ResponseEntity<>(captiveServices.getLocationsOfResidence(), HttpStatus.OK);
+        } catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+     }
+    @GetMapping(path="/v1/SexDistributionPerCities")
     public ResponseEntity<Map<String, HashMap<String, Long>>> exposeSexDistribution(){
-    try {
-        return new ResponseEntity<>(captiveServices.getSexDistribution(), HttpStatus.OK);
-    } catch (Exception e){
-        return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            return new ResponseEntity<>(captiveServices.getSexDistribution(), HttpStatus.OK);
+        } catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-}
 
-@GetMapping(path="/v1/relocations")
+    @GetMapping(path="/v1/relocations")
     public ResponseEntity<List<List<String>>> exposeRelocations(){
-    try{
-        return new ResponseEntity<>(captiveServices.getTheRelocated(), HttpStatus.OK) ;
-    } catch (Exception e){
-        return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try{
+            return new ResponseEntity<>(captiveServices.getTheRelocated(), HttpStatus.OK) ;
+        } catch (Exception e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-}
 
-@PostMapping(path = "/v1/postNewCaptive/")
+    @PostMapping(path = "/v1/postNewCaptive/")
     public ResponseEntity<String> postNewCaptive(@RequestBody Captive captive){
-    captiveServices.addCaptive(captive);
-    return new ResponseEntity<>("Captive posted", HttpStatus.OK);
-}
-
-@PostMapping(path = "/v1/whoWasSimilarToMe/")
-    public ResponseEntity<Captive> findACandidate(@RequestBody Visitor visitor){
-    try {
-     return  new ResponseEntity<>(candidateFinder.returnCandidate(visitor), HttpStatus.OK) ;
-    } catch (Exception e){
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        captiveServices.addCaptive(captive);
+        return new ResponseEntity<>("Captive posted", HttpStatus.OK);
     }
-}
+
+    @PostMapping(path = "/v1/whoWasSimilarToMe/")
+    public ResponseEntity<Captive> findACandidate(@RequestBody Visitor visitor){
+        try {
+         return  new ResponseEntity<>(candidateFinder.returnCandidate(visitor), HttpStatus.OK) ;
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping(path="/v1/AddAbbrevs")
     public ResponseEntity<List<LocalAbbreviatedEntity>> addAbbreviations(@RequestBody List<LocalAbbreviatedEntity> list ) {
@@ -99,10 +98,9 @@ public class FrontEndApiController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
-@PutMapping(path = "/v1/updateCaptiveV2/{id}")
+    @PutMapping(path = "/v1/updateCaptiveV2/{id}")
     public ResponseEntity<String> updateCaptiveV2(@PathVariable("id") long Id, @RequestBody Map<String, Object>  updateAttribute){
         try{
             captiveServices.updateCaptiveV2(Id, updateAttribute);
@@ -123,7 +121,6 @@ public class FrontEndApiController {
     @GetMapping(path="/v1/test")
     public void testest()  {
         reviewLocations.reviewLocations();
-
     }
 
 }

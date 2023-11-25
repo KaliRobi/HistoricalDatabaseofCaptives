@@ -20,20 +20,15 @@ public class LocalSecurityConfiguration {
 
     private final UserRepository userRepository;
 
-// everything will be jwt
-
-
     public LocalSecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
 
     }
 
-
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByUsername(username)
-                .orElseThrow( () -> new UserNotFoundException("user with the following username does not exists" + username))
-                ;
+                .orElseThrow( () -> new UserNotFoundException("user with the following username does not exists" + username));
     }
 
     @Bean

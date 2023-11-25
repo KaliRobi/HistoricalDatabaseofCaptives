@@ -12,7 +12,6 @@ public class AuthenticationService {
     // no sign up option yet first registration will be manual through the db
     // change password option should be implemented.
 
-
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
 
@@ -23,7 +22,6 @@ public class AuthenticationService {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }
-
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
         System.out.println(userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow());

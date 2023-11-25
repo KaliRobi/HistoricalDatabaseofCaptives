@@ -15,7 +15,6 @@ public class LocalAuthenticationConfiguration {
     private  final  JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-
     private static final String[] PUBLIC_ENDPOINTS = {
             "/v1/allTheCaptives",
             "/v1/LocationsOfResidence",
@@ -23,30 +22,23 @@ public class LocalAuthenticationConfiguration {
             "/v1/relocations",
             "/v1/whoWasSimilarToMe",
             "/v1/authenticate"
-
-
     };
 
     private static final String[] USER_ENDPOINTS = {
             "/v1/postNewCaptive",
             "/v1/AddAbbrevs",
             "/v1/updateCaptiveV2/{id}"
-
     };
 
     private static final String[] ADMIN_ENDPOINTS = {
-            //not sure that admin console will be done before the first release
-
+//  not sure that admin console will be done before the first release
     };
 
     public LocalAuthenticationConfiguration(JwtAuthenticationFilter jwtAuthFilter,
                                             AuthenticationProvider authenticationProvider) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
-
     }
-
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSec) throws Exception {

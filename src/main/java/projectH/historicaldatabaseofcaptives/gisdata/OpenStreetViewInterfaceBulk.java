@@ -21,7 +21,6 @@ import java.util.stream.IntStream;
 @Component
 public class OpenStreetViewInterfaceBulk implements IGeolocator {
 
-
     private final GeologicalRepository geologicalRepository;
     private final WithOrWithoutCoordinates withOrWithoutCoordinates;
 
@@ -30,18 +29,16 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
         this.withOrWithoutCoordinates = withOrWithoutCoordinates;
     }
 
-    // This version is for the larger mass of data retrieval. Timeout is needed to avoid closedConnectionException
-    // Due to Historical reason the display name of many locations is written in ciril or romanian alphabet.
-    // select * from geological_location where regexp_like(name, '[а-яА-ЯёЁ]');
-    // so in geological_locations table there is "source_name"  "osv_name" columns for names
+// This version is for the larger mass of data retrieval. Timeout is needed to avoid closedConnectionException
+// Due to Historical reason the display name of many locations is written in ciril or romanian alphabet.
+// select * from geological_location where regexp_like(name, '[а-яА-ЯёЁ]');
+// so in geological_locations table there is "source_name"  "osv_name" columns for names
     @Override
     public void getLocationData(Set<String> targetTownSet) throws InterruptedException, ExecutionException, IOException {
         targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
              //creating uri list while dealing with the special Hungarian characters
         List<List<String>> targetLocations = bulkTownFeeder( targetTownSet.stream().toList(), 6);
         produceCompleteables(targetLocations);
-
-
     }
 
     private void  produceCompleteables(List<List<String>>  targetLocations ) throws InterruptedException, ExecutionException, IOException {
@@ -61,17 +58,13 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
             listOfCompletables.add(copmMap);
             insertEntriesIntoGeologicalLocations(listOfCompletables);
             listOfCompletables.clear();
             Thread.sleep(6000);
         }
-
     }
-
 
     private Map<String, OSVJson> getCompleteables(List<TargetLink> targetUrls) throws InterruptedException, ExecutionException, IOException {
         HttpClient client = HttpClient.newHttpClient();
@@ -84,7 +77,6 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
         return mapOfLatLon;
     }
 
-
     private OSVJson processCompletables(CompletableFuture<String> completableFuture) throws ExecutionException, InterruptedException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -96,10 +88,7 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
         }
         return osvJson;
     }
-
-
     private void insertEntriesIntoGeologicalLocations(List<Map<String, OSVJson>> listOfLatLon ) {
-
         for (Map<String, OSVJson> latLonsMap : listOfLatLon) {
             try{
             for (String key : latLonsMap.keySet()) {
@@ -110,12 +99,9 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
                             osvJson.getLon(),
                             osvJson.getLat(),
                             osvJson.getDisplay_name().substring(osvJson.getDisplay_name().lastIndexOf(',')+1).trim()));
-
                 }
             }
         } catch (StringIndexOutOfBoundsException ignored){
-
-
             }
         }
     }
@@ -123,8 +109,6 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
 //    create a list of list what defines the amount of data the GET request will fetch at once.
 //    aim is to get as much as possible at  the given time, but avoid creating tails like 21 % 4 = 1 vs 21 % 3 = 0
     public List<List<String>> bulkTownFeeder(List<String> listToProcess, int maxPartitionSize){
-
-
         int listSize = listToProcess.size();
 
         Integer partitionSize = IntStream.range(1, maxPartitionSize).filter(e-> listSize % e == 0).reduce(Integer::max).orElseThrow();
@@ -137,10 +121,9 @@ public class OpenStreetViewInterfaceBulk implements IGeolocator {
         itList.forEach(e ->
                 collectorList.add(listToProcess.subList(e - partitionSize, e))
         );
-
         collectorList.forEach(System.out::println);
 
-                return collectorList;
+        return collectorList;
     }
 
 

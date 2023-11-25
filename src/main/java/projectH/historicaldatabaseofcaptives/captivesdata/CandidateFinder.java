@@ -15,19 +15,12 @@ import projectH.historicaldatabaseofcaptives.users.Visitor;
 
 @Component
 public class CandidateFinder {
-
     private final CaptiveServices captiveServices;
-        public CandidateFinder(CaptiveServices captiveServices) {
+    public CandidateFinder(CaptiveServices captiveServices) {
         this.captiveServices = captiveServices;
     }
 
-
-
     public Captive returnCandidate(Visitor visitor){
-
        return captiveServices.findACaptive(visitor);
-
     }
-
-
 }

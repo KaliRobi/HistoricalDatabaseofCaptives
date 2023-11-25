@@ -1,39 +1,36 @@
 package projectH.historicaldatabaseofcaptives.datacleaner;
-/*
-As it turns out to support all the scientific needs of the project the geoloaction part needed to be quite extensive
-This is why Class will attempt to give a separate cleaning method
-This will be a blueprint for now.
- */
-
 
 import org.springframework.stereotype.Component;
 import projectH.historicaldatabaseofcaptives.captivesdata.Captive;
 import projectH.historicaldatabaseofcaptives.captivesdata.CaptiveServices;
 import projectH.historicaldatabaseofcaptives.gisdata.GeoLocation;
 import projectH.historicaldatabaseofcaptives.gisdata.GeologicalRepository;
-
 import java.util.*;
 import java.util.stream.Collectors;
+
+
+/*
+As it turns out to support all the scientific needs of the project the geoloaction part needed to be quite extensive
+This is why Class will attempt to give a separate cleaning method
+This will be a blueprint for now.
+ */
+
 @Component
 public class ReviewLocations {
-
 
     private final GeologicalRepository geologicalRepository;
     private final CaptiveServices captiveServices;
     private final ReviewableEntityRepository reviewableEntityRepository;
-
 
     public ReviewLocations(GeologicalRepository geologicalRepository, CaptiveServices captiveServices, ReviewableEntityRepository reviewableEntityRepository) {
         this.geologicalRepository = geologicalRepository;
         this.captiveServices = captiveServices;
         this.reviewableEntityRepository = reviewableEntityRepository;
     }
-
     public void reviewLocations(){
         Map<Long, String>  reviewableCandidates =  mergeNonMatchingLocations();
         saveReviewableEntities(reviewableCandidates);
     }
-
 
     private Map<Long, String>  reviewResidences(){
         Map<Long, String> placeOfResidence = captiveServices.getAllTheCaptives()
@@ -53,7 +50,6 @@ public class ReviewLocations {
 
     }
 
-
     private Map<Long, String> extractReviewables(Map<Long, String> entryMap){
         Map<Long, String> reviewableLocations = new HashMap<>();
         Set<String> osvNameList = getOSVNames();
@@ -66,7 +62,6 @@ public class ReviewLocations {
         }
         return reviewableLocations;
     }
-
 
     private Set<String> getOSVNames(){
 //        this deals with the cyryllic and arabic letters, the former will be a different topic because there the locations are correct just the language is different
@@ -96,7 +91,6 @@ public class ReviewLocations {
         );
 
         return birthPlaceMap;
-
     }
 
     private String returnNewValue(String value, String valueToAdd){
@@ -108,8 +102,6 @@ public class ReviewLocations {
         for(Map.Entry<Long, String> entity : candidateMap.entrySet()){
             reviewableEntityRepository.save(
             new ReviewableEntity(entity.getKey(), entity.getValue(), "Invalid location name(s) "+entity.getValue()+" for captive with id "+ entity.getKey()));
-
         }
-
     }
 }

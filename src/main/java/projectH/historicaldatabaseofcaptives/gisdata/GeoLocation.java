@@ -47,9 +47,7 @@ public class GeoLocation {
     public GeoLocation(Double longitude , Double latitude ) {
         this.latitude = latitude;
         this.longitude = longitude;
-
     }
-
 
     public GeoLocation() {
     }
@@ -75,7 +73,6 @@ public class GeoLocation {
     }
 
     public void setSource_name(String sourceName) {
-
         this.sourceName = sourceName;
     }
 

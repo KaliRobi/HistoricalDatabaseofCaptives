@@ -13,11 +13,14 @@ import java.util.*;
  * The class will audit the distances between Budapest and the returned data and will add the outstanding location name to a new table
  *
  * the whole Spherical math is well described here although at this moment in this small section of the earth I am not sure how large the difference will be if
- * calculations are done via normal geometry
+ * calculations are done via simple geometry
  * http://www.movable-type.co.uk/scripts/latlong.html
  *
  * Even if the class might look a bit overkill for now, it is better to use an approach which provides us a more fundamental base for further features
  *
+ *  Haversine formula
+ *  based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
+ *  https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
  *
  */
 
@@ -93,17 +96,14 @@ public class DistanceVerifier {
             double y = geoTo.getLongitude() - geoFrom.getLongitude();
             return new Vector(x, y);
         } catch (NullPointerException e){
-            //should point to the concrete missing attribute
             if(geoFrom.getLongitude() == null || geoFrom.getLatitude() == null){
                 throw  new GeolocationAttributeMissing("Geolocation (from) with coordinates " + geoFrom.getLongitude() + "/" + geoFrom.getLatitude()+ " is not allowed");
             }
             throw  new GeolocationAttributeMissing("Geolocation (to) with coordinates " + geoTo.getLongitude() + "/" + geoTo.getLatitude()+ " is not allowed");
-
-
         }
 
     }
-    //this needs to be based on something
+
     private GeoLocation geolocationFromVectors(Vector vectorOnX, Vector vectorOnY){
         return new GeoLocation( vectorOnX.getX() ,  vectorOnY.getY());
     }
@@ -117,22 +117,17 @@ public class DistanceVerifier {
     }
 
     private double calculateLocationToLocationDistance(GeoLocation locationA, GeoLocation locationB) {
-        /*
-        convert to Radian is  degree * 3.1415926535 / 180;
-         */
+//      convert to Radian is  degree * 3.1415926535 / 180;
 
-        double latA = Math.toRadians(locationB.getLatitude());
-        double latB = Math.toRadians(locationB.getLatitude());
-        double difLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
-        double difLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude()) ;
-//      Haversine formula
-//         based on https://community.esri.com/t5/coordinate-reference-systems-blog/distance-on-a-sphere-the-haversine-formula/ba-p/902128
-//         https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
+        double firstLocationLatitude = Math.toRadians(locationB.getLatitude());
+        double secondLocationLatitude = Math.toRadians(locationB.getLatitude());
 
-        double atan2Base = Math.pow(Math.sin(difLat / 2),  2) + Math.cos(latA) * Math.cos(latB) * Math.pow(Math.sin(difLon / 2) ,2);
+        double latitudeDifference = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
+        double longitudeDifference = Math.toRadians(locationB.getLongitude() - locationA.getLongitude()) ;
 
-        double distanceInKm =  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
-        return   distanceInKm;
+        double atan2Base = Math.pow(Math.sin(latitudeDifference / 2),  2) + Math.cos(firstLocationLatitude) * Math.cos(secondLocationLatitude) * Math.pow(Math.sin(longitudeDifference / 2) ,2);
+
+        return  (Math.atan2(Math.sqrt(atan2Base), Math.sqrt(1 - atan2Base))) * 2 * 6371000 / 1000 ;
     }
 
 

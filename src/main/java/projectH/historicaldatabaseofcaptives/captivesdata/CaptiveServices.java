@@ -36,19 +36,6 @@ public class CaptiveServices {
 
     }
 
-    /// reworked with name of updateCaptiveV2, keeping this version just in case
-//    public void updateCaptive(long captiveId, Captive captiveNewData){
-//        ModelMapper modelMapper = new ModelMapper();
-//        geoServices.findLocationOrFetchIt(captiveNewData);
-//        try {
-//            Captive captiveToUpdate = captiveRecordRepository.findById( captiveId).get();
-//            modelMapper.map(captiveNewData, captiveToUpdate);
-//            captiveRecordRepository.save(captiveToUpdate);
-//        } catch (NoSuchCaptiveIdFound e){
-//            throw new NoSuchCaptiveIdFound("this id is not in the db" + captiveId, e);
-//        }
-//}
-
     public void updateCaptiveV2(long captiveId, Map<String, Object> inboundMap){
         ModelMapper modelMapper = new ModelMapper();
         updateGeolocationsIfNeeded(inboundMap);
@@ -60,6 +47,7 @@ public class CaptiveServices {
     // return which one is present
     private List<String> listPresentGeoRelatedAttributesToUpdate(Map<String, Object> inboundMap) {
         List<String> geoRelatedColumns = Arrays.asList("place_of_birth", "place_of_residence", "arrest_site");
+
        return inboundMap.keySet().stream().filter(geoRelatedColumns::contains).toList();
     }
 
@@ -80,6 +68,7 @@ public class CaptiveServices {
     public TreeSet<String> getLocationsOfBirth() {
         TreeSet<String> citiesOfBirth = new TreeSet<>();
         getAllTheCaptives().forEach(capt -> citiesOfBirth.add(capt.getPlace_of_birth()));
+
         return citiesOfBirth;
     }
 
@@ -105,7 +94,6 @@ public class CaptiveServices {
 
 
     public List<List<String>> getTheRelocated(){
-
         // get records where the location of birth and residence is not the same
         /// base for checking the relocation directions. This might be better to be a map? Org, dest, weight?
         List<List<String>> relocatedCandidateList  = getAllTheCaptives().stream().filter(captive -> !captive.getPlace_of_residence()
@@ -113,12 +101,10 @@ public class CaptiveServices {
                         .stream().map(captive ->  Arrays.asList(captive.getPlace_of_birth(), captive.getPlace_of_residence()))
                         .toList();
 
-
         HashSet<List<String>> uniqueRelocations  = new HashSet<>(relocatedCandidateList);
         List<List<String>> relocationsWithWeight = new ArrayList<>();
         for (List<String> uniqueRelocation : uniqueRelocations) {
             long groupedValue = relocatedCandidateList.stream().filter(element -> element.equals(uniqueRelocation)).count();
-
             if (groupedValue > 10L) {
                 relocationsWithWeight.add(Arrays.asList(uniqueRelocation
                         .get(0), uniqueRelocation.get(1), String.valueOf(relocatedCandidateList.stream()
@@ -132,9 +118,7 @@ public class CaptiveServices {
 
     // returns a captive by its attributes
     public Captive findACaptive(Visitor visitor){
-
          List<Captive> captivesList =  captiveRecordRepository.getTargetGroupByLocationAndSex(visitor.getLocation().getSource_name(), visitor.getSex());
-
          List<Captive> candidateToPresentList = captivesList.stream().filter(e -> e.getAge() == visitor.getAge()).limit(1).toList();
          if(!candidateToPresentList.isEmpty() ){
              return candidateToPresentList.get(0);
@@ -142,9 +126,5 @@ public class CaptiveServices {
         else{
              return new Captive();
          }
-
     }
-
-
-
 }

@@ -13,7 +13,7 @@ public class WithOrWithoutCoordinates {
         this.geologicalRepository = geologicalRepository;
     }
 
-    // get the locations without lat / lon data
+//  get the locations without lat / lon data
     public Set<String> getLocationsWithoutCoordinates() {
         Set<String> locationsWithoutLocationData = new HashSet<>();
 
@@ -24,7 +24,6 @@ public class WithOrWithoutCoordinates {
                     }
                 }
         );
-
         return locationsWithoutLocationData;
     }
 
@@ -38,7 +37,6 @@ public class WithOrWithoutCoordinates {
                     }
                 }
         );
-
         return locationsWithLocationData;
     }
 }

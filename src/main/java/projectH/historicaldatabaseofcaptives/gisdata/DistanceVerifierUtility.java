@@ -17,12 +17,12 @@ public class DistanceVerifierUtility {
 
     private  final GeologicalRepository geologicalRepository;
 
-    public DistanceVerifierUtility(OutstandingGeolocationRepository outstandingGeolocationRepository, DistanceVerifier distanceVerifier, GeologicalRepository geologicalRepository) {
+    public DistanceVerifierUtility(OutstandingGeolocationRepository outstandingGeolocationRepository,
+                                   DistanceVerifier distanceVerifier, GeologicalRepository geologicalRepository) {
         this.outstandingGeolocationRepository = outstandingGeolocationRepository;
         this.distanceVerifier = distanceVerifier;
         this.geologicalRepository = geologicalRepository;
     }
-
 
     public Set<GeoLocation> inspectLocationsForOutstandings(){
          Set<GeoLocation> locationsWithDifferentNames = separateLocationsWithDifferentNames();
@@ -34,9 +34,6 @@ public class DistanceVerifierUtility {
 
         return locationsWithDifferentNames;
     }
-
-//    insert_time >= sysdate-1 / 7 depends on the setup  wil be done with a @Scheduler
-
 //    will check for candidates if the source_name !equals osv_name because of the difference in hungarian and surrounding nations.
     private Set<GeoLocation> separateLocationsWithDifferentNames(){
         return  geologicalRepository.findAll().stream().filter( e -> !e.getSource_name().equalsIgnoreCase(e.getOsv_name()))
@@ -50,7 +47,8 @@ public class DistanceVerifierUtility {
 
     // to avoid duplication
     private boolean isNotRepeatedCandidate (GeoLocation location) {
-       Set<Long> existingIds = outstandingGeolocationRepository.findAll().stream().map(OutstandingGeolocation::getGeological_location_id).collect(Collectors.toSet());
+       Set<Long> existingIds = outstandingGeolocationRepository.findAll()
+               .stream().map(OutstandingGeolocation::getGeological_location_id).collect(Collectors.toSet());
       return !existingIds.contains(location.getId());
     }
 

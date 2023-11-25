@@ -17,13 +17,8 @@ public class ReviewAbbreviations {
     public ReviewAbbreviations(LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository) {
         this.localAbbreviatedEntityRepository = localAbbreviatedEntityRepository;
     }
-
-
     public void addAbbreviations(List<LocalAbbreviatedEntity> localAbbreviatedEntityList){
         localAbbreviatedEntityList.forEach(localAbbreviatedEntityRepository::save);
 
     }
-
-
-
 }

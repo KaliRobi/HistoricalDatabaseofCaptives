@@ -11,8 +11,6 @@ import projectH.historicaldatabaseofcaptives.datacleaner.DataCleanerService;
 public class Scheduler {
     @Autowired
     private DataCleanerService dataCleanerService;
-
-
     @Scheduled(cron = "0 5 * * 0")
     public void cleanData(){
         dataCleanerService.startCleaning();

@@ -12,15 +12,11 @@ public class TargetLink {
 
     private   String target;
 
-
     public TargetLink(URI link, String target) {
         this.link = link;
-
         this.target = target;
     }
-
     public TargetLink() {
-
     }
 
     public URI getLink() {

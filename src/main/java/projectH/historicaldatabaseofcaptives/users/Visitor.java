@@ -29,14 +29,10 @@ public class Visitor implements IPerson{
 
     }
 
-
-
-
     @Override
     public LocalDate getDateOfBirth() {
         return this.dateOfBirth;
     }
-
 
     @Override
     public int getAge() {
@@ -44,7 +40,6 @@ public class Visitor implements IPerson{
 
         return calendar.get(Calendar.YEAR)- this.dateOfBirth.get(ChronoField.YEAR);
     }
-
 
     @Override
     public String getName() {

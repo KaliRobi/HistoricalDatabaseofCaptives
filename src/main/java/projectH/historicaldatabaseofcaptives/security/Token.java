@@ -19,7 +19,6 @@ public class Token {
 
     public boolean expired;
 
-
 }
 
 

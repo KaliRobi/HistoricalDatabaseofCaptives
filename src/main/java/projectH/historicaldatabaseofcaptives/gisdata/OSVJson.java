@@ -48,8 +48,6 @@ public class OSVJson implements Serializable {
                 String type,
                 double importance,
                 String icon
-
-
  ) {
   this.place_id = place_id;
   this.licence = licence;

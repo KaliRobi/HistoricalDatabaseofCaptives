@@ -34,18 +34,13 @@ public class OpenStreetViewInterface implements IGeolocator{
     }
 
     public OpenStreetViewInterface() {
-
     }
 
-    //    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
+//    Application interface with openStreetView, what also send the retrieved coordinates to the  database.
 //    This version of the class should be used for normal operations because it is supposedly faster than the bulk version.
     @Override
     public void getLocationData(Set<String> targetTownSet) {
-
-
-
-
-        //filter out the already processed locations
+//      filter out the already processed locations
         try {
             targetTownSet.removeAll(withOrWithoutCoordinates.getLocationsWithCoordinates());
         } catch (NullPointerException e){
@@ -66,36 +61,39 @@ public class OpenStreetViewInterface implements IGeolocator{
             List<CompletableFuture<String>> listOfLatLon = targetUris.stream().map(targetURi -> client
                     .sendAsync(HttpRequest.newBuilder(targetURi).GET().build(), HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
-                    .thenApply(e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8).substring(targetURi.toString().lastIndexOf("="))))
+                    .thenApply(e -> e.concat(URLDecoder.decode(targetURi.toString(), StandardCharsets.UTF_8)
+                            .substring(targetURi.toString()
+                                    .lastIndexOf("="))))).toList();
 
-            ).toList();
             Map<String, String> collect;
-            // return value from open street view
+//          return value from open street view
             for (CompletableFuture<String> lonLat : listOfLatLon) {
                 String sourceName;
                 String osvName;
                 String country;
 //                could be rewritten to use ObjectMapper like on the bulk version, but String methods are also an option here
-//                probably removed in the production version
+//                probably will be removed in the production version
                 try {
-
                     sourceName = Arrays.stream(lonLat.get().split("=")).toList().subList(1, 2).get(0);
+
                     collect = Arrays.stream(Arrays.asList(lonLat.get().split("}")).get(0).split(","))
                             .map(part -> part.replace("\"", "").split(":"))
                             .filter(p -> p.length > 1)
                             .collect(Collectors.toMap(s -> s[0], s -> s[1])
                             );
+
                     collect.keySet().retainAll(List.of(DISPLAY_NAME, "lon", "lat"));
                     osvName = collect.get(DISPLAY_NAME).substring(0, collect.get(DISPLAY_NAME).indexOf(','));
                     country = collect.get(DISPLAY_NAME).substring(collect.get(DISPLAY_NAME).lastIndexOf(',') + 1);
                 } catch (InterruptedException | ExecutionException ex) {
                     throw new RuntimeException(ex);
                 }
-                geologicalRepository.save(new GeoLocation(sourceName, osvName, Double.parseDouble(collect.get("lat")), Double.parseDouble(collect.get("lon")), country));
+                geologicalRepository.save(
+                        new GeoLocation(sourceName, osvName,
+                        Double.parseDouble(collect.get("lat")),
+                        Double.parseDouble(collect.get("lon")),
+                        country));
             }
-
         }
     }
-
-
 }

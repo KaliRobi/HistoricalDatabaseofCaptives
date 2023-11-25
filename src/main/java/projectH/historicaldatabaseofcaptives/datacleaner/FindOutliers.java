@@ -19,21 +19,29 @@ public class FindOutliers {
          if(listSize % 2 == 0 ) {
             List<Integer> lowerHalf = sortedList.subList(0, listSize/2 );
             List<Integer> upperHalf = sortedList.subList(listSize/2 , listSize);
+
             double firstQuarter = lowerHalf.get(lowerHalf.size() / 2);
             double thirdQuarter = upperHalf.get(upperHalf.size() / 2);
+
             double innerQuarterRange = thirdQuarter - firstQuarter;
+
             double lowerLimit = firstQuarter - innerQuarterRange * 1.5;
             double upperLimit = thirdQuarter + innerQuarterRange * 1.5;
+
              return   sortedList.stream().filter(e -> !(e < upperLimit && e > lowerLimit) ).distinct().collect(Collectors.toCollection(ArrayList::new));
         }
 //         inclusive method for the odd sized collections
         List<Integer> lowerHalf = sortedList.subList(0, listSize / 2 +1 );
         List<Integer> upperHalf = sortedList.subList(listSize / 2 , listSize);
+
         double firstQuarter =  lowerHalf.size() % 2 == 0 ?  lowerHalf.get(lowerHalf.size() / 2 ) - 0.5 : lowerHalf.get(lowerHalf.size() / 2 ) ;
         double thirdQuarter =   upperHalf.size() % 2 == 0 ? upperHalf.get(upperHalf.size() / 2) - 0.5 : upperHalf.get(upperHalf.size() / 2) ;
+
         double innerQuarterRange = thirdQuarter - firstQuarter;
+
         double lowerLimit = (firstQuarter - 0.5) - innerQuarterRange * 1.5;
         double upperLimit = (thirdQuarter -0.5) + innerQuarterRange * 1.5;
+
         return   sortedList.stream().filter(e -> !(e < upperLimit && e > lowerLimit) ).distinct().collect(Collectors.toCollection(ArrayList::new));
     }
 }

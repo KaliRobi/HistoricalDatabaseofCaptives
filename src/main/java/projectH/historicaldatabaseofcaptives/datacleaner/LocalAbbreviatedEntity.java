@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 @Entity(name = "local_abbreviated_entity")
 @Table(name = "local_abbreviated_entity")
 public class LocalAbbreviatedEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,7 +21,8 @@ public class LocalAbbreviatedEntity {
 
     private String related_table;
 
-    public LocalAbbreviatedEntity(Long id, Timestamp insert_time, String abbr, String value_hu, String value_en, String table_column, String related_table) {
+    public LocalAbbreviatedEntity(Long id, Timestamp insert_time, String abbr, String value_hu,
+                                  String value_en, String table_column, String related_table) {
         this.id = id;
         this.insert_time = insert_time;
         this.abbr = abbr;
@@ -91,8 +91,6 @@ public class LocalAbbreviatedEntity {
     public void setValue_en(String value_en) {
         this.value_en = value_en;
     }
-
-
 
     @Override
     public String toString() {

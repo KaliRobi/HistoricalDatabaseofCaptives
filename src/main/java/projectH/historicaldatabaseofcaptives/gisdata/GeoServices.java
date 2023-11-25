@@ -12,17 +12,11 @@ public class GeoServices {
     private final FindLocationInDbOrRetrieve findLocationInDbOrRetrieve;
     private final GeologicalRepository geologicalRepository;
 
-
-
-
     @Autowired
     public GeoServices(GeologicalRepository geologicalRepository, FindLocationInDbOrRetrieve findLocationInDbOrRetrieve1) {
         this.geologicalRepository = geologicalRepository;
         this.findLocationInDbOrRetrieve = findLocationInDbOrRetrieve1;
     }
-
-
-
 
     public GeoLocation getALocationByName(String name){
             return geologicalRepository.findByName(name);
@@ -31,5 +25,4 @@ public class GeoServices {
     public void findLocationOrFetchIt(String geolocation){
         findLocationInDbOrRetrieve.checkCaptiveLocationAgainstGeoEntity(geolocation);
     }
-
 }

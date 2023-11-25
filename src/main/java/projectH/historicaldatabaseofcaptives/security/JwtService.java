@@ -24,7 +24,6 @@ public class JwtService {
         return getClaim(token, Claims::getIssuer);
 
     }
-
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(getSignInKey())
@@ -46,9 +45,7 @@ public class JwtService {
     return createToken(new HashMap<>(), userDetails);
     }
 
-
     public  String createToken(Map<String, Objects> claimsToAdd, UserDetails userDetails) {
-
         return Jwts.builder()
                 .claims(claimsToAdd)
                 .subject(userDetails.getUsername())
@@ -58,7 +55,6 @@ public class JwtService {
                 .compact();
      }
     public  String createToken( UserDetails userDetails) {
-
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))

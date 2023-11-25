@@ -1,11 +1,5 @@
 package projectH.historicaldatabaseofcaptives.datacleaner;
 
-
-/*
-instead of column specific reviews instance specific ones are mor effective.
-
- */
-
 import org.springframework.stereotype.Component;
 import projectH.historicaldatabaseofcaptives.captivesdata.Captive;
 import projectH.historicaldatabaseofcaptives.captivesdata.CaptiveServices;
@@ -14,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Component
 public class ReviewStringColumnsCaptiveData {
 
@@ -21,17 +16,14 @@ public class ReviewStringColumnsCaptiveData {
     private final CaptiveServices captiveServices;
     private final CreateReviewableEntity createReviewableEntity;
 
-
-
-    public ReviewStringColumnsCaptiveData(LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository, CaptiveServices captiveServices, CreateReviewableEntity createReviewableEntity) {
+    public ReviewStringColumnsCaptiveData(LocalAbbreviatedEntityRepository localAbbreviatedEntityRepository,
+                                          CaptiveServices captiveServices,
+                                          CreateReviewableEntity createReviewableEntity) {
         this.localAbbreviatedEntityRepository = localAbbreviatedEntityRepository;
         this.captiveServices = captiveServices;
         this.createReviewableEntity = createReviewableEntity;
-
     }
-
      // need  a switch which loops though the keys (tables) and each table will loops though the columns
-
     public void reviewColumns(){
      List<String> columnsWithAbbrebs = getMapsForColumnsAndAbbreviations().keySet().stream().toList();
     for(String column : columnsWithAbbrebs){

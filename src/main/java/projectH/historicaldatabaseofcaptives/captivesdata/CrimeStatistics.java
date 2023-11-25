@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
  *  crime categories, average punishment, ransom
  * crime type per location
  *
- *
- *
  *crime pyramid, from most popular to the rarest
  *crime pyramid the ransom and the sentence period
  */
@@ -28,20 +26,12 @@ public class CrimeStatistics {
         this.captiveRecordRepository = captiveRecordRepository;
 
     }
-
     // first very basic location / gender / crime
     public Map<String, Long> frequencyOfCrimePerGender(){
         List<String> captiveList = captiveRecordRepository.getTargetGroupByLocationAndSex("Debrecen", "n")
                          .stream().map(e -> e.getCrime()).toList();
         System.out.println(captiveList.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting() )));
+
         return captiveList.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting() ));
     }
-
-
-
-
-
-
-
-
 }
