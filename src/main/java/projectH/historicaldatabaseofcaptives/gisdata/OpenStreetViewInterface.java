@@ -50,6 +50,7 @@ public class OpenStreetViewInterface implements IGeolocator{
             //creating uri list while dealing with the special Hungarian characters
             List<URI> targetUris = targetTownSet.stream().map(target ->
             {
+                // switch to StringBuilder
                 try {
                     return new URI("https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + URLEncoder.encode(target, StandardCharsets.UTF_8));
                 } catch (URISyntaxException e) {
@@ -71,6 +72,7 @@ public class OpenStreetViewInterface implements IGeolocator{
                 String sourceName;
                 String osvName;
                 String country;
+
 //                could be rewritten to use ObjectMapper like on the bulk version, but String methods are also an option here
 //                probably will be removed in the production version
                 try {
